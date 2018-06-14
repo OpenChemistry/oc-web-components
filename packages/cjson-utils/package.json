@@ -1,0 +1,27 @@
+{
+  "name": "@openchemistry/cjson-utils",
+  "version": "0.0.0",
+  "description": "Utilities to validate and convert cjson chemical data",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenChemistry/oc-web-components.git"
+  },
+  "author": "Kitware, Inc.",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/OpenChemistry/oc-web-components/issues"
+  },
+  "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
+  "dependencies": {
+    "@openchemistry/types": "^0.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.9.2"
+  }
+}
