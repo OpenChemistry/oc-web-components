@@ -17,6 +17,9 @@ jobs:
         name: Run npm install
         command: npm install
     - run:
+        name: Run Lerna bootstrap
+        command: npm run bootstrap
+    - run:
         name: Run build
         command: npm run build
     - save_cache:
