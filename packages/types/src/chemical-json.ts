@@ -1,4 +1,6 @@
-export interface IAtoms {
+export { IAtoms, IBonds, IChemJson };
+
+interface IAtoms {
   coords : {
     ["3d"] : number[];
   };
@@ -8,17 +10,15 @@ export interface IAtoms {
   }
 }
 
-export interface IBonds {
+interface IBonds {
   connections : {
     index : number[];
   };
   order : number[];
 }
 
-export interface IChemJson {
+interface IChemJson {
   atoms : IAtoms;
   bonds? : IBonds;
   [propName: string]: any;
 }
-
-// export {IAtoms, IBonds, IChemJson};

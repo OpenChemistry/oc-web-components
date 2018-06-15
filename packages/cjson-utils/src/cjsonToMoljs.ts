@@ -1,6 +1,8 @@
 import { IChemJson, IAtoms, IBonds, IAtomSpec } from '@openchemistry/types';
 import { numberOfAtoms } from './validation';
 
+export { cjsonToMoljs };
+
 const elementSymbols = [
   "Xx", "H", "He", "Li", "Be", "B", "C", "N", "O", "F",
   "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K",
@@ -66,5 +68,3 @@ function bondsToMoljs(atomsIn: IAtoms,
   }
   return atoms;
 }
-
-export {cjsonToMoljs};
