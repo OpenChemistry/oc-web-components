@@ -1,5 +1,18 @@
 {
-	"devDependencies": {
-		"lerna": "^2.11.0"
-	}
+  "devDependencies": {
+    "commitizen": "^2.10.1",
+    "conventional-commit-types": "^2.2.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "lerna": "^2.11.0"
+  },
+  "scripts": {
+    "build": "lerna run build --stream",
+    "clean": "lerna clean",
+    "publish": "lerna publish --yes"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

@@ -1,0 +1,70 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:8.9.1
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - npm-deps-{{ checksum "package.json" }}
+        - npm-deps-
+    - run:
+        name: Run npm install
+        command: npm install
+    - run:
+        name: Run build
+        command: npm run build
+    - save_cache:
+        paths:
+          - node_modules
+        key: npm-deps-{{ checksum "package.json" }}
+    - persist_to_workspace:
+        root: ~/repo
+        paths: .
+  publish:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Configure git
+          command: |
+            git config --global user.email $GIT_EMAIL
+            git config --global user.name $GIT_USER
+      - run:
+          name: Publish package
+          command: npm run publish
+      - add_ssh_keys
+      - run:
+          name: Keyscan Github
+          command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run:
+          name: Push new tags
+          command: git push --tags origin
+
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*?/
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*?/
+            branches:
+              only:
+                - master
