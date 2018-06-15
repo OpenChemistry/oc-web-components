@@ -20,5 +20,8 @@
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "devDependencies": {
     "typescript": "^2.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
