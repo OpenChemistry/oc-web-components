@@ -1,5 +1,5 @@
 exports.config = {
-  namespace: 'moljs-cjson',
+  namespace: 'molecule-moljs',
   outputTargets:[
     { 
       type: 'dist' 

@@ -11,7 +11,7 @@ declare var $3Dmol: any;
   tag: 'oc-molecule-moljs',
   styleUrl: 'molecule-moljs.css'
 })
-export class MoljsCjson {
+export class MoleculeMoljs {
 
   // The chemical json object in iput
   // Pure string fallback if used outside of JS or frameworks  
@@ -44,7 +44,6 @@ export class MoljsCjson {
    */
   componentDidLoad() {
     console.log('Component has been rendered');
-    // console.log(mol3d);
     let config = { };
     if (!this.viewer) {
       this.viewer = $3Dmol.createViewer( 'mol-viewer', config );

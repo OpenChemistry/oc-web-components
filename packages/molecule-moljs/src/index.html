@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Stencil Component Starter</title>
-  <script src="/build/moljs-cjson.js"></script>
+  <script src="/build/molecule-moljs.js"></script>
   <script src="http://3Dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
 
 </head>
 <body>
   
   <div style="width: 100%; height:40rem;">
-    <oc-molecule-moljs></oc-molecule-moljs>
+    <oc-molecule-moljs />
   </div>
 
   <script>
@@ -190,7 +190,7 @@
         "chemical json" : 0
       }
     ]
-    let el = document.querySelector("oc-molecule-moljs");
+    let el = document.querySelector("molecule-moljs");
     let count = 0;
     el.cjsonProp = cjsons[count%2];
     let interval = setInterval(()=>{
