@@ -1,0 +1,24 @@
+{
+  "name": "@openchemistry/types",
+  "version": "0.0.0",
+  "description": "Typescript interfaces used by openchemistry packages",
+  "main": "dist/index",
+  "types": "dist/index",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenChemistry/oc-web-components.git"
+  },
+  "author": "Kitware, Inc.",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/OpenChemistry/oc-web-components/issues"
+  },
+  "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
+  "devDependencies": {
+    "typescript": "^2.9.2"
+  }
+}
