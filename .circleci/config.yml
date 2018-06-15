@@ -50,8 +50,8 @@ jobs:
           name: Keyscan Github
           command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
       - run:
-          name: Push new tags
-          command: git push --tags origin
+          name: Push to GitHub
+          command: git push --follow-tags origin master
 
 
 workflows:
