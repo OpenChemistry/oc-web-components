@@ -42,16 +42,13 @@ jobs:
           command: |
             git config --global user.email $GIT_EMAIL
             git config --global user.name $GIT_USER
-      - run:
-          name: Publish package
-          command: npm run publish
       - add_ssh_keys
       - run:
           name: Keyscan Github
           command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
       - run:
-          name: Push to GitHub
-          command: git push --follow-tags origin master
+          name: Publish package
+          command: npm run publish
 
 
 workflows:
