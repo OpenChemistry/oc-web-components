@@ -1,4 +1,6 @@
-export interface IAtomSpec {
+export { IAtomSpec };
+
+interface IAtomSpec {
   elem: string;
   x: number;
   y: number;

@@ -1,5 +1,7 @@
 import { IChemJson, IAtoms, IBonds } from '@openchemistry/types';
 
+export { validateChemJson, isChemJson, numberOfAtoms };
+
 function isChemJson(obj: any) : obj is IChemJson {
   return obj.atoms !== undefined;
 }
@@ -61,5 +63,3 @@ function numberOfAtoms(atoms: IAtoms) : number {
     return -1;
   }
 }
-
-export {validateChemJson, isChemJson, numberOfAtoms};
