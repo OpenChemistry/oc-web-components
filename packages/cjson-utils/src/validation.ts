@@ -1,4 +1,4 @@
-import { IChemJson, IAtoms, IBonds } from '@openchemistry/types';
+import { IChemJson, IAtoms, IBonds, ICube } from '@openchemistry/types';
 
 export { validateChemJson, isChemJson, numberOfAtoms };
 
@@ -14,6 +14,12 @@ function validateChemJson(obj: IChemJson) : boolean {
     // If bonds are invalid, throw them out but still keep the atoms
     if (!validateBonds(obj.atoms, obj.bonds)) {
       obj.bonds = undefined;
+    }
+  }
+  if (obj.cube) {
+    // If cube data is invalid, throw it out but still keep the rest
+    if (!validateCube(obj.cube)) {
+      obj.cube = undefined;
     }
   }
   return true;
@@ -47,6 +53,13 @@ function validateBonds(atoms: IAtoms, bonds: IBonds) : boolean {
     }
   }
   return true;
+}
+
+function validateCube(cube: ICube) : boolean {
+  let grid = cube.dimensions;
+  let nPts = grid[0] * grid[1] * grid[2];
+  let nScalars = cube.scalars.length;
+  return nPts == nScalars;
 }
 
 function numberOfAtoms(atoms: IAtoms) : number {
