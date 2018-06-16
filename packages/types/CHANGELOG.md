@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.0.5"></a>
+## [0.0.5](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.0.4...@openchemistry/types@0.0.5) (2018-06-16)
+
+
+### Bug Fixes
+
+* Add cube to the cjson type definition ([65a88f8](https://github.com/OpenChemistry/oc-web-components/commit/65a88f8))
+
+
+
+
 <a name="0.0.4"></a>
 ## 0.0.4 (2018-06-15)
 
