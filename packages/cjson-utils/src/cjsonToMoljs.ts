@@ -32,7 +32,7 @@ function atomsToMoljs(atomsIn: IAtoms) : IAtomSpec[] {
   for (let i = 0; i < nAtoms; ++i) {
     let s: string = atomsIn.elements.symbol
                     ? atomsIn.elements.symbol[i]
-                    : elementSymbols[atomsIn.elements.number[i]];
+                    : elementSymbols[atomsIn.elements.number![i]];
     let x: number = atomsIn.coords['3d'][i * 3];
     let y: number = atomsIn.coords['3d'][i * 3 + 1];
     let z: number = atomsIn.coords['3d'][i * 3 + 2];
