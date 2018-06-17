@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.0.5"></a>
+## [0.0.5](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sample-data@0.0.4...@openchemistry/sample-data@0.0.5) (2018-06-17)
+
+
+### Bug Fixes
+
+* Add caffeine to the sample data ([cd2c74a](https://github.com/OpenChemistry/oc-web-components/commit/cd2c74a))
+
+
+
+
 <a name="0.0.4"></a>
 ## [0.0.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sample-data@0.0.3...@openchemistry/sample-data@0.0.4) (2018-06-17)
 
