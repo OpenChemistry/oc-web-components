@@ -28,13 +28,15 @@ declare global {
 
 import {
   IChemJson,
+  IDisplayOptions,
 } from '@openchemistry/types';
 
 declare global {
 
   namespace StencilComponents {
     interface OcMoleculeMoljs {
-      'cjsonProp': IChemJson | string;
+      'cjson': IChemJson | string;
+      'options': IDisplayOptions;
     }
   }
 
@@ -57,7 +59,8 @@ declare global {
   }
   namespace JSXElements {
     export interface OcMoleculeMoljsAttributes extends HTMLAttributes {
-      'cjsonProp'?: IChemJson | string;
+      'cjson'?: IChemJson | string;
+      'options'?: IDisplayOptions;
     }
   }
 }
