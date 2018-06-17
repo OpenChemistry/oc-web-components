@@ -1,11 +1,25 @@
 import { Component, Prop } from '@stencil/core';
 
-import { IChemJson } from '@openchemistry/types';
+import { IAtomSpec } from '@openchemistry/types';
+import { IChemJson, ICube } from '@openchemistry/types';
+import { IDisplayOptions, IIsoSurface, IStyle } from '@openchemistry/types';
 import { validateChemJson, isChemJson } from '@openchemistry/cjson-utils';
 import { cjsonToMoljs } from '@openchemistry/cjson-utils';
-import { IAtomSpec } from '@openchemistry/types';
 
-declare var $3Dmol: any;
+declare let $3Dmol: any;
+
+$3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
+  this.size = new $3Dmol.Vector3(volume.dimensions[0],
+                                 volume.dimensions[1],
+                                 volume.dimensions[2]);
+  this.origin = new $3Dmol.Vector3(volume.origin[0],
+                                   volume.origin[1],
+                                   volume.origin[2]);
+  this.unit = new $3Dmol.Vector3(volume.spacing[0],
+                                 volume.spacing[1],
+                                 volume.spacing[2]);
+  this.data = new Float32Array(volume.scalars);
+};
 
 @Component({
   tag: 'oc-molecule-moljs',
@@ -15,10 +29,34 @@ export class MoleculeMoljs {
 
   // The chemical json object in iput
   // Pure string fallback if used outside of JS or frameworks  
-  @Prop() cjsonProp: IChemJson | string;
+  @Prop() cjson: IChemJson | string;
+  @Prop() options: IDisplayOptions;
 
-  cjson: IChemJson;
+  cjsonData: IChemJson;
   viewer: any;
+
+  defaultOptions: IDisplayOptions = {
+    isoSurfaces: [
+      {
+        value: 0.005,
+        color: "#ff0000",
+        opacity: 0.85
+      },
+      {
+        value: -0.005,
+        color: "#0000ff",
+        opacity: 0.85
+      }
+    ],
+    style: {
+      stick: {
+        radius: 0.14,
+      },
+      sphere: {
+        scale: 0.3,
+      },
+    }
+  }
 
 
   /**
@@ -48,9 +86,7 @@ export class MoleculeMoljs {
     if (!this.viewer) {
       this.viewer = $3Dmol.createViewer( 'mol-viewer', config );
     }
-
-    this.setCjson();
-    this.setAtoms();
+    this.renderMolecule();
   }
 
   /**
@@ -76,8 +112,7 @@ export class MoleculeMoljs {
    */
   componentDidUpdate() {
     console.log('Component did update');
-    this.setCjson();
-    this.setAtoms();
+    this.renderMolecule();
   }
 
   /**
@@ -89,29 +124,81 @@ export class MoleculeMoljs {
   }
 
   setCjson() {
-    if (isChemJson(this.cjsonProp)) {
-      this.cjson = this.cjsonProp as IChemJson;
-    } else {
-      this.cjson = JSON.parse(this.cjsonProp);
-    }
-    if (!validateChemJson(this.cjson)) {
-      this.cjson = null;
-    }
-  }
-
-  setAtoms() {
-    this.viewer.clear();
     if (!this.cjson) {
       return;
     }
-    let atoms: IAtomSpec[] = cjsonToMoljs(this.cjson);
+    if (isChemJson(this.cjson)) {
+      this.cjsonData = this.cjson as IChemJson;
+    } else {
+      this.cjsonData = JSON.parse(this.cjson);
+    }
+    if (!validateChemJson(this.cjsonData)) {
+      this.cjsonData = null;
+    }
+  }
+
+  renderMolecule() {
+    this.viewer.clear();
+    this.setAtoms();
+    this.setVolume();
+    this.viewer.zoomTo();
+    this.viewer.render();
+  }
+
+  setAtoms() {
+    const cjson = this.getCjson();
+    if (!cjson || !cjson.atoms) {
+      return;
+    }
+    let atoms: IAtomSpec[] = cjsonToMoljs(cjson);
     this.viewer.setBackgroundColor(0xffffffff);
     let m = this.viewer.addModel();
     m.addAtoms(atoms);
-    m.setStyle({},{stick:{}});
-    this.viewer.zoomTo();
-    this.viewer.render();
+    m.setStyle({},this.getStyle());
+  }
 
+  setVolume() {
+    const cjson = this.getCjson();
+    if (!cjson || !cjson.cube) {
+      return;
+    }
+    const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
+    const isoSurfaces: IIsoSurface[] = this.getIsoSurfaces();
+    isoSurfaces.forEach((isoSurface) => {
+      let iso: any = {
+        isoval: isoSurface.value,
+        color: isoSurface.color,
+        opacity: isoSurface.opacity,
+      };
+      if ('smoothness' in isoSurface) {
+        iso.smoothness = isoSurface.smoothness!;
+      }
+
+      this.viewer.addIsosurface(volumeData, iso);
+    });
+  }
+
+  getCjson(): IChemJson {
+    if (!this.cjsonData) {
+      this.setCjson();
+    }
+    return this.cjsonData;
+  }
+
+  getIsoSurfaces() : IIsoSurface[] {
+    if (this.options && this.options.isoSurfaces) {
+      return this.options.isoSurfaces;
+    } else {
+      return this.defaultOptions.isoSurfaces;
+    }
+  }
+
+  getStyle() : IStyle {
+    if (this.options && this.options.style) {
+      return this.options.style;
+    } else {
+      return this.defaultOptions.style;
+    }
   }
 
   render() {
