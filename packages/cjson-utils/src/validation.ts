@@ -1,4 +1,4 @@
-import { IChemJson, IAtoms, IBonds, ICube } from '@openchemistry/types';
+import { IChemJson, IAtoms, IBonds, ICube, IVibrations } from '@openchemistry/types';
 
 export { validateChemJson, isChemJson, numberOfAtoms };
 
@@ -20,6 +20,12 @@ function validateChemJson(obj: IChemJson) : boolean {
     // If cube data is invalid, throw it out but still keep the rest
     if (!validateCube(obj.cube)) {
       obj.cube = undefined;
+    }
+  }
+  if (obj.vibrations) {
+    // If vibration data is invalid, throw it out but still keep the rest
+    if (!validateVibrations(obj.atoms, obj.vibrations)) {
+      obj.vibrations = undefined;
     }
   }
   return true;
@@ -60,6 +66,31 @@ function validateCube(cube: ICube) : boolean {
   let nPts = grid[0] * grid[1] * grid[2];
   let nScalars = cube.scalars.length;
   return nPts == nScalars;
+}
+
+function validateVibrations(atoms: IAtoms, vibrations: IVibrations) : boolean {
+  if (!vibrations.modes) {
+    return false;
+  }
+  let nModes: number = vibrations.modes.length;
+  if (vibrations.frequencies && vibrations.frequencies.length !== nModes) {
+    return false;
+  }
+  if (vibrations.intensities && vibrations.intensities.length !== nModes) {
+    return false;
+  }
+  if (vibrations.eigenVectors) {
+    if (vibrations.eigenVectors.length !== nModes) {
+      return false;
+    }
+    let nAtoms: number = numberOfAtoms(atoms);
+    for (let eigenVector of vibrations.eigenVectors) {
+      if (eigenVector.length !== nAtoms * 3) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 function numberOfAtoms(atoms: IAtoms) : number {
