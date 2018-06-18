@@ -6,6 +6,8 @@ import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions 
 import { validateChemJson, isChemJson } from '@openchemistry/cjson-utils';
 import { cjsonToMoljs } from '@openchemistry/cjson-utils';
 
+import { isNil } from "lodash-es";
+
 declare let $3Dmol: any;
 
 $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
@@ -90,10 +92,9 @@ export class MoleculeMoljs {
   componentDidLoad() {
     console.log('Component has been rendered');
     let config = { };
-    if (!this.viewer) {
+    if (isNil(this.viewer)) {
       this.viewer = $3Dmol.createViewer( 'mol-viewer', config );
     }
-    console.log(this.options);
     this.renderMolecule();
   }
 
@@ -120,7 +121,6 @@ export class MoleculeMoljs {
    */
   componentDidUpdate() {
     console.log('Component did update');
-    console.log(this.options);
     this.renderMolecule();
   }
 
@@ -133,7 +133,7 @@ export class MoleculeMoljs {
   }
 
   setCjson() {
-    if (!this.cjson) {
+    if (isNil(this.cjson)) {
       return;
     }
     if (isChemJson(this.cjson)) {
@@ -156,12 +156,12 @@ export class MoleculeMoljs {
 
   setAtoms() {
     // If an animation is playing, stop it before setting the new atoms
-    if (this.animationInterval) {
+    if (!isNil(this.animationInterval)) {
       clearInterval(this.animationInterval);
       this.animationInterval = null;
     }
     const cjson = this.getCjson();
-    if (!cjson || !cjson.atoms) {
+    if (isNil(cjson) || isNil(cjson.atoms)) {
       return;
     }
     let atoms: IAtomSpec[] = cjsonToMoljs(cjson);
@@ -172,7 +172,7 @@ export class MoleculeMoljs {
 
     // Start an interval to play the normal mode animation
     const normalMode = this.getNormalMode();
-    if (cjson.vibrations && cjson.vibrations.eigenVectors && normalMode.play) {
+    if (!isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
       let modeIdx: number = normalMode.modeIdx !== -1 ? normalMode.modeIdx : cjson.vibrations.eigenVectors.length - 1;
       if (modeIdx < 0) {
         return;
@@ -204,7 +204,7 @@ export class MoleculeMoljs {
 
   setVolume() {
     const cjson = this.getCjson();
-    if (!cjson || !cjson.cube) {
+    if (isNil(cjson) || isNil(cjson.cube)) {
       return;
     }
     const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
@@ -224,7 +224,7 @@ export class MoleculeMoljs {
   }
 
   getCjson(): IChemJson {
-    if (!this.cjsonData) {
+    if (isNil(this.cjsonData)) {
       this.setCjson();
     }
     return this.cjsonData;
