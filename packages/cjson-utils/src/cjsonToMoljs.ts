@@ -1,5 +1,6 @@
 import { IChemJson, IAtoms, IBonds, IAtomSpec } from '@openchemistry/types';
 import { numberOfAtoms } from './validation';
+import { isNil } from "lodash-es";
 
 export { cjsonToMoljs };
 
@@ -20,7 +21,7 @@ const elementSymbols = [
 
 function cjsonToMoljs(cjson: IChemJson) : IAtomSpec[] {
   let atoms = atomsToMoljs(cjson.atoms);
-  if (cjson.bonds) {
+  if (!isNil(cjson.bonds)) {
     atoms = bondsToMoljs(cjson.atoms, cjson.bonds, atoms);
   }
   return atoms;
@@ -55,12 +56,12 @@ function bondsToMoljs(atomsIn: IAtoms,
   for (let i = 0; i < nBonds; ++i) {
     let iAtom: number = bondsIn.connections.index[i * 2];
     let jAtom: number = bondsIn.connections.index[i * 2 + 1];
-    if (atoms[iAtom].bonds === undefined) {
+    if (isNil(atoms[iAtom].bonds)) {
       atoms[iAtom].bonds = [];
     }
     atoms[iAtom].bonds!.push(jAtom);
     if (bondsIn.order) {
-      if (atoms[iAtom].bondOrder === undefined) {
+      if (isNil(atoms[iAtom].bondOrder)) {
         atoms[iAtom].bondOrder = [];
       }
       atoms[iAtom].bondOrder!.push(bondsIn.order[i]);

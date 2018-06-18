@@ -2,9 +2,11 @@ import { Component, Prop } from '@stencil/core';
 
 import { IAtomSpec } from '@openchemistry/types';
 import { IChemJson, ICube } from '@openchemistry/types';
-import { IDisplayOptions, IIsoSurface, IStyle } from '@openchemistry/types';
+import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions } from '@openchemistry/types';
 import { validateChemJson, isChemJson } from '@openchemistry/cjson-utils';
 import { cjsonToMoljs } from '@openchemistry/cjson-utils';
+
+import { isNil } from "lodash-es";
 
 declare let $3Dmol: any;
 
@@ -34,6 +36,7 @@ export class MoleculeMoljs {
 
   cjsonData: IChemJson;
   viewer: any;
+  animationInterval: any;
 
   defaultOptions: IDisplayOptions = {
     isoSurfaces: [
@@ -55,9 +58,15 @@ export class MoleculeMoljs {
       sphere: {
         scale: 0.3,
       },
+    },
+    normalMode: {
+      play: true,
+      modeIdx: -1,
+      framesPerPeriod: 15,
+      periodsPerSecond: 1,
+      scale: 1
     }
   }
-
 
   /**
    * The component is about to load and it has not
@@ -83,7 +92,7 @@ export class MoleculeMoljs {
   componentDidLoad() {
     console.log('Component has been rendered');
     let config = { };
-    if (!this.viewer) {
+    if (isNil(this.viewer)) {
       this.viewer = $3Dmol.createViewer( 'mol-viewer', config );
     }
     this.renderMolecule();
@@ -124,7 +133,7 @@ export class MoleculeMoljs {
   }
 
   setCjson() {
-    if (!this.cjson) {
+    if (isNil(this.cjson)) {
       return;
     }
     if (isChemJson(this.cjson)) {
@@ -146,8 +155,13 @@ export class MoleculeMoljs {
   }
 
   setAtoms() {
+    // If an animation is playing, stop it before setting the new atoms
+    if (!isNil(this.animationInterval)) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = null;
+    }
     const cjson = this.getCjson();
-    if (!cjson || !cjson.atoms) {
+    if (isNil(cjson) || isNil(cjson.atoms)) {
       return;
     }
     let atoms: IAtomSpec[] = cjsonToMoljs(cjson);
@@ -155,15 +169,46 @@ export class MoleculeMoljs {
     let m = this.viewer.addModel();
     m.addAtoms(atoms);
     m.setStyle({},this.getStyle());
+
+    // Start an interval to play the normal mode animation
+    const normalMode = this.getNormalMode();
+    if (!isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
+      let modeIdx: number = normalMode.modeIdx !== -1 ? normalMode.modeIdx : cjson.vibrations.eigenVectors.length - 1;
+      if (modeIdx < 0) {
+        return;
+      }
+      const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
+      let frame: number = 1;
+      this.animationInterval = setInterval(() => {
+        this.viewer.removeModel(m);
+        m = this.viewer.addModel();
+        let newAtoms: IAtomSpec[] = []
+        let scale = normalMode.scale * Math.sin(2 * Math.PI * frame / normalMode.framesPerPeriod);
+        for (let i = 0; i < atoms.length; ++i) {
+          let atom = {...atoms[i]};
+          let dx = scale * eigenvector[i * 3];
+          let dy = scale * eigenvector[i * 3 + 1];
+          let dz = scale * eigenvector[i * 3 + 2];
+          atom.x += dx;
+          atom.y += dy;
+          atom.z += dz;
+          newAtoms.push(atom);
+        }
+        m.addAtoms(newAtoms);
+        m.setStyle({},this.getStyle());
+        this.viewer.render();
+        frame++;
+      }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
+    }
   }
 
   setVolume() {
     const cjson = this.getCjson();
-    if (!cjson || !cjson.cube) {
+    if (isNil(cjson) || isNil(cjson.cube)) {
       return;
     }
     const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
-    const isoSurfaces: IIsoSurface[] = this.getIsoSurfaces();
+    const isoSurfaces: IIsoSurfaceOptions[] = this.getIsoSurfaces();
     isoSurfaces.forEach((isoSurface) => {
       let iso: any = {
         isoval: isoSurface.value,
@@ -179,26 +224,22 @@ export class MoleculeMoljs {
   }
 
   getCjson(): IChemJson {
-    if (!this.cjsonData) {
+    if (isNil(this.cjsonData)) {
       this.setCjson();
     }
     return this.cjsonData;
   }
 
-  getIsoSurfaces() : IIsoSurface[] {
-    if (this.options && this.options.isoSurfaces) {
-      return this.options.isoSurfaces;
-    } else {
-      return this.defaultOptions.isoSurfaces;
-    }
+  getIsoSurfaces() : IIsoSurfaceOptions[] {
+    return { ...this.defaultOptions.isoSurfaces, ...this.options.isoSurfaces };
   }
 
-  getStyle() : IStyle {
-    if (this.options && this.options.style) {
-      return this.options.style;
-    } else {
-      return this.defaultOptions.style;
-    }
+  getStyle() : IStyleOptions {
+    return { ...this.defaultOptions.style, ...this.options.style };
+  }
+
+  getNormalMode() : INormalModeOptions {
+    return { ...this.defaultOptions.normalMode, ...this.options.normalMode };
   }
 
   render() {

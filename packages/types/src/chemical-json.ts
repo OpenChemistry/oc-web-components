@@ -1,4 +1,4 @@
-export { IAtoms, IBonds, ICube, IChemJson };
+export { IAtoms, IBonds, ICube, IChemJson, IVibrations };
 
 interface IAtoms {
   coords : {
@@ -24,9 +24,17 @@ interface ICube {
   scalars: number[];
 }
 
+interface IVibrations {
+  eigenVectors?: number[][];
+  frequencies?: number[];
+  intensities?: number[];
+  modes: number[];
+}
+
 interface IChemJson {
   atoms : IAtoms;
   bonds? : IBonds;
   cube? : ICube;
+  vibrations?: IVibrations;
   [propName: string]: any;
 }

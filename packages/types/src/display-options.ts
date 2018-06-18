@@ -1,13 +1,13 @@
-export { IDisplayOptions, IIsoSurface, IStyle };
+export { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions };
 
-interface IIsoSurface {
+interface IIsoSurfaceOptions {
   value: number;
   color: string;
   opacity: number;
   smoothness?: number;
 }
 
-interface IStyle {
+interface IStyleOptions {
   stick: {
     radius: number;
   };
@@ -16,7 +16,16 @@ interface IStyle {
   }
 }
 
+interface INormalModeOptions {
+  play: boolean;
+  modeIdx: number;
+  framesPerPeriod?: number;
+  periodsPerSecond?: number;
+  scale?: number;
+}
+
 interface IDisplayOptions {
-  isoSurfaces?: IIsoSurface[];
-  style?: IStyle;
+  isoSurfaces?: IIsoSurfaceOptions[];
+  style?: IStyleOptions;
+  normalMode?: INormalModeOptions;
 }
