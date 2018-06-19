@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.0.7...@openchemistry/molecule-moljs@0.2.0) (2018-06-19)
+
+
+### Bug Fixes
+
+* The scene was not updated correctly on partial refresh ([65b1a14](https://github.com/OpenChemistry/oc-web-components/commit/65b1a14))
+
+
+### Features
+
+* Add animation of a molecule's normal modes ([f4517f7](https://github.com/OpenChemistry/oc-web-components/commit/f4517f7))
+
+
+### Performance Improvements
+
+* Partial refresh the molecule if cjson data hasn't changed ([8d856d6](https://github.com/OpenChemistry/oc-web-components/commit/8d856d6))
+
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.0.7...@openchemistry/molecule-moljs@0.1.0) (2018-06-19)
 

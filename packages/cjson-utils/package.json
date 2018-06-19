@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/cjson-utils",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Utilities to validate and convert cjson chemical data",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "@openchemistry/types": "^0.1.0",
+    "@openchemistry/types": "^0.2.0",
     "@types/lodash-es": "^4.17.0",
     "lodash-es": "^4.17.10"
   },
