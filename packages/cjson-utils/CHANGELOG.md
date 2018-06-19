@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/cjson-utils@0.0.5...@openchemistry/cjson-utils@0.3.0) (2018-06-19)
+
+
+### Features
+
+* Add animation of a molecule's normal modes ([f4517f7](https://github.com/OpenChemistry/oc-web-components/commit/f4517f7))
+
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/cjson-utils@0.0.5...@openchemistry/cjson-utils@0.2.0) (2018-06-19)
 
