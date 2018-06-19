@@ -267,7 +267,7 @@ export class MoleculeMoljs {
   }
 
   getIsoSurfaces() : IIsoSurfaceOptions[] {
-    if (isNil(this.options.isoSurfaces)) {
+    if (isNil(this.options) || isNil(this.options.isoSurfaces)) {
       return this.defaultOptions.isoSurfaces;
     } else {
       return this.options.isoSurfaces;
@@ -275,11 +275,19 @@ export class MoleculeMoljs {
   }
 
   getStyle() : IStyleOptions {
-    return { ...this.defaultOptions.style, ...this.options.style };
+    if (isNil(this.options) || isNil(this.options.style)) {
+      return this.defaultOptions.style;
+    } else {
+      return { ...this.defaultOptions.style, ...this.options.style };
+    }
   }
 
   getNormalMode() : INormalModeOptions {
-    return { ...this.defaultOptions.normalMode, ...this.options.normalMode };
+    if (isNil(this.options) || isNil(this.options.normalMode)) {
+      return this.defaultOptions.normalMode;
+    } else {
+      return { ...this.defaultOptions.normalMode, ...this.options.normalMode };
+    }
   }
 
   render() {
