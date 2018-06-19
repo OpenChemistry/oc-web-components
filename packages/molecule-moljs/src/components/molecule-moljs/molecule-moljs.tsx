@@ -1,4 +1,4 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, Watch } from '@stencil/core';
 
 import { IAtomSpec } from '@openchemistry/types';
 import { IChemJson, ICube } from '@openchemistry/types';
@@ -32,11 +32,26 @@ export class MoleculeMoljs {
   // The chemical json object in iput
   // Pure string fallback if used outside of JS or frameworks  
   @Prop() cjson: IChemJson | string;
+  
+  @Watch('cjson')
+  cjsonHandler() {
+    this.cjsonHasChanged = true;
+  }
+
   @Prop() options: IDisplayOptions;
+
+  @Watch('options')
+  optionsHandler() {
+    this.optionsHasChanged = true;
+  }
 
   cjsonData: IChemJson;
   viewer: any;
   animationInterval: any;
+  currAtoms: IAtomSpec[];
+  currModel: any;
+  cjsonHasChanged: boolean = false;
+  optionsHasChanged: boolean = false;
 
   defaultOptions: IDisplayOptions = {
     isoSurfaces: [
@@ -95,7 +110,7 @@ export class MoleculeMoljs {
     if (isNil(this.viewer)) {
       this.viewer = $3Dmol.createViewer( 'mol-viewer', config );
     }
-    this.renderMolecule();
+    this.fullMoleculeRefresh();
   }
 
   /**
@@ -121,7 +136,11 @@ export class MoleculeMoljs {
    */
   componentDidUpdate() {
     console.log('Component did update');
-    this.renderMolecule();
+    if (this.cjsonHasChanged) {
+      this.fullMoleculeRefresh();
+    } else if (this.optionsHasChanged) {
+      this.partialMoleculeRefresh();
+    }
   }
 
   /**
@@ -130,10 +149,15 @@ export class MoleculeMoljs {
    */
   componentDidUnload() {
     console.log('Component removed from the DOM');
+    if (!isNil(this.viewer)) {
+      this.viewer.clear();
+      this.viewer = null;
+    }
   }
 
   setCjson() {
     if (isNil(this.cjson)) {
+      this.cjsonData = null;
       return;
     }
     if (isChemJson(this.cjson)) {
@@ -146,31 +170,45 @@ export class MoleculeMoljs {
     }
   }
 
-  renderMolecule() {
+  fullMoleculeRefresh() {
     this.viewer.clear();
+    this.currModel = this.viewer.addModel();
     this.setAtoms();
+    this.partialMoleculeRefresh();
+  }
+
+  partialMoleculeRefresh() {
     this.setVolume();
     this.viewer.zoomTo();
     this.viewer.render();
+    this.startAnimation();
   }
 
   setAtoms() {
+    // If an animation is playing, stop it before setting the new atoms
+    this.stopAnimation();
+    const cjson = this.getCjson();
+    if (isNil(cjson) || isNil(cjson.atoms)) {
+      return;
+    }
+    this.currAtoms = cjsonToMoljs(cjson);
+    this.currModel.addAtoms(this.currAtoms);
+    this.currModel.setStyle({},this.getStyle());
+  }
+
+  stopAnimation() {
     // If an animation is playing, stop it before setting the new atoms
     if (!isNil(this.animationInterval)) {
       clearInterval(this.animationInterval);
       this.animationInterval = null;
     }
-    const cjson = this.getCjson();
-    if (isNil(cjson) || isNil(cjson.atoms)) {
-      return;
-    }
-    let atoms: IAtomSpec[] = cjsonToMoljs(cjson);
-    this.viewer.setBackgroundColor(0xffffffff);
-    let m = this.viewer.addModel();
-    m.addAtoms(atoms);
-    m.setStyle({},this.getStyle());
+  }
 
+  startAnimation() {
+    // If an animation is playing, stop it before starting a new one
+    this.stopAnimation();
     // Start an interval to play the normal mode animation
+    const cjson = this.getCjson();
     const normalMode = this.getNormalMode();
     if (!isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
       let modeIdx: number = normalMode.modeIdx !== -1 ? normalMode.modeIdx : cjson.vibrations.eigenVectors.length - 1;
@@ -180,12 +218,12 @@ export class MoleculeMoljs {
       const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
       let frame: number = 1;
       this.animationInterval = setInterval(() => {
-        this.viewer.removeModel(m);
-        m = this.viewer.addModel();
+        this.viewer.removeModel(this.currModel);
+        this.currModel = this.viewer.addModel();
         let newAtoms: IAtomSpec[] = []
         let scale = normalMode.scale * Math.sin(2 * Math.PI * frame / normalMode.framesPerPeriod);
-        for (let i = 0; i < atoms.length; ++i) {
-          let atom = {...atoms[i]};
+        for (let i = 0; i < this.currAtoms.length; ++i) {
+          let atom = {...this.currAtoms[i]};
           let dx = scale * eigenvector[i * 3];
           let dy = scale * eigenvector[i * 3 + 1];
           let dz = scale * eigenvector[i * 3 + 2];
@@ -194,8 +232,8 @@ export class MoleculeMoljs {
           atom.z += dz;
           newAtoms.push(atom);
         }
-        m.addAtoms(newAtoms);
-        m.setStyle({},this.getStyle());
+        this.currModel.addAtoms(newAtoms);
+        this.currModel.setStyle({},this.getStyle());
         this.viewer.render();
         frame++;
       }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
@@ -209,7 +247,8 @@ export class MoleculeMoljs {
     }
     const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
     const isoSurfaces: IIsoSurfaceOptions[] = this.getIsoSurfaces();
-    isoSurfaces.forEach((isoSurface) => {
+    // isoSurfaces.forEach((isoSurface) => {
+    for (let isoSurface of isoSurfaces) {
       let iso: any = {
         isoval: isoSurface.value,
         color: isoSurface.color,
@@ -218,9 +257,8 @@ export class MoleculeMoljs {
       if ('smoothness' in isoSurface) {
         iso.smoothness = isoSurface.smoothness!;
       }
-
       this.viewer.addIsosurface(volumeData, iso);
-    });
+    }
   }
 
   getCjson(): IChemJson {
@@ -231,7 +269,11 @@ export class MoleculeMoljs {
   }
 
   getIsoSurfaces() : IIsoSurfaceOptions[] {
-    return { ...this.defaultOptions.isoSurfaces, ...this.options.isoSurfaces };
+    if (isNil(this.options.isoSurfaces)) {
+      return this.defaultOptions.isoSurfaces;
+    } else {
+      return this.options.isoSurfaces;
+    }
   }
 
   getStyle() : IStyleOptions {
