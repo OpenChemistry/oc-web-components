@@ -32,16 +32,12 @@ export class MoleculeMoljs {
   // The chemical json object in iput
   // Pure string fallback if used outside of JS or frameworks  
   @Prop() cjson: IChemJson | string;
-  
-  @Watch('cjson')
-  cjsonHandler() {
+  @Watch('cjson') cjsonHandler() {
     this.cjsonHasChanged = true;
   }
 
   @Prop() options: IDisplayOptions;
-
-  @Watch('options')
-  optionsHandler() {
+  @Watch('options') optionsHandler() {
     this.optionsHasChanged = true;
   }
 
@@ -110,7 +106,8 @@ export class MoleculeMoljs {
     if (isNil(this.viewer)) {
       this.viewer = $3Dmol.createViewer( 'mol-viewer', config );
     }
-    this.fullMoleculeRefresh();
+    this.convertCjson();
+    this.renderMolecule();
   }
 
   /**
@@ -137,10 +134,11 @@ export class MoleculeMoljs {
   componentDidUpdate() {
     console.log('Component did update');
     if (this.cjsonHasChanged) {
-      this.fullMoleculeRefresh();
-    } else if (this.optionsHasChanged) {
-      this.partialMoleculeRefresh();
+      this.convertCjson();
     }
+    this.renderMolecule();
+    this.cjsonHasChanged = false;
+    this.optionsHasChanged = false;
   }
 
   /**
@@ -170,14 +168,19 @@ export class MoleculeMoljs {
     }
   }
 
-  fullMoleculeRefresh() {
+  convertCjson() {
+    const cjson = this.getCjson();
+    if (isNil(cjson) || isNil(cjson.atoms)) {
+      this.currAtoms = [];
+      return;
+    }
+    this.currAtoms = cjsonToMoljs(cjson);
+  }
+
+  renderMolecule() {
     this.viewer.clear();
     this.currModel = this.viewer.addModel();
     this.setAtoms();
-    this.partialMoleculeRefresh();
-  }
-
-  partialMoleculeRefresh() {
     this.setVolume();
     this.viewer.zoomTo();
     this.viewer.render();
@@ -187,11 +190,6 @@ export class MoleculeMoljs {
   setAtoms() {
     // If an animation is playing, stop it before setting the new atoms
     this.stopAnimation();
-    const cjson = this.getCjson();
-    if (isNil(cjson) || isNil(cjson.atoms)) {
-      return;
-    }
-    this.currAtoms = cjsonToMoljs(cjson);
     this.currModel.addAtoms(this.currAtoms);
     this.currModel.setStyle({},this.getStyle());
   }
