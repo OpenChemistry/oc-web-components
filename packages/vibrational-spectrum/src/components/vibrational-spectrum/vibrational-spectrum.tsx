@@ -225,12 +225,13 @@ export class MyComponent {
     let lineFreqData = [];
     let numberOfPoints = 400;
     let increment = (frequencyRange[1] - frequencyRange[0]) / (numberOfPoints - 1);
+    let ggSq = (0.5 * gamma) ** 2;
     for (let i = 0; i < numberOfPoints; ++i) {
       let freqIntensity = 0.0;
       let currentFreq = frequencyRange[0] + i * increment;
       for (let j = 0; j < data.intensities.length; ++j) {
         let xx0 = currentFreq - data.frequencies[j];
-        freqIntensity += prefactor * data.intensities[j] / (xx0 * xx0 + 0.5 * gamma * gamma);
+        freqIntensity += prefactor * data.intensities[j] / (xx0 * xx0 + ggSq);
       }
       if (freqIntensity > freqRange[1]) {
         freqRange[1] = freqIntensity;
