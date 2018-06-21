@@ -1,10 +1,14 @@
 .bar {
-  fill: #7986CBaa;
+  fill: #a6bddbaa;
   shape-rendering: crispEdges;
 }
 
 .bar.selected {
-  fill: #FF3300;
+  fill: rgba(255, 60, 0, 0.7);
+}
+
+.bar.hover {
+  fill: rgba(255, 60, 0, 0.5);
 }
 
 .axis path, .axis line {
@@ -20,8 +24,6 @@
 .line {
   fill: none;
   stroke: #a6bddb;
-  stroke-width: 3;
-  shape-rendering: crispEdges;
 }
 
 .tooltip {

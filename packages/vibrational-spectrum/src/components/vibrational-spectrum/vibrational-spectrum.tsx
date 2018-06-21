@@ -63,8 +63,6 @@ export class MyComponent {
         this.renderChart();
       }
     }, 50);
-
-
   }
 
   renderChart() {
@@ -79,10 +77,7 @@ export class MyComponent {
     this.addXAxis(this.svg, this.vibrations.frequencies, 'Frequency (cm\u207B\u00B9)');
     this.addYAxis(this.svg, this.vibrations.intensities, "Intensity");
     this.addBars(this.svg, this.vibrations);
-  }
-
-  onResize() {
-    console.log("Resize!");
+    this.addTheoryLine(this.svg, this.vibrations);
   }
 
   addXAxis(svg: any, x: number[], label: string) {
@@ -148,10 +143,6 @@ export class MyComponent {
       });
     }
 
-    var t = d3.transition()
-    .duration(750)
-    .ease(d3.easeLinear);
-  
     let w = parseInt(svg.style("width"), 10);
     let barWidth = Math.min(7, w / 100);
     svg.selectAll(".bar")
@@ -163,11 +154,40 @@ export class MyComponent {
       .on('click', (d) => {
         this.barSelectedHandler(d.index, svg);
       })
+      .on('mouseover', function() {
+        d3.select(this).classed('hover', true);
+      })
+      .on('mouseout', function() {
+        d3.select(this).classed('hover', false);
+      })
       .attr("x", (d) => { return this.xScale(d.frequency) - barWidth / 2; })
       .attr("y", () => { return  this.yScale(0); })
-      .transition(t)
+      .transition()
         .attr("y", (d) => { return  this.yScale(d.intensity); })
         .attr("height", (d) => { return this.yScale(0) - this.yScale(d.intensity) ; })
+  }
+
+  addTheoryLine(svg: any, vibrations: IVibrations) {
+    let xRange = this.xScale.domain();
+    let yRange = this.yScale.domain();
+    let lineData = this.generateTheoryLine(vibrations, xRange, yRange, 40);
+    const line = d3.line()
+      .x((d: any) => {return this.xScale(d.x)})
+      .y((d: any) => {return this.yScale(d.y)});
+
+    svg.append("path")
+      .datum(lineData)
+      .attr("d", line)
+      .attr('stroke-width', 0)
+      .attr('fill', 'none')
+      .attr('class', 'line')
+      .transition()
+        .attr('stroke-width', 2.5)
+      
+  }
+
+  addExperimentalLine(svg: any, vibrations: IVibrations) {
+    console.log(svg, vibrations);
   }
 
   barSelectedHandler(index: number, svg: any) {
@@ -180,7 +200,6 @@ export class MyComponent {
       this.selectedBar = -1;
     } else {
       thisBar.classed('selected', true);
-      thisBar.classed('hover', true);
       this.selectedBar = index;
     }
     this.barSelected.emit(this.selectedBar);
@@ -200,32 +219,31 @@ export class MyComponent {
 
   }
 
-  generateLine (data, frequencyRange, intensityRange, gamma) {
-    var freqRange = [ 0.0, 0.0 ];
-    var prefactor = gamma / 3.14;
-    var lineFreqData = [];
-    var numberOfPoints = 400;
+  generateTheoryLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) {
+    let freqRange = [ 0.0, 0.0 ];
+    let prefactor = 0.5 * gamma / Math.PI;
+    let lineFreqData = [];
+    let numberOfPoints = 400;
     let increment = (frequencyRange[1] - frequencyRange[0]) / (numberOfPoints - 1);
     for (let i = 0; i < numberOfPoints; ++i) {
       let freqIntensity = 0.0;
       let currentFreq = frequencyRange[0] + i * increment;
       for (let j = 0; j < data.intensities.length; ++j) {
         let xx0 = currentFreq - data.frequencies[j];
-        freqIntensity += prefactor * data.intensities[j] / (xx0*xx0 + gamma*gamma);
+        freqIntensity += prefactor * data.intensities[j] / (xx0 * xx0 + 0.5 * gamma * gamma);
       }
       if (freqIntensity > freqRange[1]) {
         freqRange[1] = freqIntensity;
       }
-      lineFreqData.push([
-        currentFreq,
-        freqIntensity
-      ]);
+      lineFreqData.push({
+        'x': currentFreq,
+        'y': freqIntensity
+      });
     }
     let normalization = intensityRange[1] / freqRange[1];
     for (let i = 0; i < numberOfPoints; ++i) {
-      lineFreqData[i][1] *= normalization;
+      lineFreqData[i].y *= normalization;
     }
-
     return lineFreqData;
   }
 
