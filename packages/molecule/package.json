@@ -18,9 +18,8 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "@openchemistry/vibrational-spectrum": "^0.1.0",
+    "@openchemistry/vibrational-spectrum": "^0.0.0",
     "@openchemistry/molecule-moljs": "^0.3.0",
-    "@openchemistry/sample-data": "^0.1.0",
     "@openchemistry/cjson-utils": "^0.3.0",
     "@openchemistry/types": "^0.3.0",
     "@types/lodash-es": "^4.17.0",
