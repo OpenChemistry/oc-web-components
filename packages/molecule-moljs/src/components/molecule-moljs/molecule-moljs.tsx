@@ -208,8 +208,8 @@ export class MoleculeMoljs {
     // Start an interval to play the normal mode animation
     const cjson = this.getCjson();
     const normalMode = this.getNormalMode();
-    if (!isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
-      let modeIdx: number = normalMode.modeIdx !== -1 ? normalMode.modeIdx : cjson.vibrations.eigenVectors.length - 1;
+    if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
+      let modeIdx: number = normalMode.modeIdx;
       if (modeIdx < 0) {
         return;
       }
