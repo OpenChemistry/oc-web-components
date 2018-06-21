@@ -209,7 +209,7 @@ export class MoleculeMoljs {
     const cjson = this.getCjson();
     const normalMode = this.getNormalMode();
     if (!isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
-      let modeIdx: number = normalMode.modeIdx !== -1 ? normalMode.modeIdx : cjson.vibrations.eigenVectors.length - 1;
+      let modeIdx: number = normalMode.modeIdx;
       if (modeIdx < 0) {
         return;
       }
