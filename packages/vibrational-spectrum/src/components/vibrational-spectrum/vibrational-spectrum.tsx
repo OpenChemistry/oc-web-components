@@ -1,10 +1,9 @@
 import { Component, Prop, Event, EventEmitter } from '@stencil/core';
 
 import { IVibrations } from '@openchemistry/types';
-import { Caffeine } from '@openchemistry/sample-data';
 
+import { isNil } from "lodash-es";
 import * as d3 from "d3";
-// import { scaleLinear } from 'd3';
 
 @Component({
   tag: 'oc-vibrational-spectrum',
@@ -15,13 +14,7 @@ export class MyComponent {
 
   @Event() barSelected: EventEmitter;
   
-  @Prop() vibrations_: IVibrations;
-  vibrations: IVibrations = Caffeine.vibrations;
-  // vibrations: IVibrations = {
-  //   frequencies: [10, 20, 40, 80],
-  //   intensities: [5, 30, 15, 20],
-  //   modes: [1, 2, 3, 4]
-  // }
+  @Prop() vibrations: IVibrations;
 
   xScale: d3.ScaleLinear<any, any>;
   yScale: d3.ScaleLinear<any, any>;
@@ -51,10 +44,6 @@ export class MyComponent {
     window.addEventListener('resize', this.asyncRenderChart.bind(this));
   }
 
-  setupChart() {
-
-  }
-
   asyncRenderChart() {
     this.renderQueue += 1;
     let myQueue = this.renderQueue;
@@ -68,6 +57,13 @@ export class MyComponent {
   renderChart() {
     if (this.svg) {
       this.svg.remove();
+    }
+
+    if (isNil(this.vibrations) ||
+        isNil(this.vibrations.frequencies) ||
+        isNil(this.vibrations.intensities)
+    ) {
+      return;
     }
 
     this.svg = d3.select(this.containerElement)
@@ -219,7 +215,7 @@ export class MyComponent {
 
   }
 
-  generateTheoryLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) {
+  generateTheoryLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) : any[] {
     let freqRange = [ 0.0, 0.0 ];
     let prefactor = 0.5 * gamma / Math.PI;
     let lineFreqData = [];
@@ -247,7 +243,6 @@ export class MyComponent {
     }
     return lineFreqData;
   }
-
 
   render() {
     return (

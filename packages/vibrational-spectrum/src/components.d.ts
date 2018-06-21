@@ -33,7 +33,7 @@ declare global {
 
   namespace StencilComponents {
     interface OcVibrationalSpectrum {
-      'vibrations_': IVibrations;
+      'vibrations': IVibrations;
     }
   }
 
@@ -57,7 +57,7 @@ declare global {
   namespace JSXElements {
     export interface OcVibrationalSpectrumAttributes extends HTMLAttributes {
       'onBarSelected'?: (event: CustomEvent) => void;
-      'vibrations_'?: IVibrations;
+      'vibrations'?: IVibrations;
     }
   }
 }
