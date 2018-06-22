@@ -3,8 +3,8 @@ import { Component, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import { isNil } from "lodash-es";
 
 import { IChemJson } from '@openchemistry/types';
-import { isChemJson } from '@openchemistry/cjson-utils';
-import { composeDisplayOptions } from '@openchemistry/cjson-utils';
+import { isChemJson } from '@openchemistry/utils';
+import { composeDisplayOptions } from '@openchemistry/utils';
 import { IDisplayOptions } from '@openchemistry/types';
 
 import '@openchemistry/molecule-moljs';
