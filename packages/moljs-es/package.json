@@ -1,0 +1,20 @@
+{
+  "name": "@openchemistry/moljs-es",
+  "version": "0.0.0",
+  "module": "dist/moljs-es.js",
+  "dependencies": {
+    "3dmol": "git+https://github.com/OpenChemistry/3Dmol.js.git",
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {
+    "rollup": "^0.60.0",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "files": [
+    "dist"
+  ]
+}
