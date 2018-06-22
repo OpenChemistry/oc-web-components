@@ -2,9 +2,10 @@ import { Component, Prop, Watch } from '@stencil/core';
 
 import { IAtomSpec } from '@openchemistry/types';
 import { IChemJson, ICube } from '@openchemistry/types';
-import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions } from '@openchemistry/types';
-import { validateChemJson, isChemJson } from '@openchemistry/cjson-utils';
-import { cjsonToMoljs } from '@openchemistry/cjson-utils';
+import { IDisplayOptions, IIsoSurfaceOptions } from '@openchemistry/types';
+import { validateChemJson, isChemJson } from '@openchemistry/utils';
+import { cjsonToMoljs } from '@openchemistry/utils';
+import { composeDisplayOptions } from '@openchemistry/utils';
 
 import { isNil } from "lodash-es";
 
@@ -37,47 +38,19 @@ export class MoleculeMoljs {
   }
 
   @Prop() options: IDisplayOptions;
-  @Watch('options') optionsHandler() {
-    this.optionsHasChanged = true;
+  @Watch('options') optionsHandler(newValue: IDisplayOptions) {
+    this.optionsData = composeDisplayOptions(newValue);
   }
 
   cjsonData: IChemJson;
+  optionsData: IDisplayOptions;
+
+  cjsonHasChanged: boolean = false;
+
   viewer: any;
   animationInterval: any;
   currAtoms: IAtomSpec[];
   currModel: any;
-  cjsonHasChanged: boolean = false;
-  optionsHasChanged: boolean = false;
-
-  defaultOptions: IDisplayOptions = {
-    isoSurfaces: [
-      {
-        value: 0.005,
-        color: "#ff0000",
-        opacity: 0.85
-      },
-      {
-        value: -0.005,
-        color: "#0000ff",
-        opacity: 0.85
-      }
-    ],
-    style: {
-      stick: {
-        radius: 0.14,
-      },
-      sphere: {
-        scale: 0.3,
-      },
-    },
-    normalMode: {
-      play: true,
-      modeIdx: -1,
-      framesPerPeriod: 15,
-      periodsPerSecond: 1,
-      scale: 1
-    }
-  }
 
   /**
    * The component is about to load and it has not
@@ -138,7 +111,6 @@ export class MoleculeMoljs {
     }
     this.renderMolecule();
     this.cjsonHasChanged = false;
-    this.optionsHasChanged = false;
   }
 
   /**
@@ -191,7 +163,7 @@ export class MoleculeMoljs {
     // If an animation is playing, stop it before setting the new atoms
     this.stopAnimation();
     this.currModel.addAtoms(this.currAtoms);
-    this.currModel.setStyle({},this.getStyle());
+    this.currModel.setStyle({},this.getOptions().style);
   }
 
   stopAnimation() {
@@ -207,7 +179,7 @@ export class MoleculeMoljs {
     this.stopAnimation();
     // Start an interval to play the normal mode animation
     const cjson = this.getCjson();
-    const normalMode = this.getNormalMode();
+    const normalMode = this.getOptions().normalMode;
     if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
       let modeIdx: number = normalMode.modeIdx;
       if (modeIdx < 0) {
@@ -231,7 +203,7 @@ export class MoleculeMoljs {
           newAtoms.push(atom);
         }
         this.currModel.addAtoms(newAtoms);
-        this.currModel.setStyle({},this.getStyle());
+        this.currModel.setStyle({},this.getOptions().style);
         this.viewer.render();
         frame++;
       }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
@@ -244,8 +216,7 @@ export class MoleculeMoljs {
       return;
     }
     const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
-    const isoSurfaces: IIsoSurfaceOptions[] = this.getIsoSurfaces();
-    // isoSurfaces.forEach((isoSurface) => {
+    const isoSurfaces: IIsoSurfaceOptions[] = this.getOptions().isoSurfaces;
     for (let isoSurface of isoSurfaces) {
       let iso: any = {
         isoval: isoSurface.value,
@@ -266,28 +237,15 @@ export class MoleculeMoljs {
     return this.cjsonData;
   }
 
-  getIsoSurfaces() : IIsoSurfaceOptions[] {
-    if (isNil(this.options) || isNil(this.options.isoSurfaces)) {
-      return this.defaultOptions.isoSurfaces;
-    } else {
-      return this.options.isoSurfaces;
-    }
+  setOptions() {
+    this.optionsData = composeDisplayOptions(this.options);
   }
 
-  getStyle() : IStyleOptions {
-    if (isNil(this.options) || isNil(this.options.style)) {
-      return this.defaultOptions.style;
-    } else {
-      return { ...this.defaultOptions.style, ...this.options.style };
+  getOptions() : IDisplayOptions {
+    if (isNil(this.optionsData)) {
+      this.setOptions();
     }
-  }
-
-  getNormalMode() : INormalModeOptions {
-    if (isNil(this.options) || isNil(this.options.normalMode)) {
-      return this.defaultOptions.normalMode;
-    } else {
-      return { ...this.defaultOptions.normalMode, ...this.options.normalMode };
-    }
+    return this.optionsData;
   }
 
   render() {

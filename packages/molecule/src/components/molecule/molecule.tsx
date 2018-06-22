@@ -1,13 +1,14 @@
-import { Component, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Watch, Event, EventEmitter } from '@stencil/core';
+
+import { isNil } from "lodash-es";
 
 import { IChemJson } from '@openchemistry/types';
-import { isChemJson } from '@openchemistry/cjson-utils';
+import { isChemJson } from '@openchemistry/utils';
+import { composeDisplayOptions } from '@openchemistry/utils';
 import { IDisplayOptions } from '@openchemistry/types';
 
 import '@openchemistry/molecule-moljs';
 import '@openchemistry/vibrational-spectrum';
-
-import { isNil } from "lodash-es";
 
 @Component({
   tag: 'oc-molecule',
@@ -18,49 +19,22 @@ export class Molecule {
   // The chemical json object in iput
   // Pure string fallback if used outside of JS or frameworks
   @Prop() cjson: IChemJson | string;
+
   @Prop() options: IDisplayOptions;
+  @Watch('options') optionsHandler(newValue: IDisplayOptions) {
+    this.optionsData = composeDisplayOptions(newValue);
+  }
 
   @Event() barSelected: EventEmitter;
 
 
   cjsonData: IChemJson;
 
-  currOptions: IDisplayOptions;
-
-  defaultOptions: IDisplayOptions = {
-    isoSurfaces: [
-      {
-        value: 0.005,
-        color: "#ff0000",
-        opacity: 0.85
-      },
-      {
-        value: -0.005,
-        color: "#0000ff",
-        opacity: 0.85
-      }
-    ],
-    style: {
-      stick: {
-        radius: 0.14,
-      },
-      sphere: {
-        scale: 0.3,
-      },
-    },
-    normalMode: {
-      play: true,
-      modeIdx: -1,
-      framesPerPeriod: 15,
-      periodsPerSecond: 1,
-      scale: 1
-    }
-  }
+  optionsData: IDisplayOptions;
 
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
     this.cjsonData = this.getCjson();
-    this.currOptions = this.composeOptions();
   }
 
   componentDidLoad() {
@@ -70,17 +44,12 @@ export class Molecule {
   componentWillUpdate() {
     console.log('Molecule will update and re-render');
     this.cjsonData = this.getCjson();
-    this.currOptions = this.composeOptions();
   }
 
   componentDidUpdate() {
     console.log('Molecule did update');
   }
 
-  /**
-   * The component did unload and the element
-   * will be destroyed.
-   */
   componentDidUnload() {
     console.log('Molecule removed from the DOM');
   }
@@ -96,14 +65,9 @@ export class Molecule {
     }
   }
 
-  composeOptions() {
-    // TODO: add a reusable method to the utils package to compose options by
-    // combining defaults and passed options
-    return this.options;
-  }
-
   onBarSelected(event: CustomEvent) {
     if (event.type === "barSelected") {
+      // This is a "dumb" component, re-emit the event
       this.barSelected.emit(event.detail);
     }
   }
@@ -112,11 +76,10 @@ export class Molecule {
     if (this.cjsonData && this.cjsonData.vibrations) {
       return (
         <div style={{width: "100%", heigth: "100%", display: "flex", position: "relative"}}>
-         
           <div style={{width: "50%", height: "40rem", position: "relative"}}>
             <oc-molecule-moljs
               cjson={this.cjsonData}
-              options={this.currOptions}
+              options={this.optionsData}
             />
           </div>
           <div style={{width: "50%", height: "40rem", position: "relative"}}>
@@ -132,7 +95,7 @@ export class Molecule {
         <div style={{width: "100%", heigth: "100%", display: "flex", position: "relative"}}>         
           <oc-molecule-moljs
             cjson={this.cjsonData}
-            options={this.currOptions}
+            options={this.optionsData}
           />
         </div>
       )
