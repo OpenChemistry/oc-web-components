@@ -18,9 +18,9 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "3dmol": "1.3.4",
     "@openchemistry/types": "^0.3.0",
     "@openchemistry/utils": "^0.0.1",
+    "@openchemistry/moljs-es": "^0.0.0",
     "@types/lodash-es": "^4.17.0",
     "lodash-es": "^4.17.10"
   },
