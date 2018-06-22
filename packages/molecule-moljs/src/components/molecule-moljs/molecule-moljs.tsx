@@ -3,9 +3,9 @@ import { Component, Prop, Watch } from '@stencil/core';
 import { IAtomSpec } from '@openchemistry/types';
 import { IChemJson, ICube } from '@openchemistry/types';
 import { IDisplayOptions, IIsoSurfaceOptions } from '@openchemistry/types';
-import { validateChemJson, isChemJson } from '@openchemistry/cjson-utils';
-import { cjsonToMoljs } from '@openchemistry/cjson-utils';
-import { composeDisplayOptions } from '@openchemistry/cjson-utils';
+import { validateChemJson, isChemJson } from '@openchemistry/utils';
+import { cjsonToMoljs } from '@openchemistry/utils';
+import { composeDisplayOptions } from '@openchemistry/utils';
 
 import { isNil } from "lodash-es";
 
