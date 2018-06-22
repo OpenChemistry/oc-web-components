@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.148"></a>
+## [0.3.148](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.147...@openchemistry/molecule-moljs@0.3.148) (2018-06-22)
+
+
+### Bug Fixes
+
+* Use new ES module ([df315e1](https://github.com/OpenChemistry/oc-web-components/commit/df315e1))
+
+
+
+
 <a name="0.3.147"></a>
 ## [0.3.147](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.146...@openchemistry/molecule-moljs@0.3.147) (2018-06-22)
 
