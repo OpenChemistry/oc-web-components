@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/utils",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Utilities to validate and convert cjson chemical data",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
