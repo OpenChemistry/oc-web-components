@@ -6,10 +6,10 @@ import { IDisplayOptions, IIsoSurfaceOptions } from '@openchemistry/types';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
 import { cjsonToMoljs } from '@openchemistry/utils';
 import { composeDisplayOptions } from '@openchemistry/utils';
+import $3Dmol from '@openchemistry/moljs-es';
 
 import { isNil } from "lodash-es";
 
-declare let $3Dmol: any;
 
 $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
   this.size = new $3Dmol.Vector3(volume.dimensions[0],
@@ -31,7 +31,7 @@ $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
 export class MoleculeMoljs {
 
   // The chemical json object in iput
-  // Pure string fallback if used outside of JS or frameworks  
+  // Pure string fallback if used outside of JS or frameworks
   @Prop() cjson: IChemJson | string;
   @Watch('cjson') cjsonHandler() {
     this.cjsonHasChanged = true;
@@ -249,7 +249,7 @@ export class MoleculeMoljs {
   }
 
   render() {
-    return ( 
+    return (
       <div id='mol-viewer'></div>
     );
   }
