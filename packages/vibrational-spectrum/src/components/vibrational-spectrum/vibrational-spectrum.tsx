@@ -1,6 +1,6 @@
-import { Component, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, Watch } from '@stencil/core';
 
-import { IVibrations } from '@openchemistry/types';
+import { IVibrations, INormalModeOptions } from '@openchemistry/types';
 
 import { isNil } from "lodash-es";
 import * as d3 from "d3";
@@ -10,11 +10,15 @@ import * as d3 from "d3";
   styleUrl: 'vibrational-spectrum.css',
   shadow: true
 })
-export class MyComponent {
+export class VibrationalSpectrum {
 
   @Event() barSelected: EventEmitter;
   
   @Prop() vibrations: IVibrations;
+  @Watch('vibrations') cjsonHandler() {
+    this.spectrumHasChanged = true;
+  }
+  @Prop() options: INormalModeOptions;
 
   xScale: d3.ScaleLinear<any, any>;
   yScale: d3.ScaleLinear<any, any>;
@@ -26,6 +30,7 @@ export class MyComponent {
   svg: any;
 
   selectedBar: number = -1;
+  spectrumHasChanged: boolean = false;
 
   width: number;
   height: number;
@@ -35,12 +40,13 @@ export class MyComponent {
 
 
   componentWillLoad() {
-    console.log('Component is about to be rendered');
+    console.log('VibrationalSpectrum is about to be rendered');
   }
 
   componentDidLoad() {
-    console.log('Component has been rendered');
+    console.log('VibrationalSpectrum has been rendered');
     this.renderChart();
+    this.highlightBar();
     window.addEventListener('resize', this.asyncRenderChart.bind(this));
   }
 
@@ -50,6 +56,7 @@ export class MyComponent {
     setTimeout(()=>{
       if (myQueue >= this.renderQueue) {
         this.renderChart();
+        this.highlightBar();
       }
     }, 50);
   }
@@ -148,7 +155,7 @@ export class MyComponent {
       .attr("class", "bar")
       .attr("width", barWidth)
       .on('click', (d) => {
-        this.barSelectedHandler(d.index, svg);
+        this.barSelected.emit(d.index);
       })
       .on('mouseover', function() {
         d3.select(this).classed('hover', true);
@@ -186,32 +193,32 @@ export class MyComponent {
     console.log(svg, vibrations);
   }
 
-  barSelectedHandler(index: number, svg: any) {
-    // TODO The must be a better way todo this selec
-    const bars = svg.selectAll('.bar');
-    bars.classed('selected', false);
-    let thisBar = svg.select("#bar" + index);
-
-    if (this.selectedBar == index) {
-      this.selectedBar = -1;
-    } else {
-      thisBar.classed('selected', true);
-      this.selectedBar = index;
-    }
-    this.barSelected.emit(this.selectedBar);
-  }
-
   componentWillUpdate() {
-    console.log('Component will update and re-render');
+    console.log('VibrationalSpectrum will update and re-render');
   }
 
   componentDidUpdate() {
-    console.log('Component did update');
+    console.log('VibrationalSpectrum did update');
+    if (this.spectrumHasChanged) {
+      this.renderChart();
+      this.spectrumHasChanged = false;
+    }
+    this.highlightBar();
+    
+  }
 
+  highlightBar() {
+    // Highlight the bar of the selected mode passed in prop options
+    const bars = this.svg.selectAll('.bar');
+    bars.classed('selected', false);
+    if (this.options && this.options.modeIdx >= 0) {
+      let selectedBar = this.svg.select("#bar" + this.options.modeIdx);
+      selectedBar.classed('selected', true);
+    }
   }
 
   componentDidUnload() {
-    console.log('Component removed from the DOM');
+    console.log('VibrationalSpectrum removed from the DOM');
 
   }
 
