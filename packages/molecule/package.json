@@ -19,18 +19,18 @@
   },
   "dependencies": {
     "@openchemistry/molecule-moljs": "^0.3.148",
-    "@openchemistry/types": "^0.3.0",
     "@openchemistry/utils": "^0.0.1",
     "@openchemistry/vibrational-spectrum": "^0.1.2",
-    "@types/lodash-es": "^4.17.0",
     "lodash-es": "^4.17.10"
   },
   "devDependencies": {
+    "@openchemistry/types": "^0.3.0",
     "@stencil/core": "^0.9.10",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
-    "@types/jest": "^21.1.1",
-    "jest": "^21.2.1"
+    "@types/jest": "^22.0.1",
+    "@types/lodash-es": "^4.17.0",
+    "jest": "^23.1.0"
   },
   "repository": {
     "type": "git",
