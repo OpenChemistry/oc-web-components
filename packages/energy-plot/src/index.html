@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Stencil Component Starter</title>
+  <script src="/build/energy-plot.js"></script>
+</head>
+<body>
+  <div  style="width: 100%; height:40rem;">
+    <oc-energy-plot id="plot"></oc-energy-plot>
+  </div>
+
+  <script>
+    let plot = document.getElementById("plot");
+    let energies = [];
+    energies.push({
+      label: "2H2 + O2 => 2H2O",
+      energy: -56.7
+    });
+    energies.push({
+      label: "C + O2 => CO2",
+      energy: -94.3
+    });
+    energies.push({
+      label: "6C + 3H2 => C6H6",
+      energy: +29.8
+    });
+    energies.push({
+      label: "N + O2 => NO2",
+      energy: +12.3
+    });
+    plot.energies = energies;
+  </script>
+</body>
+</html>

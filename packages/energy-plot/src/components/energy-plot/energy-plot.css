@@ -1,0 +1,35 @@
+.point {
+  fill: #a6bddbaa;
+  shape-rendering: crispEdges;
+}
+
+.point.selected {
+  fill: rgba(255, 60, 0, 0.7);
+}
+
+.point.hover {
+  fill: rgba(255, 60, 0, 0.5);
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #a6bddb;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 5px;
+  font: 12px sans-serif;
+  background: #a6bddb;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
