@@ -21,7 +21,7 @@ jobs:
         command: npm run bootstrap
     - run:
         name: Run build
-        command: npm run build
+        command: npm run build-serial
     - save_cache:
         paths:
           - node_modules
