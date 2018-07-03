@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "stencil build",
-    "dev": "stencil build --dev --watch --serve",
+    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
     "serve": "npm run dev",
     "start": "npm run dev",
     "test": "jest",
@@ -25,7 +25,9 @@
     "lodash-es": "^4.17.10"
   },
   "devDependencies": {
-    "@stencil/core": "^0.10.0-9",
+    "@stencil/core": "^0.9.11",
+    "@stencil/dev-server": "latest",
+    "@stencil/utils": "latest",
     "@types/jest": "^21.1.1",
     "jest": "^21.2.1"
   },
