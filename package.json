@@ -6,7 +6,8 @@
     "lerna": "^2.11.0"
   },
   "scripts": {
-    "build": "lerna run build --concurrency 1 --stream",
+    "build": "lerna run build --stream",
+    "build-serial": "lerna run build --concurrency 1 --stream",
     "clean": "lerna clean",
     "publish": "lerna publish --yes -m 'Publish [ci skip]'",
     "bootstrap": "lerna bootstrap"
