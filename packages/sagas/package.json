@@ -1,0 +1,36 @@
+{
+  "name": "@openchemistry/sagas",
+  "version": "0.0.1",
+  "description": " ",
+  "main": "dist/sagas.js",
+  "module": "src/index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenChemistry/oc-web-components.git"
+  },
+  "author": "Kitware, Inc.",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/OpenChemistry/oc-web-components/issues"
+  },
+  "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
+  "dependencies": {
+    "@openchemistry/redux": "^0.0.1",
+    "@openchemistry/rest": "^0.0.1",
+    "axios": "^0.18.0",
+    "jsonpath": "^1.0.0",
+    "lodash-es": "^4.17.10",
+    "redux-saga": "^0.16.0",
+    "universal-cookie": "^2.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.15.1",
+    "webpack-command": "^0.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
