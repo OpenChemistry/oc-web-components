@@ -1,8 +1,9 @@
 import axios, { CancelToken } from 'axios';
 import { CANCEL } from 'redux-saga'
-import * as girder from './girder'
-import * as jupyterhub from './jupyterhub'
-
+import * as girder from './girder';
+import * as jupyterhub from './jupyterhub';
+export * from './girder'
+export * from './jupyterhub'
 
 var _girderClient = axios.create({
   baseURL: `${window.location.origin}/api/v1`
