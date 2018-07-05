@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { get } from '../'
 
@@ -8,7 +8,7 @@ export function fetchMe(token) {
 
   }
 
-  if (!_.isNil(token)) {
+  if (!isNil(token)) {
     params.headers = {
       'Girder-Token': token
     }
