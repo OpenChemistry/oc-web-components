@@ -2,10 +2,9 @@
   "name": "@openchemistry/redux",
   "version": "0.0.2",
   "description": " ",
-  "main": "dist/redux.js",
-  "module": "src/index.js",
+  "module": "es/index.js",
   "scripts": {
-    "build": "webpack"
+    "build": "babel src --out-dir es --plugins='babel-plugin-transform-object-rest-spread'"
   },
   "repository": {
     "type": "git",
@@ -25,8 +24,9 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
-    "webpack": "^4.15.1",
-    "webpack-command": "^0.4.0"
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
   },
   "publishConfig": {
     "access": "public"
