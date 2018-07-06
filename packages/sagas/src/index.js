@@ -37,7 +37,9 @@ import * as rest from '@openchemistry/rest'
 import { girderClient  } from '@openchemistry/rest'
 import { watchLoadCalculationNotebooks } from './calculations'
 
-var jp = require('jsonpath')
+import jp from 'jsonpath';
+
+// var jp = require('jsonpath')
 
 export function fetchMoleculesFromGirder() {
   return girderClient().get('molecules')
