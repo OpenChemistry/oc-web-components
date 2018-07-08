@@ -1,0 +1,9 @@
+.end-slot {
+  width: 3rem;
+  padding-left: 0.5rem;
+}
+
+.start-slot {
+  width: 3rem;
+  padding-right: 0.5rem;
+}
