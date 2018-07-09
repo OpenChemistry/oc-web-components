@@ -1,5 +1,5 @@
 dist/
-es/
+esm/
 
 *~
 *.sw[mnpcod]
