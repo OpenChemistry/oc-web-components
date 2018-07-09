@@ -5,6 +5,7 @@ export const NEW_TOKEN   = 'NEW_TOKEN';
 export const INVALIDATE_TOKEN = 'INVALIDATE_TOKEN';
 export const REQUEST_TOKEN_INVALIDATION = 'REQUEST_TOKEN_INVALIDATION';
 export const AUTHENTICATE = 'AUTHENTICATE';
+export const LOGIN_GIRDER = 'LOGIN_GIRDER';
 export const SET_AUTHENTICATING = 'SET_AUTHENTICATING';
 export const AUTHENTICATED = 'AUTHENTICATED';
 export const SET_ME = 'SET_ME';
@@ -116,6 +117,8 @@ export const invalidateToken = createAction(INVALIDATE_TOKEN);
 export const fetchTokenForApiKey = createAction(FETCH_TOKEN_FOR_API_KEY, (key) => ({ key }));
 export const requestTokenForApiKey = createAction(REQUEST_TOKEN_FOR_API_KEY, (key) => ({ key }));
 export const authenticated = createAction(AUTHENTICATED);
+export const loginGirder = createAction(LOGIN_GIRDER,
+  (username, password, resolve, reject) => ({username, password, resolve, reject}));
 
 // OAuth
 export const loadOauthProviders = createAction(LOAD_OAUTH_PROVIDERS);

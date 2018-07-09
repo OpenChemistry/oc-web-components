@@ -4,6 +4,7 @@ import { createAction, handleActions } from 'redux-actions';
 export const SELECT_MOLECULE = 'SELECT_MOLECULE';
 export const SELECT_AUTH_PROVIDER = 'SELECT_AUTH_PROVIDER';
 export const SHOW_NERSC_LOGIN = 'SHOW_NERSC_LOGIN';
+export const SHOW_GIRDER_LOGIN = 'SHOW_GIRDER_LOGIN';
 
 export const LOAD_NOTEBOOKS   = 'LOAD_NOTEBOOKS';
 export const REQUEST_NOTEBOOKS   = 'REQUEST_NOTEBOOKS';
@@ -17,6 +18,11 @@ export const initialState = {
   selectedMoleculeId: null,
   selectAuthProvider: false,
   nersc: {
+    login: {
+      show: false
+    }
+  },
+  girder: {
     login: {
       show: false
     }
@@ -42,6 +48,15 @@ const reducer = handleActions({
         }
     };
     return {...state, nersc };
+  },
+  SHOW_GIRDER_LOGIN: (state, action) => {
+    const show = action.payload;
+    const girder = {
+        login: {
+          show
+        }
+    };
+    return {...state, girder };
   },
   REQUEST_NOTEBOOKS: (state, action) => {
     if (action.error) {
@@ -76,6 +91,7 @@ const reducer = handleActions({
 export const selectMolecule = createAction(SELECT_MOLECULE, (id) => ({id}));
 export const selectAuthProvider = createAction(SELECT_AUTH_PROVIDER);
 export const showNerscLogin = createAction(SHOW_NERSC_LOGIN);
+export const showGirderLogin = createAction(SHOW_GIRDER_LOGIN);
 
 export const loadNotebooks = createAction(LOAD_NOTEBOOKS);
 export const requestNotebooks = createAction(REQUEST_NOTEBOOKS);
