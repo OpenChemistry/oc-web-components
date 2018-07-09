@@ -30,7 +30,7 @@ import { selectors } from '@openchemistry/redux';
 
 import { watchNotifications } from './notifications'
 import { watchAuthenticateNersc } from './nersc'
-import { watchLoadNotebooks } from './app'
+import { watchLoadNotebooks, watchLoginGirder } from './app'
 import { watchRedirectToJupyterHub, watchInvalidateSession } from './jupyterlab'
 import { user, token } from '@openchemistry/rest'
 import * as rest from '@openchemistry/rest'
@@ -450,5 +450,6 @@ export default function* root() {
   yield fork(watchTestOauthEnabled)
   yield fork(watchInvalidateSession)
   yield fork(watchLoadCalculationNotebooks)
+  yield fork(watchLoginGirder)
 }
 
