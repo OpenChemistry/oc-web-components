@@ -2,9 +2,12 @@
   "name": "@openchemistry/redux",
   "version": "0.0.3",
   "description": " ",
-  "module": "es/index.js",
+  "module": "esm/index.js",
+  "files": [
+    "esm/"
+  ],
   "scripts": {
-    "build": "babel src --out-dir es --plugins='babel-plugin-transform-object-rest-spread'"
+    "build": "babel src --out-dir esm --plugins='babel-plugin-transform-object-rest-spread'"
   },
   "repository": {
     "type": "git",
