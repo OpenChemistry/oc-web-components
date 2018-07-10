@@ -1,4 +1,6 @@
-import { Component, Prop, Watch } from '@stencil/core';
+import { Component, Prop, Watch, Element } from '@stencil/core';
+
+import ResizeObserver from 'resize-observer-polyfill';
 
 import { IAtomSpec } from '@openchemistry/types';
 import { IChemJson, ICube } from '@openchemistry/types';
@@ -8,7 +10,7 @@ import { cjsonToMoljs } from '@openchemistry/utils';
 import { composeDisplayOptions } from '@openchemistry/utils';
 import $3Dmol from '@openchemistry/moljs-es';
 
-import { isNil } from "lodash-es";
+import { isNil, throttle } from "lodash-es";
 
 
 $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
@@ -29,6 +31,8 @@ $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
   styleUrl: 'molecule-moljs.css'
 })
 export class MoleculeMoljs {
+
+  @Element() el: HTMLElement;
 
   // The chemical json object in iput
   // Pure string fallback if used outside of JS or frameworks
@@ -81,6 +85,19 @@ export class MoleculeMoljs {
     }
     this.convertCjson();
     this.renderMolecule();
+
+    let throttledResize = throttle(() => {
+      if (!isNil(this.viewer)) {
+        this.viewer.resize();
+      }
+    }, 33);
+    const ro = new ResizeObserver(() => {
+      throttledResize();
+    });
+
+    setTimeout(() => {
+      ro.observe(this.el.parentElement);
+    }, 500);
   }
 
   /**
