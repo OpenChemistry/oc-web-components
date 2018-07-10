@@ -29,7 +29,8 @@
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
     "@types/jest": "^22.0.1",
-    "jest": "^23.1.0"
+    "jest": "^23.1.0",
+    "resize-observer-polyfill": "^1.5.0"
   },
   "repository": {
     "type": "git",
