@@ -1,8 +1,11 @@
-import { Component, Prop, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 
 import { IVibrations, INormalModeOptions } from '@openchemistry/types';
 
-import { isNil } from "lodash-es";
+import { isNil, throttle } from "lodash-es";
+
+import ResizeObserver from 'resize-observer-polyfill';
+
 import * as d3 from "d3";
 
 @Component({
@@ -11,6 +14,8 @@ import * as d3 from "d3";
   shadow: true
 })
 export class VibrationalSpectrum {
+
+  @Element() el: HTMLElement;
 
   @Event() barSelected: EventEmitter;
   
@@ -36,32 +41,34 @@ export class VibrationalSpectrum {
   height: number;
   margin = {top: 20, right: 20, bottom: 50, left: 50, };
 
-  renderQueue = 0;
-
-
   componentWillLoad() {
     console.log('VibrationalSpectrum is about to be rendered');
   }
 
   componentDidLoad() {
     console.log('VibrationalSpectrum has been rendered');
-    this.renderChart();
-    this.highlightBar();
-    window.addEventListener('resize', this.asyncRenderChart.bind(this));
+
+    let throttledResize = throttle(() => {
+      this.renderChart(true);
+      this.highlightBar();
+    }, 33);
+    const ro = new ResizeObserver(() => {
+      throttledResize();
+    });
+
+    setTimeout(() => {
+      // Don't start observing for parent changes immediately, let the first 
+      // render be animated.
+      ro.observe(this.el.parentElement);
+    }, 1000);
+
+    setTimeout(() => {
+      this.renderChart(false);
+      this.highlightBar();
+    }, 200);
   }
 
-  asyncRenderChart() {
-    this.renderQueue += 1;
-    let myQueue = this.renderQueue;
-    setTimeout(()=>{
-      if (myQueue >= this.renderQueue) {
-        this.renderChart();
-        this.highlightBar();
-      }
-    }, 50);
-  }
-
-  renderChart() {
+  renderChart(resize: boolean = false) {
     if (this.svg) {
       this.svg.remove();
     }
@@ -79,8 +86,8 @@ export class VibrationalSpectrum {
                 .attr("height", "100%");
     this.addXAxis(this.svg, this.vibrations.frequencies, 'Frequency (cm\u207B\u00B9)');
     this.addYAxis(this.svg, this.vibrations.intensities, "Intensity");
-    this.addBars(this.svg, this.vibrations);
-    this.addTheoryLine(this.svg, this.vibrations);
+    this.addBars(this.svg, this.vibrations, resize);
+    this.addTheoryLine(this.svg, this.vibrations, resize);
   }
 
   addXAxis(svg: any, x: number[], label: string) {
@@ -134,8 +141,9 @@ export class VibrationalSpectrum {
     this.yLabel = label;
   }
 
-  addBars(svg: any, vibrations: IVibrations) {
+  addBars(svg: any, vibrations: IVibrations, resize: boolean = false) {
     let data = [];
+    let duration = resize ? 0 : 1000;
 
     for(let i = 0; i < vibrations.intensities.length; i++) {
       data.push({
@@ -166,11 +174,13 @@ export class VibrationalSpectrum {
       .attr("x", (d) => { return this.xScale(d.frequency) - barWidth / 2; })
       .attr("y", () => { return  this.yScale(0); })
       .transition()
+        .duration(duration)
         .attr("y", (d) => { return  this.yScale(d.intensity); })
         .attr("height", (d) => { return this.yScale(0) - this.yScale(d.intensity) ; })
   }
 
-  addTheoryLine(svg: any, vibrations: IVibrations) {
+  addTheoryLine(svg: any, vibrations: IVibrations, resize: boolean = false) {
+    let duration = resize ? 0 : 1000;
     let xRange = this.xScale.domain();
     let yRange = this.yScale.domain();
     let lineData = this.generateTheoryLine(vibrations, xRange, yRange, 40);
@@ -185,6 +195,7 @@ export class VibrationalSpectrum {
       .attr('fill', 'none')
       .attr('class', 'line')
       .transition()
+        .duration(duration)
         .attr('stroke-width', 2.5)
       
   }

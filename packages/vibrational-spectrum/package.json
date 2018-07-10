@@ -29,7 +29,8 @@
     "@types/d3": "^5.0.0",
     "@types/jest": "^22.0.1",
     "@types/lodash-es": "^4.17.0",
-    "jest": "^23.1.0"
+    "jest": "^23.1.0",
+    "resize-observer-polyfill": "^1.5.0"
   },
   "repository": {
     "type": "git",
