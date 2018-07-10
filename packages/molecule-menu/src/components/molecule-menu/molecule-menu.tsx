@@ -1,4 +1,4 @@
-import { Component, State, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter } from '@stencil/core';
 
 // import { isNil } from "lodash-es";
 import '@ionic/core';
@@ -10,14 +10,17 @@ import 'ionicons';
 })
 export class MoleculeMenu {
 
-  @State() isoValue: number = 0.01;
-  @State() scaleValue: number = 1.0;
-  @State() normalMode: number = -1;
-  @State() play: boolean = true;
+  @Prop() hasVolume: boolean = false;
+  @Prop() nModes: number = -1;
+  @Prop({ mutable: true }) isoValue: number = 0.01;
+  @Prop({ mutable: true }) scaleValue: number = 1.0;
+  @Prop({ mutable: true }) iMode: number = -1;
+  @Prop({ mutable: true }) play: boolean = true;
 
   @Event() isoValueChanged: EventEmitter;
   @Event() scaleValueChanged: EventEmitter;
   @Event() normalModeChanged: EventEmitter;
+  @Event() playChanged: EventEmitter;
 
   componentWillLoad() {
     console.log('MoleculeMenu is about to be rendered');
@@ -40,7 +43,7 @@ export class MoleculeMenu {
   }
 
   isoValueHandler(val: number) {
-    if (!isFinite(val)) {
+    if (!isFinite(val) || val === this.isoValue) {
       return;
     }
     this.isoValue = val;
@@ -48,28 +51,42 @@ export class MoleculeMenu {
   }
 
   scaleValueHandler(val: number) {
-    if (!isFinite(val)) {
+    if (!isFinite(val) || val === this.scaleValue) {
       return;
     }
     this.scaleValue = val;
     this.scaleValueChanged.emit(val);
   }
 
-  normalModeHandler(val: string) {
-    this.normalMode = parseInt(val);
-    this.normalModeChanged.emit(parseInt(val));
+  normalModeHandler(valStr: string) {
+    let val = parseInt(valStr);
+    if (val === this.iMode) {
+      return;
+    }
+    this.iMode =val;
+    this.normalModeChanged.emit(val);
+  }
+
+  playHandler() {
+    this.play = !this.play;
+    this.playChanged.emit(this.play);
   }
 
   render() {
     const normalModeOptions = [];
     normalModeOptions.push(<ion-select-option value={"-1"}>None</ion-select-option>);
-    for (let i = 0; i < 20; ++i) {
+    for (let i = 0; i < this.nModes; ++i) {
       normalModeOptions.push(<ion-select-option value={i.toString()}>{i}</ion-select-option>);
+    }
+
+    if (!this.hasVolume && this.nModes <= 0) {
+      return null;
     }
 
     return (
       <ion-card>
         <ion-card-content>
+          {this.hasVolume &&
           <ion-item>
             <ion-label color="primary" position="stacked">Isovalue</ion-label>
             <ion-range
@@ -87,23 +104,25 @@ export class MoleculeMenu {
               ></ion-input>
             </div>
           </ion-item>
+          }
+          {this.nModes > 0 &&
           <div>
           <ion-item>
             <ion-label color="primary" position="stacked">Normal Mode</ion-label>
             <ion-select
-              interface="alert"
-              value={this.normalMode.toString()}
+              style={{width: "100%"}}
+              value={this.iMode.toString()}
               onIonChange={(e: CustomEvent)=>{this.normalModeHandler(e.detail.value)}}
             >
               {normalModeOptions}
             </ion-select>
             <div class="end-slot" slot="end">
-              <ion-button fill="solid" color="light" shape="round" onClick={() => {this.play = !this.play;}}>
+              <ion-button fill="solid" color="light" shape="round" onClick={() => {this.playHandler()}}>
                 <ion-icon icon={this.play ? "pause" : "play"}></ion-icon>
               </ion-button>
             </div>
           </ion-item>
-          <ion-item>
+          <ion-item disabled={!this.play || this.iMode < 0}>
             <ion-label color="primary" position="stacked">Animation Scale</ion-label>
             <ion-range
               debounce={150}
@@ -121,6 +140,7 @@ export class MoleculeMenu {
             </div>
           </ion-item>
           </div>
+          }
         </ion-card-content>
       </ion-card>
     )
