@@ -17,3 +17,15 @@ export function fetchMe(token) {
   return get('user/me', params)
     .then(response => response.data)
 }
+
+export function logIn(username, password) {
+  const params = {
+
+  };
+  let authStr = btoa(`${username}:${password}`);
+  params.headers = {
+    'Girder-Authorization': `Basic ${authStr}`
+  }
+  return get('user/authentication', params)
+    .then(response => response.data);
+}
