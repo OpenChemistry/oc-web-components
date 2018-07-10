@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.3...@openchemistry/vibrational-spectrum@0.1.4) (2018-07-10)
+
+
+### Bug Fixes
+
+* **vibrational-spectrum:** Make the component responsive to parent resize ([16a02b1](https://github.com/OpenChemistry/oc-web-components/commit/16a02b1))
+
+
+
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.2...@openchemistry/vibrational-spectrum@0.1.3) (2018-07-05)
 

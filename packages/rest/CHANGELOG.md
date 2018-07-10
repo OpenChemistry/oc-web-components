@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/rest@0.0.4...@openchemistry/rest@0.1.0) (2018-07-10)
+
+
+### Features
+
+* **rest:** Enable username/password girder login ([989fa8d](https://github.com/OpenChemistry/oc-web-components/commit/989fa8d))
+
+
+
+
 <a name="0.0.4"></a>
 ## [0.0.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/rest@0.0.3...@openchemistry/rest@0.0.4) (2018-07-09)
 
