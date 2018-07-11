@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Stencil Component Starter</title>
+  <script src="/build/molecule-vtkjs.js"></script>
+  <script src="https://unpkg.com/split-me/dist/split-me.js"></script>
+
+</head>
+<body>
+
+  <div style="width: 100%; height: 30rem;">
+    <split-me n=2 d="vertical">
+      <split-me slot="0" n=2>
+        <oc-molecule-vtkjs slot="0"></oc-molecule-vtkjs>
+      </split-me>
+    </split-me>
+  </div>
+
+  <script>
+    let cjson = {
+      "atoms" : 
+      {
+        "coords" : 
+        {
+          "3d" : 
+          [
+            0.0,
+            0.0,
+            -0.26192472620000,
+            0.0,
+            0.77162768440000,
+            0.34261631290000,
+            0.0,
+            -0.77162768440000,
+            0.34261631290000
+          ]
+        },
+        "elements" : 
+        {
+          "number" : [ 8, 1, 1 ],
+          "symbol" : [ "O", "H", "H"]
+        }
+      },
+      "bonds" : 
+      {
+        "connections" : 
+        {
+          "index" : 
+          [
+            0,
+            1,
+            0,
+            2
+          ]
+        },
+        "order" : [ 1, 1 ]
+      },
+      "chemical json" : 0
+    };
+
+    let el = document.querySelector("oc-molecule-vtkjs");
+    el.cjson = cjson;
+  </script>
+
+</body>
+</html>
