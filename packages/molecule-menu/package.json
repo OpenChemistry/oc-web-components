@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/molecule-menu",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Stencil component to display chemical json data",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
