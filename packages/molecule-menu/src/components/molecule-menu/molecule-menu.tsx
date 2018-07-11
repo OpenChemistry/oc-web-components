@@ -6,7 +6,8 @@ import 'ionicons';
 
 @Component({
   tag: 'oc-molecule-menu',
-  styleUrl: 'molecule-menu.css'
+  styleUrl: 'molecule-menu.css',
+  shadow: true
 })
 export class MoleculeMenu {
 
@@ -84,65 +85,63 @@ export class MoleculeMenu {
     }
 
     return (
-      <ion-card>
-        <ion-card-content>
-          {this.hasVolume &&
-          <ion-item>
-            <ion-label color="primary" position="stacked">Isovalue</ion-label>
-            <ion-range
-              debounce={150}
-              min={0.0005}
-              max={0.05}
-              step={0.0001}
-              value={this.isoValue}
-              onIonChange={ (e: CustomEvent)=>{this.isoValueHandler(e.detail.value)}}
-            />
-            <div class="end-slot" slot="end">
-              <ion-input value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0000"}
-                debounce={500}
-                onIonChange={(e: CustomEvent)=>{this.isoValueHandler(parseFloat(e.detail.value))}}
-              ></ion-input>
-            </div>
-          </ion-item>
-          }
-          {this.nModes > 0 &&
-          <div>
-          <ion-item>
-            <ion-label color="primary" position="stacked">Normal Mode</ion-label>
-            <ion-select
-              style={{width: "100%"}}
-              value={this.iMode.toString()}
-              onIonChange={(e: CustomEvent)=>{this.normalModeHandler(e.detail.value)}}
-            >
-              {normalModeOptions}
-            </ion-select>
-            <div class="end-slot" slot="end">
-              <ion-button fill="solid" color="light" shape="round" onClick={() => {this.playHandler()}}>
-                <ion-icon icon={this.play ? "pause" : "play"}></ion-icon>
-              </ion-button>
-            </div>
-          </ion-item>
-          <ion-item disabled={!this.play || this.iMode < 0}>
-            <ion-label color="primary" position="stacked">Animation Scale</ion-label>
-            <ion-range
-              debounce={150}
-              min={0.5}
-              max={3}
-              step={0.5}
-              value={this.scaleValue}
-              onIonChange={ (e: CustomEvent)=>{this.scaleValueHandler(e.detail.value)}}
-            />
-            <div class="end-slot" slot="end">
-              <ion-input value={isFinite(this.scaleValue) ? this.scaleValue.toFixed(1) : "0.0"}
-                debounce={500}
-                onIonChange={(e: CustomEvent)=>{this.scaleValueHandler(parseFloat(e.detail.value))}}
-              ></ion-input>
-            </div>
-          </ion-item>
+      <div>
+        {this.hasVolume &&
+        <ion-item>
+          <ion-label color="primary" position="stacked">Isovalue</ion-label>
+          <ion-range
+            debounce={150}
+            min={0.0005}
+            max={0.05}
+            step={0.0001}
+            value={this.isoValue}
+            onIonChange={ (e: CustomEvent)=>{this.isoValueHandler(e.detail.value)}}
+          />
+          <div class="end-slot" slot="end">
+            <ion-input value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0000"}
+              debounce={500}
+              onIonChange={(e: CustomEvent)=>{this.isoValueHandler(parseFloat(e.detail.value))}}
+            ></ion-input>
           </div>
-          }
-        </ion-card-content>
-      </ion-card>
+        </ion-item>
+        }
+        {this.nModes > 0 &&
+        <div>
+        <ion-item>
+          <ion-label color="primary" position="stacked">Normal Mode</ion-label>
+          <ion-select
+            style={{width: "100%"}}
+            value={this.iMode.toString()}
+            onIonChange={(e: CustomEvent)=>{this.normalModeHandler(e.detail.value)}}
+          >
+            {normalModeOptions}
+          </ion-select>
+          <div class="end-slot" slot="end">
+            <ion-button fill="solid" color="light" shape="round" onClick={() => {this.playHandler()}}>
+              <ion-icon icon={this.play ? "pause" : "play"}></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+        <ion-item disabled={!this.play || this.iMode < 0}>
+          <ion-label color="primary" position="stacked">Animation Scale</ion-label>
+          <ion-range
+            debounce={150}
+            min={0.5}
+            max={3}
+            step={0.5}
+            value={this.scaleValue}
+            onIonChange={ (e: CustomEvent)=>{this.scaleValueHandler(e.detail.value)}}
+          />
+          <div class="end-slot" slot="end">
+            <ion-input value={isFinite(this.scaleValue) ? this.scaleValue.toFixed(1) : "0.0"}
+              debounce={500}
+              onIonChange={(e: CustomEvent)=>{this.scaleValueHandler(parseFloat(e.detail.value))}}
+            ></ion-input>
+          </div>
+        </ion-item>
+        </div>
+        }
+      </div>
     )
   }
 }
