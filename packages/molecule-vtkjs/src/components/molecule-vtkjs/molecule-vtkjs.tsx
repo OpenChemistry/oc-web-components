@@ -52,6 +52,7 @@ export class MoleculeVtkjs {
   componentWillLoad() {
     console.log('MoleculeVtkjs is about to be rendered');
     this.initVtkJs();
+    this.applyStyle();
   }
 
   componentDidLoad() {
@@ -82,7 +83,7 @@ export class MoleculeVtkjs {
       this.renderWindow.render();
       this.cjsonHasChanged = false;
     }
-
+    this.applyStyle();
     this.startAnimation();
   }
 
@@ -91,6 +92,7 @@ export class MoleculeVtkjs {
     this.updateMolecule();
 
     this.viewer = vtk.Rendering.Misc.vtkGenericRenderWindow.newInstance();
+    this.viewer.setBackground(255, 255, 255);
     this.renderer = this.viewer.getRenderer();
     this.renderWindow = this.viewer.getRenderWindow();
     this.filter = vtk.Filters.General.vtkMoleculeToRepresentation.newInstance();
@@ -174,6 +176,12 @@ export class MoleculeVtkjs {
         frame++;
       }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
     }
+  }
+
+  applyStyle() {
+    let style = this.getOptions().style;
+    this.filter.setAtomicRadiusScaleFactor(style.sphere.scale);
+    this.filter.setBondRadius(style.stick.radius);
   }
 
   componentDidUnload() {
