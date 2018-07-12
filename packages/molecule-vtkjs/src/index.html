@@ -62,6 +62,8 @@
 
     let el = document.querySelector("oc-molecule-vtkjs");
     el.cjson = cjson;
+
+    setTimeout(()=>{el.remove();}, 2000);
   </script>
 
 </body>
