@@ -6,15 +6,18 @@ import { isNil, throttle } from "lodash-es";
 
 import { IChemJson, IDisplayOptions, IAtoms, IBonds } from '@openchemistry/types';
 import { composeDisplayOptions } from '@openchemistry/utils';
+import { color2rgb, rowMaj2colMaj3d } from '@openchemistry/utils';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
 
-// import vtkFullScreenRenderWindow from 'vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow';
+import {BenzeneWithHomo} from '@openchemistry/sample-data';
+
 import vtk from 'vtk.js';
+
 
 @Component({
   tag: 'oc-molecule-vtkjs',
   styleUrl: 'molecule-vtkjs.css',
-  shadow: true
+  shadow: false
 })
 export class MoleculeVtkjs {
 
@@ -27,14 +30,16 @@ export class MoleculeVtkjs {
   }
 
   @Prop() options: IDisplayOptions;
-  @Watch('options') optionsHandler(newValue: IDisplayOptions) {
-    this.optionsData = composeDisplayOptions(newValue);
+  @Watch('options') optionsHandler() {
+    this.optionsHasChanged = true;
+    this.optionsData = null;
   }
 
   cjsonData: IChemJson;
   optionsData: IDisplayOptions;
 
   cjsonHasChanged: boolean = false;
+  optionsHasChanged: boolean = false;
 
   animationInterval: any;
 
@@ -48,6 +53,8 @@ export class MoleculeVtkjs {
   stickMapper: any;
   stickActor: any;
   molecule: any;
+  isoSurfaces: any[] = [];
+  volume: any;
 
   componentWillLoad() {
     console.log('MoleculeVtkjs is about to be rendered');
@@ -79,11 +86,19 @@ export class MoleculeVtkjs {
     console.log('MoleculeVtkjs did update');
     if (this.cjsonHasChanged) {
       this.updateMolecule();
+      this.updateVolume();
       this.renderer.resetCamera();
       this.renderWindow.render();
       this.cjsonHasChanged = false;
     }
-    this.applyStyle();
+
+    if (this.optionsHasChanged) {
+      this.applyStyle();
+      this.updateIsoSurfaces();
+      this.renderWindow.render();
+      this.optionsHasChanged = false;
+    }
+
     this.startAnimation();
   }
 
@@ -113,10 +128,17 @@ export class MoleculeVtkjs {
     this.stickActor = vtk.Rendering.Core.vtkActor.newInstance();
     this.stickActor.setMapper(this.stickMapper);
 
+    this.volume = vtk.Common.DataModel.vtkImageData.newInstance();
+    this.updateVolume();
+
+    this.updateIsoSurfaces();
+
     this.renderer.addActor(this.sphereActor);
     this.renderer.addActor(this.stickActor);
+
     this.renderer.resetCamera();
     this.renderWindow.render();
+
   }
 
   cleanupVtkjs() {
@@ -125,6 +147,15 @@ export class MoleculeVtkjs {
     this.filter.delete();
     this.sphereMapper.delete();
     this.sphereActor.delete();
+    this.stickMapper.delete();
+    this.stickActor.delete();
+    for (let i = 0; i < this.isoSurfaces.length; ++i) {
+      const {marchingCubes, mapper, actor} = this.isoSurfaces.pop();
+      actor.delete();
+      mapper.delete();
+      marchingCubes.delete();
+    }
+    this.volume.delete();
   }
 
   updateMolecule() {
@@ -134,6 +165,95 @@ export class MoleculeVtkjs {
 
     this.molecule.setAtoms(atoms);
     this.molecule.setBonds(bonds);
+  }
+
+  updateVolume() {
+    let cjson = this.getCjson();
+    let dimensions: number[];
+    let spacing: number[];
+    let origin: number[];
+    let scalars: any;
+
+    if (isNil(cjson.cube)) {
+      dimensions = [1, 1, 1];
+      spacing = [1, 1, 1];
+      origin = [0, 0, 0];
+      scalars = vtk.Common.Core.vtkDataArray.newInstance({
+        name: 'Scalars',
+        values: [0],
+        numberOfComponents: 1
+      });
+
+    } else {
+      dimensions = cjson.cube.dimensions;
+      spacing = cjson.cube.spacing;
+      origin = cjson.cube.origin;
+      scalars = vtk.Common.Core.vtkDataArray.newInstance({
+        name: 'Scalars',
+        values: rowMaj2colMaj3d(cjson.cube.scalars, cjson.cube.dimensions),
+        numberOfComponents: 1
+      });
+    }
+
+    this.volume.setDimensions(dimensions);
+    this.volume.setSpacing(spacing);
+    this.volume.setOrigin(origin);
+    this.volume.getPointData().setScalars(scalars);
+    
+  }
+
+  updateIsoSurfaces() {
+    // Keep the number of isoSurfaces in sync with the input
+    let options = this.getOptions();
+    
+    // Reuse existing object that we have allocated
+    const n = Math.min(options.isoSurfaces.length, this.isoSurfaces.length);
+    for (let i = 0; i < n; ++i) {
+      const {marchingCubes, actor} = this.isoSurfaces[i];
+      marchingCubes.setContourValue(options.isoSurfaces[i].value);
+      marchingCubes.setInputData(this.volume);
+      actor.getProperty('color').setColor(...color2rgb(options.isoSurfaces[i].color));
+      actor.getProperty('opacity').setOpacity(options.isoSurfaces[i].opacity);
+    }
+
+    if (this.isoSurfaces.length > options.isoSurfaces.length) {
+      // Cleanup the objects in excess
+      const n = this.isoSurfaces.length - options.isoSurfaces.length;
+      for (let i = 0; i < n; ++i) {
+        const {marchingCubes, mapper, actor} = this.isoSurfaces.pop();
+        this.renderer.removeActor(actor);
+        actor.delete();
+        mapper.delete();
+        marchingCubes.delete();
+      }
+    } else if (this.isoSurfaces.length < options.isoSurfaces.length) {
+       // Allocate the objects as needed
+      for (let i = this.isoSurfaces.length; i < options.isoSurfaces.length; ++i) {
+        let marchingCubes = vtk.Filters.General.vtkImageMarchingCubes.newInstance({
+          contourValue: options.isoSurfaces[i].value,
+          computeNormals: true,
+          mergePoints: true
+        });
+        marchingCubes.setInputData(this.volume);
+
+        let mapper = vtk.Rendering.Core.vtkMapper.newInstance();
+        mapper.setInputConnection(marchingCubes.getOutputPort());
+
+        let actor = vtk.Rendering.Core.vtkActor.newInstance({color: [255, 0, 0]});
+        actor.setMapper(mapper);
+
+        actor.getProperty().setDiffuseColor(...color2rgb(options.isoSurfaces[i].color));
+        actor.getProperty().setOpacity(options.isoSurfaces[i].opacity);
+
+        this.renderer.addActor(actor);
+
+        this.isoSurfaces.push({
+          marchingCubes,
+          mapper,
+          actor
+        });
+      }
+    }
   }
 
   stopAnimation() {
@@ -190,10 +310,11 @@ export class MoleculeVtkjs {
   }
 
   getCjson(): IChemJson {
-    if (isNil(this.cjsonData)) {
-      this.setCjson();
-    }
-    return this.cjsonData;
+    return BenzeneWithHomo;
+    // if (isNil(this.cjsonData)) {
+    //   this.setCjson();
+    // }
+    // return this.cjsonData;
   }
 
   setCjson() {

@@ -61,9 +61,66 @@
     };
 
     let el = document.querySelector("oc-molecule-vtkjs");
+    let options = {
+      isoSurfaces: []
+    }
+    el.options = options;
     el.cjson = cjson;
 
-    // setTimeout(()=>{el.remove();}, 2000);
+    setTimeout(()=>{
+      let options = {
+       isoSurfaces: [
+         {value: 0.005, color: "red", opacity: 0.7},
+         {value: -0.005, color: "green", opacity: 0.7}
+        ]
+      }
+      el.options = options;
+    }, 1000);
+
+    // setTimeout(()=>{
+    //   let options = {
+    //    isoSurfaces: [
+    //      {value: 0.005, color: "red", opacity: 0.7},
+    //      {value: -0.005, color: "green", opacity: 0.7},
+    //     ]
+    //   }
+    //   el.options = options;
+    // }, 2000);
+
+    // setTimeout(()=>{
+    //   let options = {
+    //    isoSurfaces: [
+    //      {value: -0.001, color: "green", opacity: 0.7},
+    //     ]
+    //   }
+    //   el.options = options;
+    // }, 3000);
+
+    // setTimeout(()=>{
+    //   let options = {
+    //    isoSurfaces: [
+    //      {value: 0.001, color: "red", opacity: 0.7},
+    //      {value: -0.005, color: "green", opacity: 0.7},
+    //     ]
+    //   }
+    //   el.options = options;
+    // }, 4000);
+
+    // setTimeout(()=>{
+    //   let options = {
+    //    isoSurfaces: [
+
+    //     ]
+    //   }
+    //   el.options = options;
+    // }, 5000);
+
+
+    // setTimeout(()=>{
+    //   el.remove();
+    // }, 10000);
+
+
   </script>
 
 </body>
