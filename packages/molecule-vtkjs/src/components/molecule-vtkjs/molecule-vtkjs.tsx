@@ -212,8 +212,10 @@ export class MoleculeVtkjs {
       const {marchingCubes, actor} = this.isoSurfaces[i];
       marchingCubes.setContourValue(options.isoSurfaces[i].value);
       marchingCubes.setInputData(this.volume);
-      actor.getProperty('color').setColor(...color2rgb(options.isoSurfaces[i].color));
-      actor.getProperty('opacity').setOpacity(options.isoSurfaces[i].opacity);
+      actor.getProperty().setDiffuseColor(...color2rgb(options.isoSurfaces[i].color));
+      // There is no depth peeling in vtkjs, set opacity to 1 for the time being
+      // actor.getProperty().setOpacity(options.isoSurfaces[i].opacity);
+      actor.getProperty().setOpacity(1);
     }
 
     if (this.isoSurfaces.length > options.isoSurfaces.length) {
@@ -239,11 +241,12 @@ export class MoleculeVtkjs {
         let mapper = vtk.Rendering.Core.vtkMapper.newInstance();
         mapper.setInputConnection(marchingCubes.getOutputPort());
 
-        let actor = vtk.Rendering.Core.vtkActor.newInstance({color: [255, 0, 0]});
+        let actor = vtk.Rendering.Core.vtkActor.newInstance();
         actor.setMapper(mapper);
-
         actor.getProperty().setDiffuseColor(...color2rgb(options.isoSurfaces[i].color));
-        actor.getProperty().setOpacity(options.isoSurfaces[i].opacity);
+        // There is no depth peeling in vtkjs, set opacity to 1 for the time being
+        // actor.getProperty().setOpacity(options.isoSurfaces[i].opacity);
+        actor.getProperty().setOpacity(1);
 
         this.renderer.addActor(actor);
 
