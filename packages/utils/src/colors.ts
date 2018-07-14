@@ -22,5 +22,5 @@ export function color2rgb(color: string) : [number, number, number] {
   let g = parseInt(color.substring(2,4), 16);
   let b = parseInt(color.substring(4,6), 16);
 
-  return [r, g, b];
+  return [r / 255, g / 255, b / 255];
 }
