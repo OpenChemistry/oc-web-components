@@ -9,10 +9,7 @@ import { composeDisplayOptions } from '@openchemistry/utils';
 import { color2rgb, rowMaj2colMaj3d } from '@openchemistry/utils';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
 
-import {BenzeneWithHomo} from '@openchemistry/sample-data';
-
 import vtk from 'vtk.js';
-
 
 @Component({
   tag: 'oc-molecule-vtkjs',
@@ -55,6 +52,11 @@ export class MoleculeVtkjs {
   molecule: any;
   isoSurfaces: any[] = [];
   volume: any;
+  volumeMapper: any;
+  volumeActor: any;
+
+  ctFn: any;
+  opacityFn: any;
 
   componentWillLoad() {
     console.log('MoleculeVtkjs is about to be rendered');
@@ -95,6 +97,7 @@ export class MoleculeVtkjs {
     if (this.optionsHasChanged) {
       this.applyStyle();
       this.updateIsoSurfaces();
+      this.updateVolumeLook();
       this.renderWindow.render();
       this.optionsHasChanged = false;
     }
@@ -107,7 +110,7 @@ export class MoleculeVtkjs {
     this.updateMolecule();
 
     this.viewer = vtk.Rendering.Misc.vtkGenericRenderWindow.newInstance();
-    this.viewer.setBackground(255, 255, 255);
+    this.viewer.setBackground(1, 1, 1);
     this.renderer = this.viewer.getRenderer();
     this.renderWindow = this.viewer.getRenderWindow();
     this.filter = vtk.Filters.General.vtkMoleculeToRepresentation.newInstance();
@@ -129,16 +132,30 @@ export class MoleculeVtkjs {
     this.stickActor.setMapper(this.stickMapper);
 
     this.volume = vtk.Common.DataModel.vtkImageData.newInstance();
+    this.volumeMapper = vtk.Rendering.Core.vtkVolumeMapper.newInstance();
+    this.volumeActor = vtk.Rendering.Core.vtkVolume.newInstance();
+    this.volumeActor.setMapper(this.volumeMapper);
+
+    this.ctFn = vtk.Rendering.Core.vtkColorTransferFunction.newInstance();
+    this.opacityFn = vtk.Common.DataModel.vtkPiecewiseFunction.newInstance();
+    this.volumeActor.getProperty().setRGBTransferFunction(0, this.ctFn);
+    this.volumeActor.getProperty().setScalarOpacity(0, this.opacityFn);
+    // this.volumeMapper.setSampleDistance(0.7);
+    // this.volumeActor.getProperty().setScalarOpacityUnitDistance(0, 4.5);
+    // this.volumeActor.getProperty().setInterpolationTypeToLinear();
+
     this.updateVolume();
+    this.volumeMapper.setInputData(this.volume);
 
     this.updateIsoSurfaces();
+    this.updateVolumeLook();
 
     this.renderer.addActor(this.sphereActor);
     this.renderer.addActor(this.stickActor);
+    this.renderer.addVolume(this.volumeActor);
 
     this.renderer.resetCamera();
     this.renderWindow.render();
-
   }
 
   cleanupVtkjs() {
@@ -205,7 +222,7 @@ export class MoleculeVtkjs {
   updateIsoSurfaces() {
     // Keep the number of isoSurfaces in sync with the input
     let options = this.getOptions();
-    
+
     // Reuse existing object that we have allocated
     const n = Math.min(options.isoSurfaces.length, this.isoSurfaces.length);
     for (let i = 0; i < n; ++i) {
@@ -257,6 +274,44 @@ export class MoleculeVtkjs {
         });
       }
     }
+
+    // Set visibility
+    for (let i = 0; i < this.isoSurfaces.length; ++i) {
+      this.isoSurfaces[i].actor.setVisibility(options.visibility.isoSurfaces);
+    }
+  }
+
+  updateVolumeLook() {
+    let range = this.volume.getPointData().getScalars().getRange();
+    let delta = range[1] - range[0];
+    let options = this.getOptions();
+
+    this.ctFn.removeAllPoints();
+    this.opacityFn.removeAllPoints();
+
+    let pointsProvided: boolean = !isNil(options.volume.colorsScalarValue) && options.volume.colorsScalarValue.length == options.volume.colors.length;
+    for (let i = 0; i < options.volume.colors.length; ++i) {
+      let val: number;
+      if (pointsProvided) {
+        val = options.volume.colorsScalarValue[i];
+      } else {
+        val = range[0] + i * delta / (options.volume.colors.length - 1);
+      }
+      this.ctFn.addRGBPoint(val, ...options.volume.colors[i]);
+    }
+
+    pointsProvided = !isNil(options.volume.opacityScalarValue) && options.volume.opacityScalarValue.length == options.volume.opacity.length;
+    for (let i = 0; i < options.volume.opacity.length; ++i) {
+      let val: number;
+      if (pointsProvided) {
+        val = options.volume.opacityScalarValue[i];
+      } else {
+        val = range[0] + i * delta / (options.volume.opacity.length - 1);
+      }
+      this.opacityFn.addPoint(val, options.volume.opacity[i]);
+    }
+
+    this.volumeActor.setVisibility(options.visibility.volume);
   }
 
   stopAnimation() {
@@ -313,11 +368,10 @@ export class MoleculeVtkjs {
   }
 
   getCjson(): IChemJson {
-    return BenzeneWithHomo;
-    // if (isNil(this.cjsonData)) {
-    //   this.setCjson();
-    // }
-    // return this.cjsonData;
+    if (isNil(this.cjsonData)) {
+      this.setCjson();
+    }
+    return this.cjsonData;
   }
 
   setCjson() {
