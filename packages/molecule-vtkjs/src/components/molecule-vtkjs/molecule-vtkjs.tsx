@@ -282,9 +282,14 @@ export class MoleculeVtkjs {
   }
 
   updateVolumeLook() {
-    let range = this.volume.getPointData().getScalars().getRange();
-    let delta = range[1] - range[0];
     let options = this.getOptions();
+    let range;
+    if (isNil(options.volume.range)) {
+      range = this.volume.getPointData().getScalars().getRange();
+    } else {
+      range = options.volume.range;
+    }
+    let delta = range[1] - range[0];
 
     this.ctFn.removeAllPoints();
     this.opacityFn.removeAllPoints();
