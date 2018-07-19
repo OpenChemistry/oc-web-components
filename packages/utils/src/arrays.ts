@@ -9,3 +9,26 @@ export function rowMaj2colMaj3d(scalars: number[], dims: [number, number, number
   }
   return tmp;
 }
+
+export function makeBins(scalars: number[], nBins = 50, range: number[] | undefined = undefined) {
+  let h = [];
+  for (let i = 0; i <= nBins; ++i) {
+    h.push(0);
+  }
+
+  if (!range) {
+    range = [0, 0];
+    range[0] = Math.min(...scalars);
+    range[1] = Math.max(...scalars);
+  }
+
+  let delta = range[1] - range[0];
+
+  for (let i = 0; i < scalars.length; ++i) {
+    let idx = Math.floor(nBins * (scalars[i] - range[0]) / delta);
+    if (idx <= nBins && idx > 0) {
+      h[idx]++;
+    }
+  }
+  return h;
+}
