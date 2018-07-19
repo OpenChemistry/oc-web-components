@@ -19,6 +19,8 @@ export class VolumeControls {
 
   @Prop() range: [number, number] = [0, 1];
 
+  @Prop() histograms: number[] = [];
+
   @Element() el: HTMLElement;
 
   canvas: HTMLCanvasElement;
@@ -29,6 +31,7 @@ export class VolumeControls {
 
   xScale: ScaleLinear<number, number>;
   yScale: ScaleLinear<number, number>;
+  yScaleHist: ScaleLinear<number, number>;
 
   activeNode: number;
   
@@ -58,6 +61,11 @@ export class VolumeControls {
     this.ghostCanvas.height = h;
     this.xScale = scaleLinear().domain(this.range).range([0, w]);
     this.yScale = scaleLinear().domain([0, 1]).range([h, 0]);
+    if (this.histograms.length > 0) {
+      let low = Math.min(...this.histograms);
+      let high = Math.max(...this.histograms);
+      this.yScaleHist = scaleLinear().domain([low, high]).range([h, h / 2]);
+    }
     this.drawCanvas();
   }
 
@@ -167,6 +175,7 @@ export class VolumeControls {
     this.ghostC.clearRect(0, 0, this.ghostCanvas.width, this.ghostCanvas.height);
     this.drawBackGround(opacity);
     this.drawOpacityControls(opacity);
+    this.drawHistograms(opacity);
   }
 
   defaultX(n: number): number[] {
@@ -280,12 +289,21 @@ export class VolumeControls {
     }
   }
 
+  drawHistograms(globalOpacity: number) {
+    if (this.histograms.length === 0) {
+      return;
+    }
+    let gray = 128;
+    let opacity = 0.3;
+    let width = this.canvas.width / this.histograms.length;
+    let delta = this.range[1] - this.range[0];
+    this.c.fillStyle = `rgba(${gray}, ${gray}, ${gray}, ${opacity * globalOpacity})`;
+    for (let i = 0; i < this.histograms.length; ++i) {
+      let x0 = this.xScale(this.range[0] + delta * i / this.histograms.length);
+      let y0 = this.yScaleHist(this.histograms[i]);
+      this.c.fillRect(x0, y0, width, this.canvas.height - y0);
+    }
 
-  drawGhostCanvas() {
-
-  }
-
-  drawOpacityCanvas() {
 
   }
 
