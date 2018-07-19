@@ -1,6 +1,6 @@
 import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
 
-import { scaleLinear, ScaleLinear } from 'd3';
+import { scaleLinear, ScaleLinear, scaleLog, ScaleLogarithmic } from 'd3';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -33,7 +33,7 @@ export class VolumeControls {
 
   xScale: ScaleLinear<number, number>;
   yScale: ScaleLinear<number, number>;
-  yScaleHist: ScaleLinear<number, number>;
+  yScaleHist: ScaleLogarithmic<number, number>;
 
   activeNode: number;
   
@@ -64,9 +64,8 @@ export class VolumeControls {
     this.xScale = scaleLinear().domain(this.range).range([0, w]);
     this.yScale = scaleLinear().domain([0, 1]).range([h, 0]);
     if (this.histograms.length > 0) {
-      let low = Math.min(...this.histograms);
       let high = Math.max(...this.histograms);
-      this.yScaleHist = scaleLinear().domain([low, high]).range([h, h / 2]);
+      this.yScaleHist = scaleLog().domain([1, high]).range([h, h / 2]);
     }
     this.drawCanvas();
   }
