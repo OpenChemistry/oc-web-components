@@ -1,4 +1,4 @@
-import { Component, Prop, Element } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
 
 import { scaleLinear, ScaleLinear } from 'd3';
 
@@ -22,6 +22,8 @@ export class VolumeControls {
   @Prop() histograms: number[] = [];
 
   @Element() el: HTMLElement;
+
+  @Event() opacitiesChanged: EventEmitter;
 
   canvas: HTMLCanvasElement;
   c: CanvasRenderingContext2D;
@@ -120,11 +122,13 @@ export class VolumeControls {
     }
     this.opacitiesX = [...this.opacitiesX.slice(0, idx), x, ...this.opacitiesX.slice(idx)];
     this.opacities = [...this.opacities.slice(0, idx), y, ...this.opacities.slice(idx)];
+    this.opacitiesChangedHandler();
   }
 
   removeOpacityNode(idx: number) {
     this.opacitiesX = [...this.opacitiesX.slice(0, idx), ...this.opacitiesX.slice(idx + 1)];
     this.opacities = [...this.opacities.slice(0, idx), ...this.opacities.slice(idx + 1)];
+    this.opacitiesChangedHandler();
   }
 
   onDragStart(ev: DragEvent) {
@@ -165,8 +169,17 @@ export class VolumeControls {
     if (this.opacitiesX[i] !== x || this.opacities[i] !== y){
       this.opacitiesX[i] = x;
       this.opacities[i] = y;
+      this.opacitiesChangedHandler();
       this.drawCanvas();
     }
+  }
+
+  opacitiesChangedHandler() {
+    let val = {
+      opacity: this.opacities,
+      opacityScalarValue: this.opacitiesX
+    }
+    this.opacitiesChanged.emit(val);
   }
 
   drawCanvas() {
