@@ -15,9 +15,12 @@
     "test": "jest",
     "test.watch": "jest --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "d3": "^5.5.0"
+  },
   "devDependencies": {
     "@stencil/core": "^0.10.0",
+    "@types/d3": "^5.0.0",
     "@types/jest": "^21.1.1",
     "jest": "^21.2.1",
     "resize-observer-polyfill": "^1.5.0"

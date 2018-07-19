@@ -1,5 +1,7 @@
 import { Component, Prop, Element } from '@stencil/core';
 
+import { scaleLinear, ScaleLinear } from 'd3';
+
 import ResizeObserver from 'resize-observer-polyfill';
 
 @Component({
@@ -15,6 +17,8 @@ export class VolumeControls {
   @Prop({mutable: true}) opacities: number[] = [0, 1];
   @Prop({mutable: true}) opacitiesX: number[];
 
+  @Prop() range: [number, number] = [0, 1];
+
   @Element() el: HTMLElement;
 
   canvas: HTMLCanvasElement;
@@ -22,6 +26,9 @@ export class VolumeControls {
 
   ghostCanvas: HTMLCanvasElement;
   ghostC: CanvasRenderingContext2D;
+
+  xScale: ScaleLinear<number, number>;
+  yScale: ScaleLinear<number, number>;
 
   activeNode: number;
   
@@ -43,27 +50,73 @@ export class VolumeControls {
   }
 
   onResize() {
-    this.canvas.width = this.el.parentElement.clientWidth;
-    this.canvas.height = this.el.parentElement.clientHeight;
-    this.ghostCanvas.width = this.el.parentElement.clientWidth;
-    this.ghostCanvas.height = this.el.parentElement.clientHeight;
+    let w = this.el.parentElement.clientWidth;
+    let h = this.el.parentElement.clientHeight;
+    this.canvas.width = w;
+    this.canvas.height = h;
+    this.ghostCanvas.width = w;
+    this.ghostCanvas.height = h;
+    this.xScale = scaleLinear().domain(this.range).range([0, w]);
+    this.yScale = scaleLinear().domain([0, 1]).range([h, 0]);
     this.drawCanvas();
   }
 
   onMouseDown(ev: MouseEvent) {
-    // ev.preventDefault();
+    this.activeNode = this._getNodeOnCanvas(ev.clientX, ev.clientY);
+  }
+
+  onDblClick(ev: MouseEvent) {
+    let node = this._getNodeOnCanvas(ev.clientX, ev.clientY);
+    if (node === undefined) {
+      const {x, y} = this._mouseToXY(ev.clientX, ev.clientY);
+      this.addOpacityNode(x, y);
+      this.drawCanvas();
+    }
+  }
+
+  onAuxClick(ev: MouseEvent) {
+    let node = this._getNodeOnCanvas(ev.clientX, ev.clientY);
+    if (node !== undefined) {
+      this.removeOpacityNode(node);
+      this.drawCanvas();
+    }
+  }
+
+  _getNodeOnCanvas(mX, mY) {
     let rect = this.canvas.getBoundingClientRect();
-    let x = ev.clientX - rect.left;
-    let y = ev.clientY - rect.top;
+    let x = mX - rect.left;
+    let y = mY - rect.top;
     let col = this.ghostC.getImageData(x, y, 1, 1).data;
 
     // the canvas is transparent anywhere but where the nodes are
     if (col[3] === 255) {
-      this.activeNode = col[0];
-    } else {
-      this.activeNode = undefined;
+      return col[0];
     }
-    console.log(this.activeNode);
+    return undefined;
+  }
+
+  _mouseToXY(mX: number, mY: number) {
+    let rect = this.canvas.getBoundingClientRect();
+    let x = this.xScale.invert(mX - rect.left);
+    let y = this.yScale.invert(mY - rect.top);
+    return {x, y};
+  }
+
+  addOpacityNode(x: number, y: number) {
+    let idx = 0;
+    for (let i = 0; i < this.opacitiesX.length; ++i) {
+      if (this.opacitiesX[i] > x) {
+        break;
+      }
+      idx++;
+    }
+    this.opacitiesX = [...this.opacitiesX.slice(0, idx), x, ...this.opacitiesX.slice(idx)];
+    this.opacities = [...this.opacities.slice(0, idx), y, ...this.opacities.slice(idx)];
+  }
+
+  removeOpacityNode(idx: number) {
+    this.opacitiesX = [...this.opacitiesX.slice(0, idx), ...this.opacitiesX.slice(idx + 1)];
+    this.opacities = [...this.opacities.slice(0, idx), ...this.opacities.slice(idx + 1)];
   }
 
   onDragStart(ev: DragEvent) {
@@ -84,27 +137,28 @@ export class VolumeControls {
   }
 
   moveNode(mX: number, mY: number, i: number) {
-    let rect = this.canvas.getBoundingClientRect();
-    let x = (mX - rect.left) / rect.width;
-    let y = 1 - (mY - rect.top) / rect.height;
+    let {x, y} = this._mouseToXY(mX, mY);
 
     y = Math.min(1, y);
     y = Math.max(0, y);
-    x = Math.min(1, x);
-    x = Math.max(0, x);
+    x = Math.min(this.range[1], x);
+    x = Math.max(this.range[0], x);
     if (i > 0) {
       x = Math.max(this.opacitiesX[i - 1], x);
     } else {
-      x = 0;
+      x = this.range[0];
     }
     if (i < this.opacitiesX.length - 1) {
       x = Math.min(this.opacitiesX[i + 1], x);
     } else {
-      x = 1;
+      x = this.range[1];
     }
-    this.opacitiesX[i] = x;
-    this.opacities[i] = y;
-    this.drawCanvas();
+
+    if (this.opacitiesX[i] !== x || this.opacities[i] !== y){
+      this.opacitiesX[i] = x;
+      this.opacities[i] = y;
+      this.drawCanvas();
+    }
   }
 
   drawCanvas() {
@@ -117,8 +171,10 @@ export class VolumeControls {
 
   defaultX(n: number): number[] {
     let x: number[] = [];
+    let delta = this.range[1] - this.range[0];
     for (let i = 0; i < n; ++i) {
-      x.push(i / (n - 1));
+      let val = this.range[0] + delta * (i / (n - 1));
+      x.push(val);
     }
     return x;
   }
@@ -134,6 +190,8 @@ export class VolumeControls {
 
     let colorIdx = 0;
     let opacityIdx = 0;
+
+    let delta = this.range[1] - this.range[0];
 
     while (colorIdx < this.colors.length && opacityIdx < this.opacities.length) {
       let xCol = this.colorsX[colorIdx];
@@ -164,7 +222,7 @@ export class VolumeControls {
         opacity = frac * this.opacities[opacityIdx] + (1 - frac) * this.opacities[opacityIdx + 1];
       }
 
-      grad.addColorStop(x, `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${globalOpacity * opacity})`);
+      grad.addColorStop((x - this.range[0]) / delta, `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${globalOpacity * opacity})`);
 
       if (colorIdx < this.colorsX.length - 1) {
         xCol = this.colorsX[colorIdx + 1];
@@ -190,12 +248,13 @@ export class VolumeControls {
   }
 
   drawOpacityControls(globalOpacity: number) {
-    this.c.strokeStyle = `rgba(${0}, ${0}, ${0}, ${globalOpacity})`
+    let gray = 32;
+    this.c.strokeStyle = `rgba(${gray}, ${gray}, ${gray}, ${globalOpacity})`
     this.c.lineWidth = 2;
     this.c.beginPath();
     for (let i = 0; i < this.opacitiesX.length; ++i) {
-      let x: number = this.opacitiesX[i] * this.canvas.width;
-      let y:number = this.canvas.height - this.opacities[i] * this.canvas.height;
+      let x: number = this.xScale(this.opacitiesX[i]);
+      let y:number = this.yScale(this.opacities[i]);
       this.c.lineTo(x, y);
       if (i === 0) {
         this.c.moveTo(x, y);
@@ -205,10 +264,10 @@ export class VolumeControls {
     }
     this.c.stroke();
 
-    this.c.fillStyle = `rgba(${0}, ${0}, ${0}, ${globalOpacity})`
+    this.c.fillStyle = `rgba(${gray}, ${gray}, ${gray}, ${globalOpacity})`
     for (let i = 0; i < this.opacitiesX.length; ++i) {
-      let x: number = this.opacitiesX[i] * this.canvas.width;
-      let y:number = this.canvas.height - this.opacities[i] * this.canvas.height;
+      let x: number = this.xScale(this.opacitiesX[i]);
+      let y:number = this.yScale(this.opacities[i]);
       this.c.beginPath();
       this.c.arc(x, y, 12, 0, 2 * Math.PI);
       this.c.fill();
@@ -242,10 +301,12 @@ export class VolumeControls {
         >
         </canvas>
         <canvas
-        
           draggable={true}
+          onContextMenu={(ev) => {ev.preventDefault();}}
           onMouseDown={(e: MouseEvent) => {this.onMouseDown(e)}}
+          onDblClick={(e: MouseEvent) => {this.onDblClick(e)}}
           onDragStart={(e: DragEvent) => {this.onDragStart(e)}}
+          onAuxClick={(e: MouseEvent) => {this.onAuxClick(e)}}
           ref={(ref: HTMLCanvasElement) => {
             this.canvas = ref;
             this.c = ref.getContext('2d');
