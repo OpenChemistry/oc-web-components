@@ -1,7 +1,7 @@
 import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions, IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
 
 export { defaultDisplayOptions, defaultStyleOptions, defaultIsoSurfaces, defaultNormalModeOptions };
-export { composeDisplayOptions, composeStyleOptions, composeNormalModeOptions, composeIsoSurfaces};
+export { composeDisplayOptions, composeStyleOptions, composeNormalModeOptions, composeIsoSurfaces, composeVolumeOptions, composeVisibilityOptions};
 
 import { isUndefined } from "lodash-es";
 
