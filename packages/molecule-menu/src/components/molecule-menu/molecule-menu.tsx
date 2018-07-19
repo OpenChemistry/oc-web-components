@@ -1,8 +1,12 @@
 import { Component, Prop, Event, EventEmitter } from '@stencil/core';
 
+import { IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
+import { composeVolumeOptions, composeVisibilityOptions } from '@openchemistry/utils';
+
 // import { isNil } from "lodash-es";
 import '@ionic/core';
 import 'ionicons';
+import '@openchemistry/volume-controls';
 
 @Component({
   tag: 'oc-molecule-menu',
@@ -13,6 +17,8 @@ export class MoleculeMenu {
 
   @Prop() hasVolume: boolean = false;
   @Prop() nModes: number = -1;
+  @Prop() volumeOptions: IVolumeOptions;
+  @Prop({ mutable: true }) visibilityOptions: IVisibilityOptions;
   @Prop({ mutable: true }) isoValue: number = 0.01;
   @Prop({ mutable: true }) scaleValue: number = 1.0;
   @Prop({ mutable: true }) iMode: number = -1;
@@ -22,6 +28,8 @@ export class MoleculeMenu {
   @Event() scaleValueChanged: EventEmitter;
   @Event() normalModeChanged: EventEmitter;
   @Event() playChanged: EventEmitter;
+  @Event() opacitiesChanged: EventEmitter;
+  @Event() visibilityChanged: EventEmitter;
 
   componentWillLoad() {
     console.log('MoleculeMenu is about to be rendered');
@@ -68,6 +76,11 @@ export class MoleculeMenu {
     this.normalModeChanged.emit(val);
   }
 
+  toggleVisibilityHandler(key: string, val: boolean) {
+    this.visibilityOptions = {...this.visibilityOptions, ...{[key]: !val}};
+    this.visibilityChanged.emit(this.visibilityOptions);
+  }
+
   playHandler() {
     this.play = !this.play;
     this.playChanged.emit(this.play);
@@ -80,6 +93,9 @@ export class MoleculeMenu {
       normalModeOptions.push(<ion-select-option value={i.toString()}>{i}</ion-select-option>);
     }
 
+    const volumeOptions = composeVolumeOptions(this.volumeOptions);
+    const visibilityOptions = composeVisibilityOptions(this.visibilityOptions);
+
     if (!this.hasVolume && this.nModes <= 0) {
       return null;
     }
@@ -87,23 +103,53 @@ export class MoleculeMenu {
     return (
       <div>
         {this.hasVolume &&
-        <ion-item>
-          <ion-label color="primary" position="stacked">Isovalue</ion-label>
-          <ion-range
-            debounce={150}
-            min={0.0005}
-            max={0.05}
-            step={0.0001}
-            value={this.isoValue}
-            onIonChange={ (e: CustomEvent)=>{this.isoValueHandler(e.detail.value)}}
-          />
-          <div class="end-slot" slot="end">
-            <ion-input value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0000"}
-              debounce={500}
-              onIonChange={(e: CustomEvent)=>{this.isoValueHandler(parseFloat(e.detail.value))}}
-            ></ion-input>
+        <div>
+          <ion-item>
+            <ion-label>Show isosurface</ion-label>
+            <ion-checkbox
+              checked={visibilityOptions.isoSurfaces}
+              onIonChange={()=>{this.toggleVisibilityHandler('isoSurfaces', visibilityOptions.isoSurfaces)}}
+            />
+          </ion-item>
+          <ion-item>
+            <ion-label>Show volume</ion-label>
+            <ion-checkbox
+              checked={visibilityOptions.volume}
+              onIonChange={()=>{this.toggleVisibilityHandler('volume', visibilityOptions.volume)}}
+            />
+          </ion-item>
+          { visibilityOptions.isoSurfaces &&
+          <ion-item>
+            <ion-label color="primary" position="stacked">Isovalue</ion-label>
+            <ion-range
+              debounce={150}
+              min={0.0005}
+              max={0.05}
+              step={0.0001}
+              value={this.isoValue}
+              onIonChange={ (e: CustomEvent)=>{this.isoValueHandler(e.detail.value)}}
+            />
+            <div class="end-slot" slot="end">
+              <ion-input value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0000"}
+                debounce={500}
+                onIonChange={(e: CustomEvent)=>{this.isoValueHandler(parseFloat(e.detail.value))}}
+              ></ion-input>
+            </div>
+          </ion-item>
+          }
+          { visibilityOptions.volume &&
+          <div style={{width: "100%", height: "8rem"}}>
+            <oc-volume-controls
+              colors={volumeOptions.colors}
+              colorsX={volumeOptions.colorsScalarValue}
+              opacities={volumeOptions.opacity}
+              opacitiesX={volumeOptions.opacityScalarValue}
+              range={volumeOptions.range}
+              onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
+            />
           </div>
-        </ion-item>
+          }
+        </div>
         }
         {this.nModes > 0 &&
         <div>
