@@ -18,11 +18,13 @@ export class MoleculeMenu {
   @Prop() hasVolume: boolean = false;
   @Prop() nModes: number = -1;
   @Prop() volumeOptions: IVolumeOptions;
+  @Prop() colorMaps: string[];
   @Prop({ mutable: true }) visibilityOptions: IVisibilityOptions;
   @Prop({ mutable: true }) isoValue: number = 0.01;
   @Prop({ mutable: true }) scaleValue: number = 1.0;
   @Prop({ mutable: true }) iMode: number = -1;
   @Prop({ mutable: true }) play: boolean = true;
+  @Prop({ mutable: true }) activeMap: string = 'Viridis';
 
   @Event() isoValueChanged: EventEmitter;
   @Event() scaleValueChanged: EventEmitter;
@@ -30,6 +32,7 @@ export class MoleculeMenu {
   @Event() playChanged: EventEmitter;
   @Event() opacitiesChanged: EventEmitter;
   @Event() visibilityChanged: EventEmitter;
+  @Event() colorMapChanged: EventEmitter;
 
   componentWillLoad() {
     console.log('MoleculeMenu is about to be rendered');
@@ -86,6 +89,13 @@ export class MoleculeMenu {
     this.playChanged.emit(this.play);
   }
 
+  colorMapHandler(val: string) {
+    if (val !== this.activeMap) {
+      this.activeMap = val;
+      this.colorMapChanged.emit(val);
+    }
+  }
+
   render() {
     const normalModeOptions = [];
     normalModeOptions.push(<ion-select-option value={"-1"}>None</ion-select-option>);
@@ -93,26 +103,31 @@ export class MoleculeMenu {
       normalModeOptions.push(<ion-select-option value={i.toString()}>{i}</ion-select-option>);
     }
 
+    const colorMapsOptions = [];
+    for (let mapName of this.colorMaps || []) {
+      colorMapsOptions.push(<ion-select-option value={mapName}>{mapName}</ion-select-option>);
+    }
+
     const volumeOptions = composeVolumeOptions(this.volumeOptions);
     const visibilityOptions = composeVisibilityOptions(this.visibilityOptions);
 
     if (!this.hasVolume && this.nModes <= 0) {
-      return null;
+      // return null;
     }
 
     return (
       <div>
-        {this.hasVolume &&
+        {(this.hasVolume || true) &&
         <div>
           <ion-item>
-            <ion-label>Show isosurface</ion-label>
+            <ion-label>Show Isosurface</ion-label>
             <ion-checkbox
               checked={visibilityOptions.isoSurfaces}
               onIonChange={()=>{this.toggleVisibilityHandler('isoSurfaces', visibilityOptions.isoSurfaces)}}
             />
           </ion-item>
           <ion-item>
-            <ion-label>Show volume</ion-label>
+            <ion-label>Show Volume</ion-label>
             <ion-checkbox
               checked={visibilityOptions.volume}
               onIonChange={()=>{this.toggleVisibilityHandler('volume', visibilityOptions.volume)}}
@@ -138,15 +153,27 @@ export class MoleculeMenu {
           </ion-item>
           }
           { visibilityOptions.volume &&
-          <div style={{width: "100%", height: "8rem"}}>
-            <oc-volume-controls
-              colors={volumeOptions.colors}
-              colorsX={volumeOptions.colorsScalarValue}
-              opacities={volumeOptions.opacity}
-              opacitiesX={volumeOptions.opacityScalarValue}
-              range={volumeOptions.range}
-              onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
-            />
+          <div>
+            <div style={{width: "100%", height: "8rem"}}>
+              <oc-volume-controls
+                colors={volumeOptions.colors}
+                colorsX={volumeOptions.colorsScalarValue}
+                opacities={volumeOptions.opacity}
+                opacitiesX={volumeOptions.opacityScalarValue}
+                range={volumeOptions.range}
+                onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
+              />
+            </div>
+            <ion-item>
+            <ion-label color="primary" position="stacked">Color Map</ion-label>
+              <ion-select
+                style={{width: "100%"}}
+                value={this.activeMap}
+                onIonChange={(e: CustomEvent)=>{this.colorMapHandler(e.detail.value)}}
+              >
+                {colorMapsOptions}
+              </ion-select>
+            </ion-item>
           </div>
           }
         </div>
