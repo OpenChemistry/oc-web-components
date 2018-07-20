@@ -36,6 +36,8 @@ export class VolumeControls {
   yScaleHist: ScaleLogarithmic<number, number>;
 
   activeNode: number;
+
+  ro: ResizeObserver;
   
   componentWillLoad() {
     if (!this.colorsX) {
@@ -48,13 +50,26 @@ export class VolumeControls {
 
   componentDidLoad() {
     this.onResize();
-    const ro = new ResizeObserver(() => {
+    this.ro = new ResizeObserver(() => {
       this.onResize();
     });
-    ro.observe(this.el.parentElement);
+    this.ro.observe(this.el.parentElement);
+
+  }
+
+  componentDidUpdate() {
+    this.drawCanvas();
+  }
+
+  componentDidUnload() {
+    this.ro.unobserve(this.el.parentElement);
+    this.ro.disconnect();
   }
 
   onResize() {
+    if (!this.canvas || !this.ghostCanvas) {
+      return;
+    }
     let w = this.el.parentElement.clientWidth;
     let h = this.el.parentElement.clientHeight;
     this.canvas.width = w;
@@ -290,13 +305,13 @@ export class VolumeControls {
       let x: number = this.xScale(this.opacitiesX[i]);
       let y:number = this.yScale(this.opacities[i]);
       this.c.beginPath();
-      this.c.arc(x, y, 12, 0, 2 * Math.PI);
+      this.c.arc(x, y, 9, 0, 2 * Math.PI);
       this.c.fill();
 
       // Use unique color needed to build the color to node map
       this.ghostC.fillStyle = `rgb(${i}, ${i}, ${i})`
       this.ghostC.beginPath();
-      this.ghostC.arc(x, y, 30, 0, 2 * Math.PI);
+      this.ghostC.arc(x, y, 12, 0, 2 * Math.PI);
       this.ghostC.fill();
     }
   }
@@ -315,8 +330,6 @@ export class VolumeControls {
       let y0 = this.yScaleHist(this.histograms[i]);
       this.c.fillRect(x0, y0, width, this.canvas.height - y0);
     }
-
-
   }
 
   render() {
@@ -326,7 +339,9 @@ export class VolumeControls {
           hidden={true}
           ref={(ref: HTMLCanvasElement) => {
             this.ghostCanvas = ref;
-            this.ghostC = ref.getContext('2d');
+            if (ref) {
+              this.ghostC = ref.getContext('2d');
+            }
           }}
         >
         </canvas>
@@ -339,7 +354,9 @@ export class VolumeControls {
           onAuxClick={(e: MouseEvent) => {this.onAuxClick(e)}}
           ref={(ref: HTMLCanvasElement) => {
             this.canvas = ref;
-            this.c = ref.getContext('2d');
+            if (ref) {
+              this.c = ref.getContext('2d');
+            }
           }}
         >
         </canvas>
