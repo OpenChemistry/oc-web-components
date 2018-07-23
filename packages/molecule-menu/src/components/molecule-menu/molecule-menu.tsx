@@ -98,43 +98,43 @@ export class MoleculeMenu {
 
   render() {
     const normalModeOptions = [];
-    normalModeOptions.push(<ion-select-option value={"-1"}>None</ion-select-option>);
+    normalModeOptions.push(
+      <ion-select-option key={'-1'} value={'-1'}>None</ion-select-option>
+    );
     for (let i = 0; i < this.nModes; ++i) {
-      normalModeOptions.push(<ion-select-option value={i.toString()}>{i}</ion-select-option>);
+      normalModeOptions.push(
+        <ion-select-option key={i.toString()} value={i.toString()}>{i}</ion-select-option>
+      );
     }
 
     const colorMapsOptions = [];
     for (let mapName of this.colorMaps || []) {
-      colorMapsOptions.push(<ion-select-option value={mapName}>{mapName}</ion-select-option>);
+      colorMapsOptions.push(
+        <ion-select-option key={mapName} value={mapName}>{mapName}</ion-select-option>
+      );
     }
 
     const volumeOptions = composeVolumeOptions(this.volumeOptions);
     const visibilityOptions = composeVisibilityOptions(this.visibilityOptions);
 
     if (!this.hasVolume && this.nModes <= 0) {
-      // return null;
+      return null;
     }
 
-    return (
-      <div>
-        {(this.hasVolume || true) &&
-        <div>
-          <ion-item>
-            <ion-label>Show Isosurface</ion-label>
-            <ion-checkbox
-              checked={visibilityOptions.isoSurfaces}
-              onIonChange={()=>{this.toggleVisibilityHandler('isoSurfaces', visibilityOptions.isoSurfaces)}}
-            />
-          </ion-item>
-          <ion-item>
-            <ion-label>Show Volume</ion-label>
-            <ion-checkbox
-              checked={visibilityOptions.volume}
-              onIonChange={()=>{this.toggleVisibilityHandler('volume', visibilityOptions.volume)}}
-            />
-          </ion-item>
-          { visibilityOptions.isoSurfaces &&
-          <ion-item>
+    let menuItems = [];
+    if (this.hasVolume) {
+      menuItems.push(
+        <ion-item key="isoSurfaceToggle">
+          <ion-label>Show Isosurface</ion-label>
+          <ion-toggle
+            checked={visibilityOptions.isoSurfaces}
+            onIonChange={()=>{this.toggleVisibilityHandler('isoSurfaces', visibilityOptions.isoSurfaces)}}
+          />
+        </ion-item>
+      );
+      if (visibilityOptions.isoSurfaces) {
+        menuItems.push(
+          <ion-item key="isoSurfaceSlider">
             <ion-label color="primary" position="stacked">Isovalue</ion-label>
             <ion-range
               debounce={150}
@@ -151,21 +151,34 @@ export class MoleculeMenu {
               ></ion-input>
             </div>
           </ion-item>
-          }
-          { visibilityOptions.volume &&
-          <div>
-            <div style={{width: "100%", height: "8rem"}}>
-              <oc-volume-controls
-                colors={volumeOptions.colors}
-                colorsX={volumeOptions.colorsScalarValue}
-                opacities={volumeOptions.opacity}
-                opacitiesX={volumeOptions.opacityScalarValue}
-                range={volumeOptions.range}
-                onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
-              />
-            </div>
-            <ion-item>
-            <ion-label color="primary" position="stacked">Color Map</ion-label>
+        );
+      }
+      menuItems.push(
+        <ion-item key="volumeToggle">
+          <ion-label>Show Volume</ion-label>
+          <ion-toggle
+            checked={visibilityOptions.volume}
+            onIonChange={()=>{this.toggleVisibilityHandler('volume', visibilityOptions.volume)}}
+          />
+        </ion-item>
+      );
+      if (visibilityOptions.volume) {
+        menuItems.push(
+          <div style={{width: "100%", height: "8rem"}}>
+            <oc-volume-controls
+              colors={volumeOptions.colors}
+              colorsX={volumeOptions.colorsScalarValue}
+              opacities={volumeOptions.opacity}
+              opacitiesX={volumeOptions.opacityScalarValue}
+              range={volumeOptions.range}
+              histograms={volumeOptions.histograms}
+              onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
+            />
+          </div>
+        );
+        menuItems.push(
+            <ion-item key="colormapSelect">
+              <ion-label color="primary" position="stacked">Color Map</ion-label>
               <ion-select
                 style={{width: "100%"}}
                 value={this.activeMap}
@@ -174,13 +187,13 @@ export class MoleculeMenu {
                 {colorMapsOptions}
               </ion-select>
             </ion-item>
-          </div>
-          }
-        </div>
-        }
-        {this.nModes > 0 &&
-        <div>
-        <ion-item>
+        );
+      }
+    }
+
+    if (this.nModes > 0) {
+      menuItems.push(
+        <ion-item key="normalModeSelect">
           <ion-label color="primary" position="stacked">Normal Mode</ion-label>
           <ion-select
             style={{width: "100%"}}
@@ -195,7 +208,9 @@ export class MoleculeMenu {
             </ion-button>
           </div>
         </ion-item>
-        <ion-item disabled={!this.play || this.iMode < 0}>
+      );
+      menuItems.push(
+        <ion-item disabled={!this.play || this.iMode < 0} key="animationScaleSlider">
           <ion-label color="primary" position="stacked">Animation Scale</ion-label>
           <ion-range
             debounce={150}
@@ -212,8 +227,12 @@ export class MoleculeMenu {
             ></ion-input>
           </div>
         </ion-item>
-        </div>
-        }
+      );
+    }
+
+    return (
+      <div>
+        {menuItems}
       </div>
     )
   }

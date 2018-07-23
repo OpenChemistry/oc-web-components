@@ -10,42 +10,21 @@ import 'ionicons';
 })
 export class MoleculeMenuPopup {
 
-  popoverController: any;
-  popover: any;
-  menuComponent: any;
   @State() open = false;
-
-  componentDidLoad() {
-    // this.presentMenu(true);
-  }
-
-  async presentMenu(dismiss = false) {
-    
-    await this.popoverController.componentOnReady();
-
-    this.popover = await this.popoverController.create({
-      component: this.menuComponent,
-      translucent: true
-    });
-
-    // this.open = true;
-    await this.popover.present();
-    if (dismiss) {
-      await this.popover.dismiss();
-    }
-    return;
-
-  }
-
+  
   render() {
     return (
-      <div>
-        <ion-button fill="clear" onClick={() => {this.presentMenu()}}>
-          <ion-icon name='more'></ion-icon>
-        </ion-button>
-        <ion-popover-controller ref={ref => {this.popoverController = ref;}}>
-        </ion-popover-controller>
-        <oc-molecule-menu ref={ref => {this.menuComponent = ref;}}/>
+      <div class='main-container'>
+        <div class='menu-button-container'>
+          <ion-button fill='clear' onClick={() => {this.open = !this.open}}>
+            <ion-icon  color="dark" name='more'></ion-icon>
+          </ion-button>
+        </div>
+        <div hidden={!this.open} class='menu-container'>
+          <ion-card class='menu-card'>
+            <slot />
+          </ion-card>
+        </div>
       </div>
     )
   }
