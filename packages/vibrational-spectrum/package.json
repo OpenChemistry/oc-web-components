@@ -11,9 +11,7 @@
   ],
   "scripts": {
     "build": "stencil build",
-    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
-    "serve": "stencil-dev-server",
-    "start": "npm run dev",
+    "start": "stencil build --dev --watch --serve",
     "test": "jest",
     "test.watch": "jest --watch"
   },
@@ -23,9 +21,7 @@
   },
   "devDependencies": {
     "@openchemistry/types": "^0.3.0",
-    "@stencil/core": "^0.9.11",
-    "@stencil/dev-server": "latest",
-    "@stencil/utils": "latest",
+    "@stencil/core": "^0.10.7",
     "@types/d3": "^5.0.0",
     "@types/jest": "^22.0.1",
     "@types/lodash-es": "^4.17.0",
