@@ -58,6 +58,12 @@ export class VolumeControls {
   }
 
   componentDidUpdate() {
+    if (this.colorsX.length !== this.colors.length) {
+      this.colorsX = this.defaultX(this.colors.length);
+    }
+    if (this.opacitiesX.length !== this.opacities.length) {
+      this.opacitiesX = this.defaultX(this.opacities.length);
+    }
     this.drawCanvas();
   }
 
@@ -164,18 +170,19 @@ export class VolumeControls {
 
   moveNode(mX: number, mY: number, i: number) {
     let {x, y} = this._mouseToXY(mX, mY);
+    let dx = (this.range[1] - this.range[0]) * 0.001;
 
     y = Math.min(1, y);
     y = Math.max(0, y);
     x = Math.min(this.range[1], x);
     x = Math.max(this.range[0], x);
     if (i > 0) {
-      x = Math.max(this.opacitiesX[i - 1], x);
+      x = Math.max(this.opacitiesX[i - 1] + dx, x);
     } else {
       x = this.range[0];
     }
     if (i < this.opacitiesX.length - 1) {
-      x = Math.min(this.opacitiesX[i + 1], x);
+      x = Math.min(this.opacitiesX[i + 1] - dx, x);
     } else {
       x = this.range[1];
     }
