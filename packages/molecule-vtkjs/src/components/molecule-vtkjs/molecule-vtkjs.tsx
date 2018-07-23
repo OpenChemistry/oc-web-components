@@ -340,7 +340,7 @@ export class MoleculeVtkjs {
     const normalMode = this.getOptions().normalMode;
     if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
       let modeIdx: number = normalMode.modeIdx;
-      if (modeIdx < 0) {
+      if (modeIdx < 0 || modeIdx >= cjson.vibrations.eigenVectors.length) {
         return;
       }
       const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
