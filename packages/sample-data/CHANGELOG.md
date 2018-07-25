@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sample-data@0.3.1...@openchemistry/sample-data@0.3.2) (2018-07-25)
+
+
+
+
+**Note:** Version bump only for package @openchemistry/sample-data
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sample-data@0.3.0...@openchemistry/sample-data@0.3.1) (2018-07-05)
 
