@@ -30,6 +30,7 @@ interface IVolumeOptions {
   opacity: number[];
   opacityScalarValue?: number[];
   range?: [number, number];
+  histograms?: number[];
 }
 
 interface IVisibilityOptions {

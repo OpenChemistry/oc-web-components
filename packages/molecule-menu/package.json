@@ -19,6 +19,9 @@
   },
   "dependencies": {
     "@ionic/core": "latest",
+    "@openchemistry/types": "^0.3.0",
+    "@openchemistry/utils": "^0.0.2",
+    "@openchemistry/volume-controls": "^0.0.1",
     "ionicons": "^4.2.4",
     "lodash-es": "^4.17.10"
   },

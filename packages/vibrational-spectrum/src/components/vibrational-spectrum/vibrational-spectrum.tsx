@@ -41,6 +41,8 @@ export class VibrationalSpectrum {
   height: number;
   margin = {top: 20, right: 20, bottom: 50, left: 50, };
 
+  ro: ResizeObserver;
+
   componentWillLoad() {
     console.log('VibrationalSpectrum is about to be rendered');
   }
@@ -49,23 +51,29 @@ export class VibrationalSpectrum {
     console.log('VibrationalSpectrum has been rendered');
 
     let throttledResize = throttle(() => {
+      if (!this.containerElement) {
+        return;
+      }
       this.renderChart(true);
       this.highlightBar();
     }, 33);
-    const ro = new ResizeObserver(() => {
+    this.ro = new ResizeObserver(() => {
       throttledResize();
     });
 
     setTimeout(() => {
       // Don't start observing for parent changes immediately, let the first 
       // render be animated.
-      ro.observe(this.el.parentElement);
+      this.ro.observe(this.el.parentElement);
     }, 1000);
 
     setTimeout(() => {
+      if (!this.containerElement) {
+        return;
+      }
       this.renderChart(false);
       this.highlightBar();
-    }, 200);
+    }, 250);
   }
 
   renderChart(resize: boolean = false) {
@@ -230,7 +238,10 @@ export class VibrationalSpectrum {
 
   componentDidUnload() {
     console.log('VibrationalSpectrum removed from the DOM');
-
+    if (this.el.parentElement) {
+      this.ro.unobserve(this.el.parentElement);
+    }
+    this.ro.disconnect();
   }
 
   generateTheoryLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) : any[] {

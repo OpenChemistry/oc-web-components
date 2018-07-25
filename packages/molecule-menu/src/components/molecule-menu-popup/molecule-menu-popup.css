@@ -1,0 +1,23 @@
+.main-container {
+  position: relative;
+}
+
+.menu-button-container {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.menu-container {
+  position: absolute;
+  width: 30rem;
+  max-width: 100%;
+  height: auto;
+  top: 2.75rem;
+  right: 1rem;
+}
+
+.menu-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+}

@@ -1,7 +1,7 @@
 {
-  "name": "@openchemistry/vibrational-spectrum",
-  "version": "0.1.4",
-  "description": "Component to plot the vibrational spectrum of in the cjson chemical data",
+  "name": "@openchemistry/volume-controls",
+  "version": "0.0.1",
+  "description": "Component to plot adjust the opacity map and visualize its effect on the colormap",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
   "types": "dist/types/components.d.ts",
@@ -16,16 +16,13 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "d3": "^5.5.0",
-    "lodash-es": "^4.17.10"
+    "d3": "^5.5.0"
   },
   "devDependencies": {
-    "@openchemistry/types": "^0.3.0",
-    "@stencil/core": "^0.10.7",
+    "@stencil/core": "^0.10.0",
     "@types/d3": "^5.0.0",
-    "@types/jest": "^22.0.1",
-    "@types/lodash-es": "^4.17.0",
-    "jest": "^23.1.0",
+    "@types/jest": "^21.1.1",
+    "jest": "^21.2.1",
     "resize-observer-polyfill": "^1.5.0"
   },
   "repository": {
@@ -50,8 +47,5 @@
       "json",
       "jsx"
     ]
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
