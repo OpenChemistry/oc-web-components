@@ -1,4 +1,4 @@
-import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions } from '@openchemistry/types';
+import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions, IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
 
 export { defaultDisplayOptions, defaultStyleOptions, defaultIsoSurfaces, defaultNormalModeOptions };
 export { composeDisplayOptions, composeStyleOptions, composeNormalModeOptions, composeIsoSurfaces};
@@ -35,10 +35,30 @@ const defaultNormalModeOptions : INormalModeOptions = {
   scale: 1
 }
 
+const defaultVolumeOptions: IVolumeOptions = {
+  colors: [
+    [1, 0, 0],
+    [1, 1, 1],
+    [0, 0 ,1]
+  ],
+  opacity: [
+    1,
+    0,
+    1
+  ]
+};
+
+const defaultVisibilityOptions: IVisibilityOptions = {
+  volume: false,
+  isoSurfaces: true
+}
+
 const defaultDisplayOptions: IDisplayOptions = {
   isoSurfaces: defaultIsoSurfaces,
   style: defaultStyleOptions,
-  normalMode: defaultNormalModeOptions
+  normalMode: defaultNormalModeOptions,
+  volume: defaultVolumeOptions,
+  visibility: defaultVisibilityOptions
 };
 
 function composeIsoSurfaces(isoSurfaces: IIsoSurfaceOptions[] | undefined) : IIsoSurfaceOptions[] {
@@ -62,6 +82,21 @@ function composeStyleOptions(styleOptions: IStyleOptions | undefined) : IStyleOp
   return { ...defaultStyleOptions, ...styleOptions };
 }
 
+function composeVolumeOptions(volumeOptions: IVolumeOptions | undefined) : IVolumeOptions {
+  if (isUndefined(volumeOptions)) {
+    return defaultVolumeOptions;
+  }
+  return { ...defaultVolumeOptions, ...volumeOptions };
+}
+
+function composeVisibilityOptions(visibilityOptions: IVisibilityOptions | undefined) {
+  if (isUndefined(visibilityOptions)) {
+    return defaultVisibilityOptions;
+  } else {
+    return { ...defaultVisibilityOptions, ...visibilityOptions};
+  }
+}
+
 function composeDisplayOptions(displayOptions: IDisplayOptions | undefined) : IDisplayOptions {
   if (isUndefined(displayOptions)) {
     return defaultDisplayOptions;
@@ -69,7 +104,9 @@ function composeDisplayOptions(displayOptions: IDisplayOptions | undefined) : ID
   let optionsOut = {
     isoSurfaces: composeIsoSurfaces(displayOptions.isoSurfaces),
     style: composeStyleOptions(displayOptions.style),
-    normalMode: composeNormalModeOptions(displayOptions.normalMode)
+    normalMode: composeNormalModeOptions(displayOptions.normalMode),
+    volume: composeVolumeOptions(displayOptions.volume),
+    visibility: composeVisibilityOptions(displayOptions.visibility)
   }
   return optionsOut;
 }

@@ -1,0 +1,57 @@
+{
+  "name": "@openchemistry/molecule-vtkjs",
+  "version": "0.1.0",
+  "description": "Stencil Wrapper for vtkjs with support for cjson chemical data",
+  "module": "dist/esm/index.js",
+  "main": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "stencil build",
+    "start": "stencil build --dev --watch --serve",
+    "test": "jest",
+    "test.watch": "jest --watch"
+  },
+  "dependencies": {
+    "@openchemistry/utils": "^0.0.2",
+    "lodash-es": "^4.17.10",
+    "vtk.js": "^7.3.3"
+  },
+  "devDependencies": {
+    "@openchemistry/types": "^0.3.0",
+    "@stencil/core": "^0.10.2",
+    "@types/jest": "^22.0.1",
+    "@types/lodash-es": "^4.17.0",
+    "jest": "^23.1.0",
+    "resize-observer-polyfill": "^1.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenChemistry/oc-web-components"
+  },
+  "author": "Kitware, Inc.",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/OpenChemistry/oc-web-components"
+  },
+  "homepage": "https://github.com/OpenChemistry/oc-web-components",
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
