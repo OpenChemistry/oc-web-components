@@ -13,9 +13,13 @@
   </div>
   <div style="width: 100%; height:40rem; background-color: aquamarine; position: relative;">
     <oc-molecule-menu-popup>
-      <oc-molecule-menu />
+      <oc-molecule-menu id="molecule-menu" />
     </oc-molecule-menu-popup>
   </div>
 
+  <script>
+    let menu = document.getElementById('molecule-menu');
+    menu.nModes = 12;
+  </script>
 </body>
 </html>
