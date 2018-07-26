@@ -16,14 +16,14 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "d3": "^5.5.0"
+    "d3": "^5.5.0",
+    "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
     "@stencil/core": "^0.10.9",
     "@types/d3": "^5.0.0",
     "@types/jest": "^21.1.1",
-    "jest": "^21.2.1",
-    "resize-observer-polyfill": "^1.5.0"
+    "jest": "^21.2.1"
   },
   "repository": {
     "type": "git",
