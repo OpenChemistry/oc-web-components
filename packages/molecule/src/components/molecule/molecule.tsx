@@ -8,7 +8,7 @@ import { isChemJson, validateChemJson, composeDisplayOptions } from '@openchemis
 import { Caffeine } from '@openchemistry/sample-data';
 
 import '@openchemistry/molecule-menu';
-import '@openchemistry/molecule-vtkjs';
+import '@openchemistry/molecule-moljs';
 import '@openchemistry/vibrational-spectrum';
 import 'split-me';
 
@@ -91,7 +91,7 @@ export class Molecule {
     return (
       <div class='main-container'>
         <split-me n={splitN} sizes={splitSizes}>
-          <oc-molecule-vtkjs
+          <oc-molecule-moljs
             slot='0'
             cjson={cjson}
             options={this.options}

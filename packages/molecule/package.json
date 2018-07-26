@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@openchemistry/molecule-menu": "^0.1.1",
-    "@openchemistry/molecule-vtkjs": "^0.1.0",
+    "@openchemistry/molecule-moljs": "^0.3.150",
     "@openchemistry/sample-data": "^0.3.2",
     "@openchemistry/types": "^0.3.0",
     "@openchemistry/utils": "0.0.2",
