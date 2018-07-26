@@ -4,8 +4,9 @@ import { isNil } from "lodash-es";
 
 import { IChemJson, IDisplayOptions } from '@openchemistry/types';
 import { isChemJson, validateChemJson, composeDisplayOptions } from '@openchemistry/utils';
+import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
 
-import { Caffeine } from '@openchemistry/sample-data';
+import { BenzeneWithHomo } from '@openchemistry/sample-data';
 
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-moljs';
@@ -30,9 +31,19 @@ export class Molecule {
   cjsonData: IChemJson;
   cjsonHasChanged: boolean = false;
 
+  activeMap: string;
+  colorMaps = {
+    'Red Yellow Blue': redYelBlu,
+    'Viridis': viridis,
+    'Plasma': plasma,
+    'Gray': gray
+  }
+
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
     this.cjsonData = this.getCjson();
+    this.activeMap = 'Red Yellow Blue';
+    this.options.volume.colors = this.colorMaps[this.activeMap];
   }
 
   componentDidLoad() {
@@ -57,7 +68,7 @@ export class Molecule {
       this.setCjson();
     }
     // return this.cjsonData;
-    return Caffeine;
+    return BenzeneWithHomo;
   }
 
   setCjson() {
@@ -75,6 +86,42 @@ export class Molecule {
     }
   }
 
+  onAnimationChanged = (e: CustomEvent, key: string) => {
+    this.options.normalMode = {...this.options.normalMode};
+    this.options.normalMode[key] = e.detail;
+    this.options = {...this.options};
+  }
+
+  onVolumeChanged = (e: CustomEvent, key: string) => {    
+    if (key === 'opacity') {
+      this.options.volume = {...this.options.volume, ...e.detail};
+    } else if (key === 'colormap') {
+      this.activeMap = e.detail;
+      this.options.volume = {...this.options.volume, ...{colors: this.colorMaps[e.detail]}};
+    }
+    this.options = {...this.options};
+  }
+
+  onIsoValueChanged = (e: CustomEvent) => {
+    let iso = e.detail;
+    this.options.isoSurfaces = [{
+      value: iso,
+      color: 'blue',
+      opacity: 0.9,
+    }, {
+      value: -iso,
+      color: 'red',
+      opacity: 0.9
+    }
+    ];
+    this.options = {...this.options};
+  }
+
+  onVisibilityChanged = (e: CustomEvent) => {
+    this.options.visibility = {...this.options.visibility, ...e.detail};
+    this.options = {...this.options};
+  }
+
   render() {
     const cjson = this.getCjson();
     const hasVolume = !!cjson && !!cjson.cube;
@@ -84,9 +131,6 @@ export class Molecule {
     
     const splitN = hasSpectrum ? 2 : 1;
     const splitSizes = hasSpectrum ? "0.4, 0.6" : "1";
-
-    hasVolume;
-    nModes;
 
     return (
       <div class='main-container'>
@@ -100,51 +144,34 @@ export class Molecule {
           <oc-vibrational-spectrum
             slot='1'
             vibrations={cjson.vibrations}
+            options={this.options.normalMode}
+            onBarSelected={(e) => {this.onAnimationChanged(e, 'modeIdx')}}
           />
           }
         </split-me>
-        {/* { (hasSpectrum || hasVolume) && */}
+        { (hasSpectrum || hasVolume) &&
         <div class='menu-container'>
           <oc-molecule-menu-popup>
             <oc-molecule-menu
               nModes={nModes}
-              hasVolume={true}
-
-              // ref={wc(
-              //   // Events
-              //   {
-              //     scaleValueChanged: (e)=>{this.onAmplitude(e.detail);},
-              //     isoValueChanged: (e) => {this.onIsoScale(e.detail);},
-              //     normalModeChanged: (e) => {this.onModeChange(e.detail);},
-              //     playChanged: (e) => {this.onPlayToggled(e.detail);},
-              //     opacitiesChanged: (e) => {this.onOpacitiesChanged(e.detail);},
-              //     visibilityChanged: (e) => {this.onVisibilityChanged(e.detail);},
-              //     colorMapChanged: (e) => {this.onColorMapChanged(e.detail);}
-              //   },
-              //   // Props
-              //   {
-              //     nModes: nModes,
-              //     iMode: Math.min(animation.modeIdx, nModes - 1),
-              //     scaleValue: animation.scale,
-              //     play: animation.play,
-              //     hasVolume: hasVolume,
-              //     isoValue: this.state.isoSurfaces[0].value,
-              //     volumeOptions: {
-              //       colors: this.state.volume.colors,
-              //       opacity: this.state.volume.opacity,
-              //       opacityScalarValue: this.state.volume.opacityScalarValue,
-              //       range: this.state.volume.range,
-              //       histograms: histograms
-              //     },
-              //     visibilityOptions: this.state.visibility,
-              //     colorMaps: ['Red Yellow Blue', 'Viridis', 'Plasma', 'Gray'],
-              //     activeMap: this.state.volume.mapName
-              //   })
-              // }
+              iMode={this.options.normalMode.modeIdx}
+              scaleValue={this.options.normalMode.scale}
+              hasVolume={hasVolume}
+              colorMaps={Object.keys(this.colorMaps)}
+              activeMap={this.activeMap}
+              volumeOptions={this.options.volume}
+              visibilityOptions={this.options.visibility}
+              onNormalModeChanged={(e) => {this.onAnimationChanged(e, 'modeIdx')}}
+              onPlayChanged={(e) => {this.onAnimationChanged(e, 'play')}}
+              onScaleValueChanged={(e) => {this.onAnimationChanged(e, 'scale')}}
+              onOpacitiesChanged={(e) => {this.onVolumeChanged(e, 'opacity')}}
+              onColorMapChanged={(e) => {this.onVolumeChanged(e, 'colormap')}}
+              onIsoValueChanged={this.onIsoValueChanged}
+              onVisibilityChanged={this.onVisibilityChanged}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>
-        {/* } */}
+        }
       </div>
     )
   }
