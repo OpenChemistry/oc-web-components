@@ -10,8 +10,6 @@ import { Caffeine } from '@openchemistry/sample-data';
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-vtkjs';
 import '@openchemistry/vibrational-spectrum';
-import '@openchemistry/volume-controls';
-import '@ionic/core';
 import 'split-me';
 
 @Component({
