@@ -14,7 +14,7 @@ export const REQUEST_OC_FOLDER = 'REQUEST_OC_FOLDER';
 export const RECEIVE_OC_FOLDER = 'RECEIVE_OC_FOLDER';
 
 
-export const initialState = {
+const initialState = {
   selectedMoleculeId: null,
   selectAuthProvider: false,
   nersc: {
