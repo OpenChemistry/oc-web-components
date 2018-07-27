@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/redux@0.3.0...@openchemistry/redux@0.3.1) (2018-07-27)
+
+
+### Bug Fixes
+
+* Don't export initialState ([96596cb](https://github.com/OpenChemistry/oc-web-components/commit/96596cb))
+* Export ducks ([4dec91c](https://github.com/OpenChemistry/oc-web-components/commit/4dec91c))
+
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/redux@0.0.4...@openchemistry/redux@0.3.0) (2018-07-27)
 
