@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/molecule-menu",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Stencil component to display chemical json data",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
@@ -19,7 +19,7 @@
     "@ionic/core": "latest",
     "@openchemistry/types": "^0.6.0",
     "@openchemistry/utils": "^0.3.1",
-    "@openchemistry/volume-controls": "^0.0.4",
+    "@openchemistry/volume-controls": "^0.0.5",
     "ionicons": "^4.2.4",
     "lodash-es": "^4.17.10"
   },
