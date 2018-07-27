@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.3.0...@openchemistry/types@0.6.0) (2018-07-27)
+
+
+### Features
+
+* **types:** Add 'histograms' to the volumeOptions interface ([0f05567](https://github.com/OpenChemistry/oc-web-components/commit/0f05567))
+* **types:** Add volume options type definitions ([d9c3131](https://github.com/OpenChemistry/oc-web-components/commit/d9c3131))
+
+
+
+
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.3.0...@openchemistry/types@0.5.0) (2018-07-27)
+
+
+### Features
+
+* **types:** Add 'histograms' to the volumeOptions interface ([0f05567](https://github.com/OpenChemistry/oc-web-components/commit/0f05567))
+* **types:** Add volume options type definitions ([d9c3131](https://github.com/OpenChemistry/oc-web-components/commit/d9c3131))
+
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.0.6...@openchemistry/types@0.3.0) (2018-06-19)
 

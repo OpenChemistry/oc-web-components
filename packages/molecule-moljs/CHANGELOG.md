@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.153"></a>
+## [0.3.153](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.150...@openchemistry/molecule-moljs@0.3.153) (2018-07-27)
+
+
+
+
+**Note:** Version bump only for package @openchemistry/molecule-moljs
+
+<a name="0.3.152"></a>
+## [0.3.152](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.150...@openchemistry/molecule-moljs@0.3.152) (2018-07-27)
+
+
+
+
+**Note:** Version bump only for package @openchemistry/molecule-moljs
+
 <a name="0.3.150"></a>
 ## [0.3.150](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.149...@openchemistry/molecule-moljs@0.3.150) (2018-07-10)
 
