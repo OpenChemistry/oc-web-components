@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.7"></a>
+## [0.1.7](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.4...@openchemistry/vibrational-spectrum@0.1.7) (2018-07-27)
+
+
+### Bug Fixes
+
+* **vibrational-spectrum:** Improve lifecycle ([98f56b7](https://github.com/OpenChemistry/oc-web-components/commit/98f56b7))
+
+
+
+
+<a name="0.1.6"></a>
+## [0.1.6](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.4...@openchemistry/vibrational-spectrum@0.1.6) (2018-07-27)
+
+
+### Bug Fixes
+
+* **vibrational-spectrum:** Improve lifecycle ([98f56b7](https://github.com/OpenChemistry/oc-web-components/commit/98f56b7))
+
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.3...@openchemistry/vibrational-spectrum@0.1.4) (2018-07-10)
 

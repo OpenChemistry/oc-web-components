@@ -26,7 +26,7 @@ export const CONNECT_TO_NOTIFICATIONS = 'CONNECT_TO_NOTIFICATIONS'
 export const FETCH_TOKEN_FOR_API_KEY = "FETCH_TOKEN_FOR_API_KEY"
 export const REQUEST_TOKEN_FOR_API_KEY = "REQUEST_TOKEN_FOR_API_KEY"
 
-export const initialState = {
+const initialState = {
     token: null,
     authenticating: false,
     oauth: {

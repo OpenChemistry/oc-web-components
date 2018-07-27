@@ -14,7 +14,7 @@ export const REQUEST_CALCULATION_NOTEBOOKS   = 'REQUEST_CALCULATION_NOTEBOOKS';
 export const RECEIVE_CALCULATION_NOTEBOOKS   = 'RECEIVE_CALCULATION_NOTEBOOKS';
 
 
-export const initialState = {
+const initialState = {
     byId: {},
     orbitalsById: {},
     noteBooksById: {},

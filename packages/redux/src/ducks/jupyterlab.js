@@ -5,7 +5,7 @@ export const REDIRECTING_TO_JUPYTERHUB = 'REDIRECTING_TO_JUPYTERHUB';
 export const INVALIDATE_SESSION = 'INVALIDATE_SESSION'
 export const REQUEST_SESSION_INVALIDATION = 'REQUEST_SESSION_INVALIDATION';
 
-export const initialState = {
+const initialState = {
   error: null,
   redirecting: false
 };

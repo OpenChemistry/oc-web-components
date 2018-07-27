@@ -13,7 +13,7 @@ export const RECEIVE_MOLECULE   = 'RECEIVE_MOLECULE';
 
 export const SELECT_MOLECULE = 'SELECT_MOLECULE';
 
-export const initialState = {
+const initialState = {
     molecules: [],
     byId: {},
     byInchiKey: {},

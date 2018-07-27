@@ -1,8 +1,7 @@
 import { put, call, select, takeEvery } from 'redux-saga/effects'
 import { authenticate, logout, stopServer } from '@openchemistry/rest'
 import { selectors } from '@openchemistry/redux'
-import { REDIRECT_TO_JUPYTERHUB, INVALIDATE_SESSION, redirectingToJupyterHub,
-  requestSessionInvalidation} from '@openchemistry/redux'
+import { jupyterlab } from '@openchemistry/redux'
 
 export function* redirect(action) {
   try {
@@ -13,7 +12,7 @@ export function* redirect(action) {
       return;
     }
 
-    yield put(redirectingToJupyterHub());
+    yield put(jupyterlab.redirectingToJupyterHub());
 
     const token = yield select(selectors.girder.getToken)
     const redirectUrl = yield call(authenticate, token)
@@ -21,28 +20,28 @@ export function* redirect(action) {
     window.location = redirectUrl;
   }
   catch(error) {
-    yield put(redirectingToJupyterHub(error));
+    yield put(jupyterlab.redirectingToJupyterHub(error));
     console.log(error)
   }
 }
 
 export function* watchRedirectToJupyterHub() {
-  yield takeEvery(REDIRECT_TO_JUPYTERHUB, redirect);
+  yield takeEvery(jupyterlab.REDIRECT_TO_JUPYTERHUB, redirect);
 }
 
 export function* invalidateSession(action) {
   try {
     const me = yield select(selectors.girder.getMe)
-    yield put( requestSessionInvalidation() )
+    yield put( jupyterlab.requestSessionInvalidation() )
     yield call(stopServer, me.login)
     yield call(logout)
   }
   catch(error) {
-    yield put( requestSessionInvalidation(error) )
+    yield put( jupyterlab.requestSessionInvalidation(error) )
     console.log(error)
   }
 }
 
 export function* watchInvalidateSession() {
-  yield takeEvery(INVALIDATE_SESSION, invalidateSession)
+  yield takeEvery(jupyterlab.INVALIDATE_SESSION, invalidateSession)
 }
