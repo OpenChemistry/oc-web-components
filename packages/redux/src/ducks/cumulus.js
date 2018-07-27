@@ -13,7 +13,7 @@ export const RECIEVE_JOB = 'RECIEVE_JOB';
 export const RECIEVE_JOB_STATUS = 'RECIEVE_JOB_STATUS';
 
 
-export const initialState = {
+const initialState = {
   taskflows: {
     byId: {},
     // maps taskflow ids to job ids

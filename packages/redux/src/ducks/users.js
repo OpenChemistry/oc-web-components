@@ -6,7 +6,7 @@ export const REQUEST_USER_ME   = 'REQUEST_USER_ME';
 export const RECEIVE_USER_ME   = 'RECEIVE_USER_ME';
 
 
-export const initialState = {
+const initialState = {
     me: {},
     error: null,
   };

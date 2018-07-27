@@ -3,7 +3,7 @@ import { createAction, handleActions } from 'redux-actions';
 export const AUTHENTICATE_NERSC = 'AUTHENTICATE_NERSC';
 export const AUTHENTICATE_WITH_NEWT = 'AUTHENTICATE_WITH_NEWT';
 
-export const initialState = {
+const initialState = {
   newt: {
     error: null
   }

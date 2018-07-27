@@ -4,28 +4,11 @@ import Cookies from 'universal-cookie';
 
 import { isNil } from 'lodash-es';
 
-import { requestMolecules, receiveMolecules,
-         requestMolecule, requestMoleculeById, receiveMolecule,
-         LOAD_MOLECULES, LOAD_MOLECULE,
-         LOAD_MOLECULE_BY_ID} from '@openchemistry/redux';
-
-import { requestCalculationById, receiveCalculation, LOAD_CALCULATION_BY_ID,
-         requestOrbital, receiveOrbital, LOAD_ORBITAL} from '@openchemistry/redux'
-
-import { requestUserMe, receiveUserMe, LOAD_USER_ME} from '@openchemistry/redux'
-
-import { setAuthenticating, requestOauthProviders, requestTokenInvalidation,
-         receiveOauthProviders, loadOauthProviders, setMe, requestMe, newToken,
-         receiveMe, requestTokenForApiKey, connectToNotifications, setOauthEnabled,
-         authenticated, LOAD_OAUTH_PROVIDERS, INVALIDATE_TOKEN, NEW_TOKEN,
-         AUTHENTICATE, LOAD_ME, RECEIVE_NOTIFICATION,  FETCH_TOKEN_FOR_API_KEY,
-         AUTHENTICATED, TEST_OAUTH_ENABLED}  from '@openchemistry/redux'
-
-import { requestTaskFlow, receiveTaskFlow, receiveTaskFlowStatus,
-         LOAD_TASKFLOW,
-         loadJob, requestJob, receiveJob, receiveJobStatus,
-         LOAD_JOB }  from '@openchemistry/redux'
-
+import { molecules } from '@openchemistry/redux';
+import { calculations } from '@openchemistry/redux';
+import { users } from '@openchemistry/redux';
+import { girder } from '@openchemistry/redux';
+import { cumulus } from '@openchemistry/redux';
 import { selectors } from '@openchemistry/redux';
 
 import { watchNotifications } from './notifications'
@@ -65,17 +48,17 @@ export function fetchUserMeFromGirder() {
 
 export function* fetchUserMe(action) {
   try {
-    yield put( requestUserMe() )
+    yield put( users.requestUserMe() )
     const me = yield call(fetchUserMeFromGirder)
-    yield put( receiveUserMe(me) )
+    yield put( users.receiveUserMe(me) )
   }
   catch(error) {
-    yield put( requestUserMe(error) )
+    yield put( users.requestUserMe(error) )
   }
 }
 
 export function* watchFetchUserMe() {
-  yield takeEvery(LOAD_USER_ME, fetchUserMe)
+  yield takeEvery(users.LOAD_USER_ME, fetchUserMe)
 }
 
 
@@ -93,47 +76,49 @@ export function isValidToken(token) {
 
 export function* fetchMolecules() {
   try {
-    yield put( requestMolecules() )
+    yield put( molecules.requestMolecules() )
     const molecules = yield call(fetchMoleculesFromGirder)
-    yield put( receiveMolecules(molecules) )
+    yield put( molecules.receiveMolecules(molecules) )
   }
   catch(error) {
-    yield put( requestMolecules(error) )
+    yield put( molecules.requestMolecules(error) )
   }
 }
 
 export function* fetchMolecule(action) {
   try {
-    yield put( requestMolecule(action.payload.inchikey) )
+    yield put( molecules.requestMolecule(action.payload.inchikey) )
     const molecule = yield call(fetchMoleculeFromGirder, action.payload.inchikey)
-    yield put( receiveMolecule(molecule) )
+    yield put( molecules.receiveMolecule(molecule) )
   }
   catch(error) {
-    yield put( requestMolecule(error) )
+    yield put( molecules.requestMolecule(error) )
   }
 }
 
 export function* fetchMoleculeById(action) {
   try {
-    yield put( requestMoleculeById(action.payload.id) )
+    yield put( molecules.requestMoleculeById(action.payload.id) )
     const molecule = yield call(fetchMoleculeByIdFromGirder, action.payload.id)
-    yield put( receiveMolecule(molecule) )
+    yield put( molecules.receiveMolecule(molecule) )
   }
   catch(error) {
-    yield put( requestMoleculeById(error) )
+    yield put( molecules.requestMoleculeById(error) )
   }
 }
 
+console.log(molecules);
+
 export function* watchFetchMolecules() {
-  yield takeEvery(LOAD_MOLECULES, fetchMolecules)
+  yield takeEvery(molecules.LOAD_MOLECULES, fetchMolecules)
 }
 
 export function* watchFetchMolecule() {
-  yield takeEvery(LOAD_MOLECULE, fetchMolecule)
+  yield takeEvery(molecules.LOAD_MOLECULE, fetchMolecule)
 }
 
 export function* watchFetchMoleculeById() {
-  yield takeEvery(LOAD_MOLECULE_BY_ID, fetchMoleculeById)
+  yield takeEvery(molecules.LOAD_MOLECULE_BY_ID, fetchMoleculeById)
 }
 
 export function fetchCalculationByIdFromGirder(id) {
@@ -142,17 +127,17 @@ export function fetchCalculationByIdFromGirder(id) {
 }
 export function* fetchCalculationById(action) {
   try {
-    yield put( requestCalculationById(action.payload.id) )
+    yield put( calculations.requestCalculationById(action.payload.id) )
     const calculation = yield call(fetchCalculationByIdFromGirder, action.payload.id)
-    yield put( receiveCalculation(calculation) )
+    yield put( calculations.receiveCalculation(calculation) )
   }
   catch(error) {
-    yield put( requestCalculationById(error) )
+    yield put( calculations.requestCalculationById(error) )
   }
 }
 
 export function* watchFetchCalculationById() {
-  yield takeEvery(LOAD_CALCULATION_BY_ID, fetchCalculationById)
+  yield takeEvery(calculations.LOAD_CALCULATION_BY_ID, fetchCalculationById)
 }
 
 // mo
@@ -162,17 +147,17 @@ export function fetchOrbitalFromGirder(id, mo) {
 }
 export function* fetchOrbital(action) {
   try {
-    yield put( requestOrbital(action.payload.id, action.payload.mo) )
+    yield put( calculations.requestOrbital(action.payload.id, action.payload.mo) )
     const orbital = yield call(fetchOrbitalFromGirder, action.payload.id, action.payload.mo)
-    yield put( receiveOrbital(action.payload.id, action.payload.mo, orbital) )
+    yield put( calculations.receiveOrbital(action.payload.id, action.payload.mo, orbital) )
   }
   catch(error) {
-    yield put(  requestOrbital(error) )
+    yield put(  calculations.requestOrbital(error) )
   }
 }
 
 export function* watchFetchOrbital() {
-  yield takeEvery(LOAD_ORBITAL, fetchOrbital)
+  yield takeEvery(calculations.LOAD_ORBITAL, fetchOrbital)
 }
 
 // Auth
@@ -190,31 +175,31 @@ export function fetchOAuthProvidersFromGirder(redirect) {
 
 export function* fetchOauthProviders(action) {
   try {
-    yield put( requestOauthProviders() )
+    yield put( girder.requestOauthProviders() )
     const providers = yield call(fetchOAuthProvidersFromGirder, action.payload)
-    yield put( receiveOauthProviders(providers) )
+    yield put( girder.receiveOauthProviders(providers) )
   }
   catch(error) {
-    yield put(  requestOauthProviders(error) )
+    yield put(  girder.requestOauthProviders(error) )
   }
 }
 
 export function* watchFetchOauthProviders() {
-  yield takeEvery(LOAD_OAUTH_PROVIDERS, fetchOauthProviders)
+  yield takeEvery(girder.LOAD_OAUTH_PROVIDERS, fetchOauthProviders)
 }
 
 export function* testOauthEnabled(action) {
   try {
     yield call(fetchOAuthProvidersFromGirder, 'dummy')
-    yield put( setOauthEnabled(true) )
+    yield put( girder.setOauthEnabled(true) )
   }
   catch(error) {
-    yield put( setOauthEnabled(false) )
+    yield put( girder.setOauthEnabled(false) )
   }
 }
 
 export function* watchTestOauthEnabled() {
-  yield takeEvery(TEST_OAUTH_ENABLED, testOauthEnabled)
+  yield takeEvery(girder.TEST_OAUTH_ENABLED, testOauthEnabled)
 }
 
 export function* updateToken(action) {
@@ -224,16 +209,20 @@ export function* updateToken(action) {
   }
 
   const cookies = new Cookies();
-  cookies.set('girderToken', girderToken, {
-    path: '/'
-  });
-
-  // Reconnect to the event stream using the new token
-  yield put(connectToNotifications());
+  if (isNil(girderToken)) {
+    cookies.remove('girderToken');
+  }
+  else {
+    cookies.set('girderToken', girderToken, {
+      path: '/'
+    });
+    // Reconnect to the event stream using the new token
+    yield put(girder.connectToNotifications());
+  }
 }
 
 export function* watchNewToken() {
-  yield takeEvery(NEW_TOKEN, updateToken)
+  yield takeEvery(girder.NEW_TOKEN, updateToken)
 }
 
 export function* authenticate(action) {
@@ -242,16 +231,16 @@ export function* authenticate(action) {
   const redirect = payload.redirect;
   let auth = false;
   let me = null;
-  yield put(setAuthenticating(true));
+  yield put(girder.setAuthenticating(true));
 
   if (!isNil(token)) {
 
     me = yield call(user.fetchMe, token);
     if (me != null) {
-      yield put(newToken(token));
-      yield put(setMe(me))
-      yield put(setAuthenticating(false))
-      yield put(authenticated())
+      yield put(girder.newToken(token));
+      yield put(girder.setMe(me))
+      yield put(girder.setAuthenticating(false))
+      yield put(girder.authenticated())
       auth = true
     }
   }
@@ -259,47 +248,47 @@ export function* authenticate(action) {
   if (!auth) {
     if (redirect) {
       const redirect = window.location.href;
-      yield put(loadOauthProviders(redirect));
+      yield put(girder.loadOauthProviders(redirect));
     }
     else {
-      yield put(setAuthenticating(false));
+      yield put(girder.setAuthenticating(false));
     }
   }
 }
 
 export function* watchAuthenticate() {
-  yield takeEvery(AUTHENTICATE, authenticate)
+  yield takeEvery(girder.AUTHENTICATE, authenticate)
 }
 
 export function* invalidateToken(action) {
   try {
-    yield put( requestTokenInvalidation() )
+    yield put( girder.requestTokenInvalidation() )
     yield call(token.invalidate)
-    yield put( newToken(null) )
-    yield put( setMe(null) )
+    yield put( girder.newToken(null) )
+    yield put( girder.setMe(null) )
   }
   catch(error) {
-    yield put( requestTokenInvalidation(error) )
+    yield put( girder.requestTokenInvalidation(error) )
   }
 }
 
 export function* watchInvalidateToken() {
-  yield takeEvery(INVALIDATE_TOKEN, invalidateToken)
+  yield takeEvery(girder.INVALIDATE_TOKEN, invalidateToken)
 }
 
 export function* fetchMe(action) {
   try {
-    yield put( requestMe() )
+    yield put( girder.requestMe() )
     const me = yield call(fetchUserMeFromGirder)
-    yield put( receiveMe(me) )
+    yield put( girder.receiveMe(me) )
   }
   catch(error) {
-    yield put( requestMe(error) )
+    yield put( girder.requestMe(error) )
   }
 }
 
 export function* watchFetchMe() {
-  yield takeEvery(LOAD_ME, fetchMe)
+  yield takeEvery(girder.LOAD_ME, fetchMe)
 }
 
 export function* receiveNotification(action) {
@@ -311,7 +300,7 @@ export function* receiveNotification(action) {
 
     if (taskflow) {
       // If we have a status then we are keep track of this taskflow
-      yield put (receiveTaskFlowStatus(data))
+      yield put (cumulus.receiveTaskFlowStatus(data))
     }
   }
   else if (type === 'job.status') {
@@ -320,17 +309,17 @@ export function* receiveNotification(action) {
 
     if (job) {
       // If we have a status then we are keep track of this taskflow
-      yield put(receiveJobStatus(data))
+      yield put(cumulus.receiveJobStatus(data))
     }
     // This is a new job
     else if (data.status === 'created') {
-      yield put(loadJob({id}));
+      yield put(cumulus.loadJob({id}));
     }
   }
 }
 
 export function* watchNotification() {
-  yield takeEvery(RECEIVE_NOTIFICATION, receiveNotification)
+  yield takeEvery(girder.RECEIVE_NOTIFICATION, receiveNotification)
 }
 
 // TaskFlow
@@ -346,11 +335,11 @@ export function* fetchTaskFlow(action) {
 
     // If we are authenticating then wait ...
     if (authenticating) {
-      yield take(AUTHENTICATED);
+      yield take(girder.AUTHENTICATED);
     }
 
     const _id = action.payload.id;
-    yield put( requestTaskFlow(_id) );
+    yield put( cumulus.requestTaskFlow(_id) );
     let taskflow = yield call(fetchTaskFlowFromGirder, _id);
     // See if we have any jobs associated with the taskflow and if so load
     // them.
@@ -362,20 +351,20 @@ export function* fetchTaskFlow(action) {
       for( let job of jobs) {
         const id = job._id;
         console.log(id);
-        yield put( loadJob({id}));
+        yield put( cumulus.loadJob({id}));
       }
     }
 
-    yield put( receiveTaskFlow({taskflow}));
+    yield put( cumulus.receiveTaskFlow({taskflow}));
   }
   catch(error) {
     console.log(error);
-    yield put( requestTaskFlow(error) )
+    yield put( cumulus.requestTaskFlow(error) )
   }
 }
 
 export function* watchFetchTaskFlow() {
-  yield takeEvery(LOAD_TASKFLOW, fetchTaskFlow)
+  yield takeEvery(cumulus.LOAD_TASKFLOW, fetchTaskFlow)
 }
 
 // Job
@@ -388,17 +377,17 @@ export function fetchJobFromGirder(id) {
 export function* fetchJob(action) {
   try {
     const _id = action.payload.id;
-    yield put( requestJob(_id) );
+    yield put( cumulus.requestJob(_id) );
     let job = yield call(fetchJobFromGirder, _id);
-    yield put( receiveJob({job}));
+    yield put( cumulus.receiveJob({job}));
   }
   catch(error) {
-    yield put( requestJob(error) )
+    yield put( cumulus.requestJob(error) )
   }
 }
 
 export function* watchFetchJob() {
-  yield takeEvery(LOAD_JOB, fetchJob)
+  yield takeEvery(cumulus.LOAD_JOB, fetchJob)
 }
 
 // api key
@@ -414,18 +403,18 @@ export function tokenForApiKey(apiKey) {
 export function* authenticateUsingApiKey(action) {
   try {
     const key = action.payload.key;
-    yield put( requestTokenForApiKey(key) );
+    yield put( girder.requestTokenForApiKey(key) );
     let tokenResponse = yield call(tokenForApiKey, key);
 
-    yield put( newToken(tokenResponse.token) );
+    yield put( girder.newToken(tokenResponse.token) );
   }
   catch(error) {
-    yield put( requestTokenForApiKey(error) )
+    yield put( girder.requestTokenForApiKey(error) )
   }
 }
 
 export function* watchFetchTokenForApiKey() {
-  yield takeEvery( FETCH_TOKEN_FOR_API_KEY, authenticateUsingApiKey)
+  yield takeEvery( girder.FETCH_TOKEN_FOR_API_KEY, authenticateUsingApiKey)
 }
 
 export default function* root() {

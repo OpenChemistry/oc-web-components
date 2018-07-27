@@ -2,9 +2,10 @@ import axios from 'axios';
 import { put, call, takeEvery } from 'redux-saga/effects'
 import Cookies from 'universal-cookie';
 
-import { authenticateWithNewt, AUTHENTICATE_NERSC  }  from '@openchemistry/redux'
-import { setAuthenticating, newToken, setMe, authenticated }  from '@openchemistry/redux'
-import { showNerscLogin }  from '@openchemistry/redux'
+import { nersc } from '@openchemistry/redux'
+import { girder } from '@openchemistry/redux'
+import { app }  from '@openchemistry/redux'
+
 var girderClient = axios.create({
   baseURL: window.location.origin,
 });
@@ -28,8 +29,8 @@ export function* authenticateWithNersc(action) {
   const {username, password, reject, resolve} = action.payload;
 
   try {
-    yield put(setAuthenticating(true));
-    yield put( authenticateWithNewt() )
+    yield put(girder.setAuthenticating(true));
+    yield put( nersc.authenticateWithNewt() )
 
     const {auth, newt_sessionid} = yield call(authenticateNewt, username, password)
     if (!auth) {
@@ -40,22 +41,22 @@ export function* authenticateWithNersc(action) {
       const cookies = new Cookies();
       const token = cookies.get('girderToken');
 
-      yield put(newToken(token));
-      yield put(setMe(me));
-      yield put(setAuthenticating(false));
-      yield put(authenticated());
-      yield put(showNerscLogin(false));
+      yield put(girder.newToken(token));
+      yield put(girder.setMe(me));
+      yield put(girder.setAuthenticating(false));
+      yield put(girder.authenticated());
+      yield put(app.showNerscLogin(false));
     }
 
     resolve();
   }
   catch(error) {
-    yield put(  yield put( authenticateWithNewt(error) ))
+    yield put(  yield put( nersc.authenticateWithNewt(error) ))
     reject(error)
   }
 }
 
 export function* watchAuthenticateNersc() {
-  yield takeEvery(AUTHENTICATE_NERSC, authenticateWithNersc)
+  yield takeEvery(nersc.AUTHENTICATE_NERSC, authenticateWithNersc)
 }
 
