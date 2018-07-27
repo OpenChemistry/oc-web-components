@@ -11,23 +11,22 @@
   ],
   "scripts": {
     "build": "stencil build",
-    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
-    "serve": "stencil-dev-server",
-    "start": "npm run dev",
+    "start": "stencil build --dev --watch --serve",
     "test": "jest",
     "test.watch": "jest --watch"
   },
   "dependencies": {
+    "@openchemistry/molecule-menu": "^0.3.1",
     "@openchemistry/molecule-moljs": "^0.3.153",
-    "@openchemistry/utils": "^0.0.2",
+    "@openchemistry/sample-data": "^0.3.2",
+    "@openchemistry/types": "^0.6.0",
+    "@openchemistry/utils": "0.3.1",
     "@openchemistry/vibrational-spectrum": "^0.1.7",
-    "lodash-es": "^4.17.10"
+    "lodash-es": "^4.17.10",
+    "split-me": "^0.3.0"
   },
   "devDependencies": {
-    "@openchemistry/types": "^0.3.0",
-    "@stencil/core": "^0.9.10",
-    "@stencil/dev-server": "latest",
-    "@stencil/utils": "latest",
+    "@stencil/core": "^0.10.9",
     "@types/jest": "^22.0.1",
     "@types/lodash-es": "^4.17.0",
     "jest": "^23.1.0"
