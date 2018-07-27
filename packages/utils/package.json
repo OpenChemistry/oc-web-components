@@ -22,7 +22,7 @@
     "lodash-es": "^4.17.10"
   },
   "devDependencies": {
-    "@openchemistry/types": "^0.3.0",
+    "@openchemistry/types": "^0.6.0",
     "@types/lodash-es": "^4.17.0",
     "typescript": "^2.9.2"
   },
