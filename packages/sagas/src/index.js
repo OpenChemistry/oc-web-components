@@ -209,12 +209,16 @@ export function* updateToken(action) {
   }
 
   const cookies = new Cookies();
-  cookies.set('girderToken', girderToken, {
-    path: '/'
-  });
-
-  // Reconnect to the event stream using the new token
-  yield put(girder.connectToNotifications());
+  if (isNil(girderToken)) {
+    cookies.remove('girderToken');
+  }
+  else {
+    cookies.set('girderToken', girderToken, {
+      path: '/'
+    });
+    // Reconnect to the event stream using the new token
+    yield put(girder.connectToNotifications());
+  }
 }
 
 export function* watchNewToken() {
