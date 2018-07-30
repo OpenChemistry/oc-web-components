@@ -8,7 +8,10 @@ exports.config = {
       type: 'www',
       serviceWorker: false
     }
-  ]
+  ],
+  commonjs: {
+    include: ['node_modules/**', '../molecule-vtkjs/node_modules/vtk.js/dist/vtk.js']
+  }
 };
 
 exports.devServer = {
