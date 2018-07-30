@@ -9,7 +9,7 @@ import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
 import { BenzeneWithHomo } from '@openchemistry/sample-data';
 
 import '@openchemistry/molecule-menu';
-import '@openchemistry/molecule-moljs';
+import '@openchemistry/molecule-vtkjs';
 import '@openchemistry/vibrational-spectrum';
 import 'split-me';
 
@@ -135,7 +135,7 @@ export class Molecule {
     return (
       <div class='main-container'>
         <split-me n={splitN} sizes={splitSizes}>
-          <oc-molecule-moljs
+          <oc-molecule-vtkjs
             slot='0'
             cjson={cjson}
             options={this.options}
