@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.0.6"></a>
+## [0.0.6](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.0.5...@openchemistry/volume-controls@0.0.6) (2018-07-31)
+
+
+### Bug Fixes
+
+* **volume-controls:** Reduce radius of opacity nodes ([dfe8116](https://github.com/OpenChemistry/oc-web-components/commit/dfe8116))
+
+
+
+
 <a name="0.0.5"></a>
 ## [0.0.5](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.0.4...@openchemistry/volume-controls@0.0.5) (2018-07-27)
 

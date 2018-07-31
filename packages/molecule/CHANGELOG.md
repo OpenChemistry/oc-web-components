@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.2.0...@openchemistry/molecule@0.2.1) (2018-07-31)
+
+
+### Bug Fixes
+
+* **molecule:** Calculate range and histograms ([3001afb](https://github.com/OpenChemistry/oc-web-components/commit/3001afb))
+* **molecule:** Fix stencil's rollup commonjs config ([6a6feac](https://github.com/OpenChemistry/oc-web-components/commit/6a6feac))
+* **molecule:** Switch to VTK.js ([1d565d1](https://github.com/OpenChemistry/oc-web-components/commit/1d565d1))
+
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.1.10...@openchemistry/molecule@0.2.0) (2018-07-27)
 
