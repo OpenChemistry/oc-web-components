@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@openchemistry/types": "^0.6.0",
-    "@stencil/core": "^0.10.2",
+    "@stencil/core": "^0.10.10",
     "@types/jest": "^22.0.1",
     "@types/lodash-es": "^4.17.0",
     "jest": "^23.1.0"

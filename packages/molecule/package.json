@@ -16,13 +16,13 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "@openchemistry/molecule-menu": "^0.3.2",
-    "@openchemistry/molecule-moljs": "^0.3.154",
-    "@openchemistry/sample-data": "^0.3.2",
+    "@openchemistry/molecule-menu": "^0.3.1",
+    "@openchemistry/molecule-vtkjs": "^0.1.4",
     "@openchemistry/types": "^0.6.0",
     "@openchemistry/utils": "0.3.1",
     "@openchemistry/vibrational-spectrum": "^0.1.8",
     "lodash-es": "^4.17.10",
+    "memoize-one": "^4.0.0",
     "split-me": "^0.3.0"
   },
   "devDependencies": {

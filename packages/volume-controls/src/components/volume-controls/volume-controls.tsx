@@ -312,7 +312,7 @@ export class VolumeControls {
       let x: number = this.xScale(this.opacitiesX[i]);
       let y:number = this.yScale(this.opacities[i]);
       this.c.beginPath();
-      this.c.arc(x, y, 9, 0, 2 * Math.PI);
+      this.c.arc(x, y, 6, 0, 2 * Math.PI);
       this.c.fill();
 
       // Use unique color needed to build the color to node map
