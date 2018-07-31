@@ -37,7 +37,6 @@ function atomsToMoljs(atomsIn: IAtoms) : IAtomSpec[] {
     let x: number = atomsIn.coords['3d'][i * 3];
     let y: number = atomsIn.coords['3d'][i * 3 + 1];
     let z: number = atomsIn.coords['3d'][i * 3 + 2];
-    console.log(s, x, y, z);
     atoms.push({
       elem: s,
       x: x,
