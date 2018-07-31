@@ -3,10 +3,10 @@ import { Component, Prop, State, Watch } from '@stencil/core';
 import { isNil } from "lodash-es";
 
 import { IChemJson, IDisplayOptions } from '@openchemistry/types';
-import { isChemJson, validateChemJson, composeDisplayOptions } from '@openchemistry/utils';
+import { isChemJson, validateChemJson, composeDisplayOptions, makeBins } from '@openchemistry/utils';
 import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
 
-import { BenzeneWithHomo } from '@openchemistry/sample-data';
+import memoizeOne from 'memoize-one';
 
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-vtkjs';
@@ -23,6 +23,7 @@ export class Molecule {
   @Prop() cjson: IChemJson;
   @Watch('cjson')
   cjsonHandler() {
+    this.cjsonHasChanged = true;
     this.cjsonData = null;
   }
 
@@ -39,11 +40,21 @@ export class Molecule {
     'Gray': gray
   }
 
+  makeBins: Function;
+
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
+    this.getRange = memoizeOne(this.getRange);
+    this.makeBins = memoizeOne(makeBins);
     this.cjsonData = this.getCjson();
     this.activeMap = 'Red Yellow Blue';
     this.options.volume.colors = this.colorMaps[this.activeMap];
+    if (!isNil(this.cjsonData) && !isNil(this.cjsonData.cube)) {
+      let range = this.getRange(this.cjsonData.cube.scalars);
+      let histograms = this.makeBins(this.cjsonData.cube.scalars, 50, range);
+      this.options.volume.range = range;
+      this.options.volume.histograms = histograms;
+    }
   }
 
   componentDidLoad() {
@@ -52,7 +63,18 @@ export class Molecule {
 
   componentWillUpdate() {
     console.log('Molecule will update and re-render');
-    this.cjsonData = this.getCjson();
+    if (this.cjsonHasChanged) {
+      this.cjsonHasChanged = false;
+      this.cjsonData = this.getCjson();
+      if (!isNil(this.cjsonData) && !isNil(this.cjsonData.cube)) {
+        this.options.volume = {...this.options.volume};
+        let range = this.getRange(this.cjsonData.cube.scalars);
+        let histograms = this.makeBins(this.cjsonData.cube.scalars, 50, range);
+        this.options.volume.range = range;
+        this.options.volume.histograms = histograms;
+        this.options = {...this.options};
+      }
+    }
   }
 
   componentDidUpdate() {
@@ -63,12 +85,18 @@ export class Molecule {
     console.log('Molecule removed from the DOM');
   }
 
+  getRange(arr: number[]) : [number, number] {
+    let range: [number, number] = [0, 0];
+    range[0] = Math.min(...arr);
+    range[1] = Math.max(...arr);
+    return range;
+  }
+
   getCjson(): IChemJson {
     if (isNil(this.cjsonData)) {
       this.setCjson();
     }
-    // return this.cjsonData;
-    return BenzeneWithHomo;
+    return this.cjsonData;
   }
 
   setCjson() {
@@ -131,6 +159,10 @@ export class Molecule {
     
     const splitN = hasSpectrum ? 2 : 1;
     const splitSizes = hasSpectrum ? "0.4, 0.6" : "1";
+
+    if (isNil(cjson)) {
+      return (null);
+    }
 
     return (
       <div class='main-container'>
