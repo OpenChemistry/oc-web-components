@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.155...@openchemistry/molecule-moljs@0.4.0) (2018-08-01)
+
+
+### Bug Fixes
+
+* **molecule-moljs:** Bump types version ([30c527a](https://github.com/OpenChemistry/oc-web-components/commit/30c527a))
+
+
+### Features
+
+* **molecule-moljs:** Add rotate prop ([bc723e7](https://github.com/OpenChemistry/oc-web-components/commit/bc723e7))
+
+
+
+
 <a name="0.3.155"></a>
 ## [0.3.155](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.3.154...@openchemistry/molecule-moljs@0.3.155) (2018-08-01)
 
