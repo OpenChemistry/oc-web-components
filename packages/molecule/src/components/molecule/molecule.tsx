@@ -150,6 +150,16 @@ export class Molecule {
     this.options = {...this.options};
   }
 
+  onStyleChanged = (e: CustomEvent, key: string) => {
+    this.options.style = {...this.options.style};
+    if (key === 'sphere') {
+      this.options.style.sphere = {scale: e.detail};
+    } else if (key === 'stick') {
+      this.options.style.stick = {radius: e.detail};
+    }
+    this.options = {...this.options};
+  }
+
   render() {
     const cjson = this.getCjson();
     const hasVolume = !!cjson && !!cjson.cube;
@@ -181,7 +191,6 @@ export class Molecule {
           />
           }
         </split-me>
-        { (hasSpectrum || hasVolume) &&
         <div class='menu-container'>
           <oc-molecule-menu-popup>
             <oc-molecule-menu
@@ -200,10 +209,11 @@ export class Molecule {
               onColorMapChanged={(e) => {this.onVolumeChanged(e, 'colormap')}}
               onIsoValueChanged={this.onIsoValueChanged}
               onVisibilityChanged={this.onVisibilityChanged}
+              onBallChanged={(e) => {this.onStyleChanged(e, 'sphere')}}
+              onStickChanged={(e) => {this.onStyleChanged(e, 'stick')}}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>
-        }
       </div>
     )
   }
