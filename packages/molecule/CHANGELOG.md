@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.2.3...@openchemistry/molecule@0.2.4) (2018-08-01)
+
+
+### Bug Fixes
+
+* Update deps to latest versions ([56c5b28](https://github.com/OpenChemistry/oc-web-components/commit/56c5b28))
+
+
+
+
 <a name="0.2.3"></a>
 ## [0.2.3](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.2.2...@openchemistry/molecule@0.2.3) (2018-08-01)
 

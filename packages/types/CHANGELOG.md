@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.6.0...@openchemistry/types@0.6.1) (2018-08-01)
+
+
+### Bug Fixes
+
+* Update deps to latest versions ([56c5b28](https://github.com/OpenChemistry/oc-web-components/commit/56c5b28))
+
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.3.0...@openchemistry/types@0.6.0) (2018-07-27)
 
