@@ -24,10 +24,10 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.10.9",
+    "@stencil/core": "^0.11.0",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
-    "@types/jest": "^22.0.1",
+    "@types/jest": "^23.3.1",
     "jest": "^23.1.0"
   },
   "repository": {
