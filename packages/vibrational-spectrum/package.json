@@ -16,15 +16,15 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "@openchemistry/types": "^0.3.0",
+    "@openchemistry/types": "^0.6.0",
     "d3": "^5.5.0",
     "lodash-es": "^4.17.10",
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.10.9",
+    "@stencil/core": "^0.11.0",
     "@types/d3": "^5.0.0",
-    "@types/jest": "^22.0.1",
+    "@types/jest": "^23.3.1",
     "@types/lodash-es": "^4.17.0",
     "jest": "^23.1.0"
   },

@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "devDependencies": {
-    "@openchemistry/types": "^0.3.0",
-    "typescript": "^2.9.2"
+    "@openchemistry/types": "^0.6.0",
+    "typescript": "^3.0.1"
   },
   "publishConfig": {
     "access": "public"
