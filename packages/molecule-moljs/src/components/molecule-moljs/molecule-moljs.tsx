@@ -46,6 +46,8 @@ export class MoleculeMoljs {
     this.optionsData = composeDisplayOptions(newValue);
   }
 
+  @Prop() rotate: boolean = false;
+
   cjsonData: IChemJson;
   optionsData: IDisplayOptions;
 
@@ -55,6 +57,7 @@ export class MoleculeMoljs {
   animationInterval: any;
   currAtoms: IAtomSpec[];
   currModel: any;
+  rotateInterval: any;
 
   /**
    * The component is about to load and it has not
@@ -174,6 +177,7 @@ export class MoleculeMoljs {
     this.viewer.zoomTo();
     this.viewer.render();
     this.startAnimation();
+    this.handleRotate();
   }
 
   setAtoms() {
@@ -263,6 +267,16 @@ export class MoleculeMoljs {
       this.setOptions();
     }
     return this.optionsData;
+  }
+
+  handleRotate() {
+    if (this.rotate && isNil(this.rotateInterval)) {
+      this.rotateInterval = setInterval(() => this.viewer.rotate(0.5), 50);
+    }
+    else if (!this.rotate && !isNil(this.rotateInterval)) {
+      clearInterval(this.rotateInterval);
+      this.rotateInterval = null;
+    }
   }
 
   render() {
