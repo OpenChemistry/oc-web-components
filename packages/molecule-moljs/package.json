@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@openchemistry/moljs-es": "^0.1.0",
-    "@openchemistry/types": "^0.3.0",
+    "@openchemistry/types": "^0.6.0",
     "@openchemistry/utils": "^0.3.2",
     "@types/lodash-es": "^4.17.0",
     "lodash-es": "^4.17.10",
