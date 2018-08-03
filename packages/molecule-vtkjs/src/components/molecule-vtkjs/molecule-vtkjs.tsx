@@ -369,6 +369,9 @@ export class MoleculeVtkjs {
 
   componentDidUnload() {
     console.log('Component removed from the DOM');
+    if (!isNil(this.animationInterval)) {
+      clearInterval(this.animationInterval);
+    }
     this.cleanupVtkjs();
   }
 
