@@ -139,6 +139,12 @@ export class MoleculeMoljs {
    */
   componentDidUnload() {
     console.log('Component removed from the DOM');
+    if (!isNil(this.animationInterval)) {
+      clearInterval(this.animationInterval);
+    }
+    if (!isNil(this.rotateInterval)) {
+      clearInterval(this.rotateInterval);
+    }
     if (!isNil(this.viewer)) {
       this.viewer.clear();
       this.viewer = null;
