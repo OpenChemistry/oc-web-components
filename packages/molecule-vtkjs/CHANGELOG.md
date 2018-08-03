@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.9"></a>
+## [0.1.9](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.8...@openchemistry/molecule-vtkjs@0.1.9) (2018-08-03)
+
+
+### Bug Fixes
+
+* **molecule-vtkjs:** Clear interval on unload ([e85320c](https://github.com/OpenChemistry/oc-web-components/commit/e85320c))
+
+
+
+
 <a name="0.1.8"></a>
 ## [0.1.8](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.7...@openchemistry/molecule-vtkjs@0.1.8) (2018-08-01)
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.4.1...@openchemistry/molecule-moljs@0.4.2) (2018-08-03)
+
+
+### Bug Fixes
+
+* **molecule-moljs:** Clear intervals on unload ([792c545](https://github.com/OpenChemistry/oc-web-components/commit/792c545))
+
+
+
+
 <a name="0.4.1"></a>
 ## [0.4.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-moljs@0.4.0...@openchemistry/molecule-moljs@0.4.1) (2018-08-01)
 
