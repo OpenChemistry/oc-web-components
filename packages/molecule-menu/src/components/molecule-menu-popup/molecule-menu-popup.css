@@ -12,10 +12,9 @@
 
 .menu-container {
   position: absolute;
-  width: 30rem;
-  max-width: 100%;
   top: 2.75rem;
   right: 1rem;
+  width: 100%;
 }
 
 .menu-card {

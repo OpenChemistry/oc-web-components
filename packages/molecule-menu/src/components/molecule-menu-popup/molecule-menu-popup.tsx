@@ -16,7 +16,7 @@ export class MoleculeMenuPopup {
     return (
       <div class='main-container'>
         <div class='menu-button-container'>
-          <ion-button fill='clear' onClick={() => {this.open = !this.open}}>
+          <ion-button color='light' fill='outline' onClick={() => {this.open = !this.open}}>
             <ion-icon  color="dark" name='more'></ion-icon>
           </ion-button>
         </div>
