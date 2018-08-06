@@ -56,7 +56,7 @@ export function* loginGirder(action) {
     const res = yield call(girder.user.logIn, username, password);
 
     const token = res.authToken.token;
-    yield put(app.newToken(token));
+    yield put(girder_redux.newToken(token));
 
     const me = res.user;
     yield put(girder_redux.setMe(me));
