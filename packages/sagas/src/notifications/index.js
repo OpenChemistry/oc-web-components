@@ -1,6 +1,6 @@
 import { take, put, call, fork } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
-import has from 'lodash-es'
+import {has, isNil} from 'lodash-es'
 
 import { girder } from '@openchemistry/redux';
 
@@ -30,7 +30,7 @@ function createEventSource() {
 function* receiveEvents(eventSourceChannel) {
   while (true) {
     const payload = yield take(eventSourceChannel)
-    if (_.has(payload, 'error')) {
+    if (has(payload, 'error')) {
       yield put(girder.eventSourceError(payload));
     }
     else {
@@ -46,7 +46,7 @@ export function* watchNotifications() {
   while (true) {
     yield take(girder.CONNECT_TO_NOTIFICATIONS)
 
-    if (!_.isNil(eventSourceChannel)) {
+    if (!isNil(eventSourceChannel)) {
       eventSourceChannel.close()
     }
 
