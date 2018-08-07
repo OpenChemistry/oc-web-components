@@ -1,5 +1,7 @@
 import { Component, State } from '@stencil/core';
 
+import { MoreIcon } from '../../icons';
+
 import '@ionic/core';
 import 'ionicons';
 
@@ -12,12 +14,12 @@ export class MoleculeMenuPopup {
 
   @State() open = false;
   
-  render() {
+  render() {   
     return (
       <div class='main-container'>
         <div class='menu-button-container'>
-          <ion-button color='light' fill='outline' onClick={() => {this.open = !this.open}}>
-            <ion-icon  color="dark" name='more'></ion-icon>
+          <ion-button fill='clear' onClick={() => {this.open = !this.open}}>
+            <ion-icon color='dark' src={MoreIcon}></ion-icon>
           </ion-button>
         </div>
         <div hidden={!this.open} class='menu-container'>

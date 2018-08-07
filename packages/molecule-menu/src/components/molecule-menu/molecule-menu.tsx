@@ -3,7 +3,8 @@ import { Component, Prop, Event, EventEmitter } from '@stencil/core';
 import { IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
 import { composeVolumeOptions, composeVisibilityOptions } from '@openchemistry/utils';
 
-// import { isNil } from "lodash-es";
+import { PlayIcon, PauseIcon } from '../../icons';
+
 import '@ionic/core';
 import 'ionicons';
 import '@openchemistry/volume-controls';
@@ -261,7 +262,7 @@ export class MoleculeMenu {
           </ion-select>
           <div class="end-slot" slot="end">
             <ion-button fill="solid" color="light" shape="round" onClick={() => {this.playHandler()}}>
-              <ion-icon icon={this.play ? "pause" : "play"}></ion-icon>
+              <ion-icon icon={this.play ? PauseIcon : PlayIcon}></ion-icon>
             </ion-button>
           </div>
         </ion-item>
