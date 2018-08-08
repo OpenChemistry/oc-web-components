@@ -1,4 +1,4 @@
-import { IChemJson, IAtoms, IBonds, ICube, IVibrations } from '@openchemistry/types';
+import { IChemJson, IAtoms, IBonds, ICube, IVibrations, IMolecularOrbitals } from '@openchemistry/types';
 import { isNil } from "lodash-es";
 
 export { validateChemJson, isChemJson, numberOfAtoms };
@@ -27,6 +27,12 @@ function validateChemJson(obj: IChemJson) : boolean {
     // If vibration data is invalid, throw it out but still keep the rest
     if (!validateVibrations(obj.atoms, obj.vibrations)) {
       obj.vibrations = undefined;
+    }
+  }
+  if (!isNil(obj.molecularOrbitals)) {
+    // If orbitals data is invalid, throw it out but still keep the rest
+    if (!validateMolecularOrbitals(obj.molecularOrbitals)) {
+      obj.molecularOrbitals = undefined;
     }
   }
   return true;
@@ -92,6 +98,13 @@ function validateVibrations(atoms: IAtoms, vibrations: IVibrations) : boolean {
     }
   }
   return true;
+}
+
+function validateMolecularOrbitals(mo: IMolecularOrbitals) : boolean {
+  if (mo.energies.length === mo.numbers.length && mo.energies.length === mo.occupations.length) {
+    return true;
+  }
+  return false;
 }
 
 function numberOfAtoms(atoms: IAtoms) : number {
