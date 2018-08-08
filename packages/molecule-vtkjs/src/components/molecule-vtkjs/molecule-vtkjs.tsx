@@ -8,6 +8,7 @@ import { IChemJson, IDisplayOptions, IAtoms, IBonds } from '@openchemistry/types
 import { composeDisplayOptions } from '@openchemistry/utils';
 import { color2rgb, rowMaj2colMaj3d } from '@openchemistry/utils';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
+import { BenzeneWithHomo } from '@openchemistry/sample-data';
 
 import vtk from 'vtk.js';
 
@@ -376,10 +377,7 @@ export class MoleculeVtkjs {
   }
 
   getCjson(): IChemJson {
-    if (isNil(this.cjsonData)) {
-      this.setCjson();
-    }
-    return this.cjsonData;
+    return BenzeneWithHomo;
   }
 
   setCjson() {
