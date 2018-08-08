@@ -8,11 +8,9 @@ import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
 
 import memoizeOne from 'memoize-one';
 
-import '@ionic/core';
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-vtkjs';
 import '@openchemistry/vibrational-spectrum';
-import '@openchemistry/volume-controls';
 import 'split-me';
 
 @Component({
