@@ -217,7 +217,12 @@ export class MoleculeVtkjs {
     this.volume.setSpacing(spacing);
     this.volume.setOrigin(origin);
     this.volume.getPointData().setScalars(scalars);
-    
+
+    const averageSpacing =  spacing.reduce( ( x, y ) => x + y, 0 ) / spacing.length;
+    this.volumeMapper.setAutoAdjustSampleDistances(false);
+    //this.volumeMapper.setSampleDistance(0.1);  // This seems to be better.
+    this.volumeMapper.setSampleDistance(averageSpacing);
+    this.volumeActor.getProperty().setScalarOpacityUnitDistance(0, averageSpacing);
   }
 
   updateIsoSurfaces() {
