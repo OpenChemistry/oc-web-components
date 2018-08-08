@@ -8,14 +8,17 @@ import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
 
 import memoizeOne from 'memoize-one';
 
+import '@ionic/core';
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-vtkjs';
 import '@openchemistry/vibrational-spectrum';
+import '@openchemistry/volume-controls';
 import 'split-me';
 
 @Component({
   tag: 'oc-molecule',
-  styleUrl: 'molecule.css'
+  styleUrl: 'molecule.css',
+  shadow: true
 })
 export class Molecule {
 
@@ -176,21 +179,23 @@ export class Molecule {
 
     return (
       <div class='main-container'>
-        <split-me n={splitN} sizes={splitSizes}>
-          <oc-molecule-vtkjs
-            slot='0'
-            cjson={cjson}
-            options={this.options}
-          />
-          {hasSpectrum &&
-          <oc-vibrational-spectrum
-            slot='1'
-            vibrations={cjson.vibrations}
-            options={this.options.normalMode}
-            onBarSelected={(e) => {this.onAnimationChanged(e, 'modeIdx')}}
-          />
-          }
-        </split-me>
+        <div class='molecule-container'>
+          <split-me n={splitN} sizes={splitSizes}>
+            <oc-molecule-vtkjs
+              slot='0'
+              cjson={cjson}
+              options={this.options}
+            />
+            {hasSpectrum &&
+            <oc-vibrational-spectrum
+              slot='1'
+              vibrations={cjson.vibrations}
+              options={this.options.normalMode}
+              onBarSelected={(e) => {this.onAnimationChanged(e, 'modeIdx')}}
+            />
+            }
+          </split-me>
+        </div>
         <div class='menu-container'>
           <oc-molecule-menu-popup>
             <oc-molecule-menu

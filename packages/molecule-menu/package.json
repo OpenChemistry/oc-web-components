@@ -16,11 +16,10 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "@ionic/core": "latest",
+    "@ionic/core": "4.0.0-beta.0",
     "@openchemistry/types": "^0.6.1",
     "@openchemistry/utils": "^0.3.3",
     "@openchemistry/volume-controls": "^0.0.7",
-    "ionicons": "^4.2.4",
     "lodash-es": "^4.17.10"
   },
   "devDependencies": {
