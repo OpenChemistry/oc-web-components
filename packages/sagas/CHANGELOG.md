@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.4"></a>
+## [0.3.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sagas@0.3.3...@openchemistry/sagas@0.3.4) (2018-08-08)
+
+
+### Bug Fixes
+
+* **sagas:** Fix naming clash in calculations saga ([cacec81](https://github.com/OpenChemistry/oc-web-components/commit/cacec81))
+
+
+
+
 <a name="0.3.3"></a>
 ## [0.3.3](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sagas@0.3.2...@openchemistry/sagas@0.3.3) (2018-08-07)
 
