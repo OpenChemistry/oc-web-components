@@ -10,8 +10,8 @@ export function rowMaj2colMaj3d(scalars: number[], dims: [number, number, number
   return tmp;
 }
 
-export function makeBins(scalars: number[], nBins = 50, range: number[] | undefined = undefined) {
-  let h = [];
+export function makeBins(scalars: number[], nBins = 50, range: number[] | undefined = undefined) : number[] {
+  let h: number[] = [];
   for (let i = 0; i <= nBins; ++i) {
     h.push(0);
   }
@@ -31,4 +31,16 @@ export function makeBins(scalars: number[], nBins = 50, range: number[] | undefi
     }
   }
   return h;
+}
+
+export function linearSpace(start: number, stop: number, num: number, endPoint: boolean = true) : number[] {
+  // Function similar to numpy.linspace
+  let arr: number[] = [];
+  let delta = stop - start;
+  let denom = endPoint ? num - 1 : num;
+  for (let i = 0; i < num; ++i) {
+    let val = start + delta * (i / denom);
+    arr.push(val);
+  }
+  return arr;
 }
