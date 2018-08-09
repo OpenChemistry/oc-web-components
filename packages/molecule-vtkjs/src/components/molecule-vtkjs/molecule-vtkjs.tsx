@@ -10,7 +10,8 @@ import { color2rgb, rowMaj2colMaj3d } from '@openchemistry/utils';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
 import { BenzeneWithHomo } from '@openchemistry/sample-data';
 
-import vtk from 'vtk.js';
+import 'vtk.js';
+declare var vtk: any;
 
 @Component({
   tag: 'oc-molecule-vtkjs',
