@@ -19,7 +19,7 @@
     "@openchemistry/utils": "^0.3.3",
     "lodash-es": "^4.17.10",
     "resize-observer-polyfill": "^1.5.0",
-    "vtk.js": "7.5.2"
+    "vtk.js": "^7.5.5"
   },
   "devDependencies": {
     "@openchemistry/types": "^0.6.1",

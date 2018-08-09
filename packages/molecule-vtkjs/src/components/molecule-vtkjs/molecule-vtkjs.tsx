@@ -9,7 +9,8 @@ import { composeDisplayOptions } from '@openchemistry/utils';
 import { color2rgb, rowMaj2colMaj3d } from '@openchemistry/utils';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
 
-import vtk from 'vtk.js';
+import 'vtk.js';
+declare var vtk: any;
 
 @Component({
   tag: 'oc-molecule-vtkjs',
