@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 import { IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
 import { composeVolumeOptions, composeVisibilityOptions } from '@openchemistry/utils';
@@ -29,6 +29,8 @@ export class MoleculeMenu {
   @Prop({ mutable: true }) ballScale: number = 0.3;
   @Prop({ mutable: true }) stickRadius: number = 0.14;
 
+  @State() mapRange: [number, number];
+
   @Event() isoValueChanged: EventEmitter;
   @Event() scaleValueChanged: EventEmitter;
   @Event() normalModeChanged: EventEmitter;
@@ -38,6 +40,18 @@ export class MoleculeMenu {
   @Event() colorMapChanged: EventEmitter;
   @Event() ballChanged: EventEmitter;
   @Event() stickChanged: EventEmitter;
+  @Event() mapRangeChanged: EventEmitter;
+
+  @Watch('volumeOptions')
+  watchVolumeOptions(newVal: IVolumeOptions, oldVal: IVolumeOptions) {
+    if (newVal.mapRange) {
+      if (oldVal.mapRange && (oldVal.mapRange[0] !== newVal.mapRange[0] || oldVal.mapRange[1] !== newVal.mapRange[1])) {
+        this.mapRange = [newVal.mapRange[0], newVal.mapRange[1]];
+      } else if (!oldVal.mapRange) {
+        this.mapRange = [newVal.mapRange[0], newVal.mapRange[1]];
+      }
+    }
+  }
 
   componentWillLoad() {
     console.log('MoleculeMenu is about to be rendered');
@@ -115,6 +129,30 @@ export class MoleculeMenu {
     }
     this.stickRadius = val;
     this.stickChanged.emit(val);
+  }
+
+  mapRangeHandler(val: any) {
+    if (!val) {
+      return;
+    }
+    if (!this.mapRange) {
+      this.mapRange = [0, 1];
+    }
+    if (val.lower == this.mapRange[0] && val.upper == this.mapRange[1]) {
+      return;
+    }
+    this.mapRange = [val.lower, val.upper];
+    this.mapRangeChanged.emit(this.mapRange);
+  }
+
+  mapRangeSingleHandler(val: number, index: number) {
+    if (!isFinite(val) || val === this.mapRange[index]) {
+      return;
+    }
+    let mapRange: [number, number] = [this.mapRange[0], this.mapRange[1]];
+    mapRange[index] = val;
+    this.mapRange = mapRange;
+    this.mapRangeChanged.emit(this.mapRange);
   }
 
   render() {
@@ -233,6 +271,34 @@ export class MoleculeMenu {
               onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
             />
           </div>
+        );
+        menuItems.push(
+          <ion-item key="mapRange">
+            <ion-label color="primary" position="stacked">Color map range</ion-label>
+            <div class="start-slot" slot="start">
+              <ion-input value={ this.mapRange && isFinite(this.mapRange[0]) ? this.mapRange[0].toFixed(3) : volumeOptions.range ? volumeOptions.range[0].toFixed(3) : "0.000"}
+                debounce={500}
+                onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 0)}}
+              ></ion-input>
+            </div>
+            <ion-range
+              dualKnobs
+              min={volumeOptions.range ? volumeOptions.range[0] : 0}
+              max={volumeOptions.range ? volumeOptions.range[1] : 1}
+              step={0.001}
+              value={{
+                lower: this.mapRange ? this.mapRange[0] : volumeOptions.range ? volumeOptions.range[0] : 0,
+                upper: this.mapRange ? this.mapRange[1] : volumeOptions.range ? volumeOptions.range[1] : 1
+              }}
+              onIonChange={ (e: CustomEvent)=>{this.mapRangeHandler(e.detail.value)}}
+            />
+            <div class="end-slot" slot="end">
+              <ion-input value={ this.mapRange && isFinite(this.mapRange[1]) ? this.mapRange[1].toFixed(3) : volumeOptions.range ? volumeOptions.range[1].toFixed(3) : "1.000"}
+                debounce={500}
+                onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 1)}}
+              ></ion-input>
+            </div>
+          </ion-item>
         );
         menuItems.push(
             <ion-item key="colormapSelect">
