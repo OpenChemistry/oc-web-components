@@ -1,6 +1,8 @@
-import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 
 import { scaleLinear, ScaleLinear, scaleLog, ScaleLogarithmic } from 'd3';
+
+import { linearSpace } from '@openchemistry/utils';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -17,7 +19,12 @@ export class VolumeControls {
   @Prop({mutable: true}) opacities: number[] = [0, 1];
   @Prop({mutable: true}) opacitiesX: number[];
 
+  // The full range of the data
   @Prop() range: [number, number] = [0, 1];
+  @Watch('range')
+  watchRange() {
+    this.rangeChanged = true;
+  }
 
   @Prop() histograms: number[] = [];
 
@@ -35,16 +42,18 @@ export class VolumeControls {
   yScale: ScaleLinear<number, number>;
   yScaleHist: ScaleLogarithmic<number, number>;
 
+  rangeChanged:boolean = false;
+
   activeNode: number;
 
   ro: ResizeObserver;
   
   componentWillLoad() {
     if (!this.colorsX) {
-      this.colorsX = this.defaultX(this.colors.length);
+      this.colorsX = linearSpace(this.range[0], this.range[1], this.colors.length);
     }
     if (!this.opacitiesX) {
-      this.opacitiesX = this.defaultX(this.opacities.length);
+      this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
     }
   }
 
@@ -57,14 +66,20 @@ export class VolumeControls {
 
   }
 
-  componentDidUpdate() {
-    if (this.colorsX.length !== this.colors.length) {
-      this.colorsX = this.defaultX(this.colors.length);
+  componentWillUpdate() {
+    if (this.rangeChanged) {
+      this.colorsX = [];
     }
-    if (this.opacitiesX.length !== this.opacities.length) {
-      this.opacitiesX = this.defaultX(this.opacities.length);
+
+    if (this.colorsX.length !== this.colors.length) {
+      this.colorsX = linearSpace(this.range[0], this.range[1], this.colors.length);
+    }
+
+    if (this.opacitiesX.length !== this.opacities.length || this.rangeChanged) {
+      this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
     }
     this.drawCanvas();
+    this.rangeChanged = false;
   }
 
   componentDidUnload() {
@@ -212,16 +227,6 @@ export class VolumeControls {
     this.drawHistograms(opacity);
   }
 
-  defaultX(n: number): number[] {
-    let x: number[] = [];
-    let delta = this.range[1] - this.range[0];
-    for (let i = 0; i < n; ++i) {
-      let val = this.range[0] + delta * (i / (n - 1));
-      x.push(val);
-    }
-    return x;
-  }
-
   drawBackGround(globalOpacity: number) {
     let grad = this.c.createLinearGradient(0, 0, this.canvas.width, 0);
 
@@ -231,13 +236,27 @@ export class VolumeControls {
         color/opacity map.
     */
 
+    // If the range of the colormap is smaller than the range of the data,
+    // add an additional stop on the gradient to prevent the canvas from being white
+    let colors = this.colors;
+    let colorsX = this.colorsX;
+    if (colorsX[0] > this.range[0]) {
+      colors = [colors[0], ...colors];
+      colorsX = [this.range[0], ...colorsX];
+    }
+
+    if (colorsX[colorsX.length - 1] < this.range[1]) {
+      colors = [...colors, this.colors[this.colors.length - 1]];
+      colorsX = [...colorsX, this.range[1]];
+    }
+
     let colorIdx = 0;
     let opacityIdx = 0;
 
     let delta = this.range[1] - this.range[0];
 
-    while (colorIdx < this.colors.length && opacityIdx < this.opacities.length) {
-      let xCol = this.colorsX[colorIdx];
+    while (colorIdx < colors.length && opacityIdx < this.opacities.length) {
+      let xCol = colorsX[colorIdx];
       let xOp = this.opacitiesX[opacityIdx];
       let x = Math.max(xCol, xOp);
 
@@ -245,13 +264,13 @@ export class VolumeControls {
       let g: number;
       let b: number;
       let frac: number;
-      if (x === this.colorsX[colorIdx]) {
-        [r, g, b] = this.colors[colorIdx];
+      if (x === colorsX[colorIdx]) {
+        [r, g, b] = colors[colorIdx];
         frac = 0;
       } else {
-        const [r0, g0, b0] = this.colors[colorIdx];
-        const [r1, g1, b1] = this.colors[colorIdx + 1];
-        frac = (this.colorsX[colorIdx + 1] - x) / (this.colorsX[colorIdx + 1] - this.colorsX[colorIdx]);
+        const [r0, g0, b0] = colors[colorIdx];
+        const [r1, g1, b1] = colors[colorIdx + 1];
+        frac = (colorsX[colorIdx + 1] - x) / (colorsX[colorIdx + 1] - colorsX[colorIdx]);
         r = frac * r0 + (1 - frac) * r1;
         g = frac * g0 + (1 - frac) * g1;
         b = frac * b0 + (1 - frac) * b1;
@@ -267,8 +286,8 @@ export class VolumeControls {
 
       grad.addColorStop((x - this.range[0]) / delta, `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${globalOpacity * opacity})`);
 
-      if (colorIdx < this.colorsX.length - 1) {
-        xCol = this.colorsX[colorIdx + 1];
+      if (colorIdx < colorsX.length - 1) {
+        xCol = colorsX[colorIdx + 1];
       }
       if (opacityIdx < this.opacitiesX.length - 1) {
         xOp = this.opacitiesX[opacityIdx + 1];

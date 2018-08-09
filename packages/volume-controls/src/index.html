@@ -36,7 +36,10 @@
     let el = document.getElementsByTagName('oc-volume-controls')[0];
     // el.opacities = [1, 0.25, 0.75, 0.25, 1];
 
-    el.range = [-0.1, 0.1];
+    // el.range = [0, 10];
+    el.range = [0, 1];
+    el.mapRange = [ 0, 1];
+    el.opacities = [1, 1];
 
     let viridis = [
       [0.267004, 0.004874, 0.329415],
@@ -67,9 +70,13 @@
     for (let i = n; i >= 0; --i) {
       histograms.push(Math.exp(-((i - n)**2 / (n/2)**2)));
     }
-    console.log(histograms);
+    // console.log(histograms);
 
     el.histograms = histograms;
+
+    setTimeout(()=>{
+      el.mapRange = [0.25, 0.75]
+    }, 2000);
 
   </script>
 </body>
