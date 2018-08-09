@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.12"></a>
+## [0.1.12](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.11...@openchemistry/molecule-vtkjs@0.1.12) (2018-08-09)
+
+
+### Bug Fixes
+
+* Bump vtk.js ([cf99fc9](https://github.com/OpenChemistry/oc-web-components/commit/cf99fc9))
+
+
+
+
 <a name="0.1.11"></a>
 ## [0.1.11](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.10...@openchemistry/molecule-vtkjs@0.1.11) (2018-08-08)
 
