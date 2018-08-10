@@ -217,7 +217,27 @@ export class MoleculeVtkjs {
     this.volume.setSpacing(spacing);
     this.volume.setOrigin(origin);
     this.volume.getPointData().setScalars(scalars);
-    
+
+    const averageSpacing = spacing.reduce( ( x, y ) => x + y, 0 ) / spacing.length;
+    // compute a minimum spacing yielding 50 samples on an average dimension
+    const minimumSpacing = 0.02 *
+        (spacing[0]*dimensions[0] + spacing[1]*dimensions[1] + spacing[2]*dimensions[2]) / 3.0;
+
+    // use the minimum of these two values
+    // but not more than 500 samples on an axis (aka minimumSpacing*0.1)
+    const spacingToUse = Math.max(Math.min(averageSpacing, minimumSpacing), minimumSpacing*0.1);
+    this.volumeMapper.setSampleDistance(spacingToUse);
+
+    // this should maybe be a physical constant here, I'm not sure how you
+    // are selecting your opacity table settings, but I could see having a
+    // convention of 1 physical unit = 0.5 opacity maximum. Once you set that
+    // down then you don't want the average spacing of your dataset to change it
+    // as looking at the same data with two different spacings should not change
+    // the opacity. So I would think about using some physical constant here
+    // if you can. The exception to that would be if you have no idea the
+    // dimensions/nature of the data you will be visualizing. In that case you
+    // have to punt and use something like average spacing.
+    this.volumeActor.getProperty().setScalarOpacityUnitDistance(0, averageSpacing);
   }
 
   updateIsoSurfaces() {
