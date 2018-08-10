@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, State } from '@stencil/core';
 
 import { IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
 import { composeVolumeOptions, composeVisibilityOptions } from '@openchemistry/utils';
@@ -41,17 +41,6 @@ export class MoleculeMenu {
   @Event() ballChanged: EventEmitter;
   @Event() stickChanged: EventEmitter;
   @Event() mapRangeChanged: EventEmitter;
-
-  @Watch('volumeOptions')
-  watchVolumeOptions(newVal: IVolumeOptions, oldVal: IVolumeOptions) {
-    if (newVal.mapRange) {
-      if (oldVal.mapRange && (oldVal.mapRange[0] !== newVal.mapRange[0] || oldVal.mapRange[1] !== newVal.mapRange[1])) {
-        this.mapRange = [newVal.mapRange[0], newVal.mapRange[1]];
-      } else if (!oldVal.mapRange) {
-        this.mapRange = [newVal.mapRange[0], newVal.mapRange[1]];
-      }
-    }
-  }
 
   componentWillLoad() {
     console.log('MoleculeMenu is about to be rendered');
