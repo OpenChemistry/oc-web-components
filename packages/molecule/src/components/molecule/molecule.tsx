@@ -5,6 +5,7 @@ import { isNil } from "lodash-es";
 import { IChemJson, IDisplayOptions } from '@openchemistry/types';
 import { isChemJson, validateChemJson, composeDisplayOptions, makeBins } from '@openchemistry/utils';
 import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
+import { linearSpace } from '@openchemistry/utils';
 
 import memoizeOne from 'memoize-one';
 
@@ -127,7 +128,21 @@ export class Molecule {
     } else if (key === 'colormap') {
       this.activeMap = e.detail;
       this.options.volume = {...this.options.volume, ...{colors: this.colorMaps[e.detail]}};
+    } else {
+      this.options.volume = {...this.options.volume};
+      this.options.volume[key] = e.detail;
     }
+    this.options = {...this.options};
+  }
+
+  onMapRangeChanged = (e: CustomEvent) => {
+    if (!this.options.volume || !this.options.volume.colors) {
+      return;
+    }
+    let range = e.detail;
+    let x = linearSpace(range[0], range[1], this.options.volume.colors.length);
+    this.options.volume = {...this.options.volume};
+    this.options.volume.colorsScalarValue = x;
     this.options = {...this.options};
   }
 
@@ -214,6 +229,7 @@ export class Molecule {
               onVisibilityChanged={this.onVisibilityChanged}
               onBallChanged={(e) => {this.onStyleChanged(e, 'sphere')}}
               onStickChanged={(e) => {this.onStyleChanged(e, 'stick')}}
+              onMapRangeChanged={this.onMapRangeChanged}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>

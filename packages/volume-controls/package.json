@@ -16,6 +16,7 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
+    "@openchemistry/utils": "^0.3.3",
     "d3": "^5.5.0",
     "resize-observer-polyfill": "^1.5.0"
   },
