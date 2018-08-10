@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.3.3...@openchemistry/utils@0.4.0) (2018-08-10)
+
+
+### Features
+
+* **utils:** Add a function similar to numpy.linspace ([e70627e](https://github.com/OpenChemistry/oc-web-components/commit/e70627e))
+
+
+
+
 <a name="0.3.3"></a>
 ## [0.3.3](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.3.2...@openchemistry/utils@0.3.3) (2018-08-01)
 

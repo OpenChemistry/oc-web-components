@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.0.8...@openchemistry/volume-controls@0.1.0) (2018-08-10)
+
+
+### Features
+
+* **volume-controls:** Enable independent range for the colormap ([d5e38ea](https://github.com/OpenChemistry/oc-web-components/commit/d5e38ea))
+
+
+
+
 <a name="0.0.8"></a>
 ## [0.0.8](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.0.7...@openchemistry/volume-controls@0.0.8) (2018-08-08)
 

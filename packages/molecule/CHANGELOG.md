@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.2.11...@openchemistry/molecule@0.3.0) (2018-08-10)
+
+
+### Features
+
+* **molecule:** Enable independent range for the colormap ([f22763e](https://github.com/OpenChemistry/oc-web-components/commit/f22763e))
+
+
+
+
 <a name="0.2.11"></a>
 ## [0.2.11](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.2.10...@openchemistry/molecule@0.2.11) (2018-08-10)
 
