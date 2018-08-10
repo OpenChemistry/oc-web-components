@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.13"></a>
+## [0.1.13](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.12...@openchemistry/molecule-vtkjs@0.1.13) (2018-08-10)
+
+
+### Bug Fixes
+
+* Add Ken's vtk settings suggestions ([e73463e](https://github.com/OpenChemistry/oc-web-components/commit/e73463e))
+* Bump vtk.js to get volume rendering fixes ([de03e9e](https://github.com/OpenChemistry/oc-web-components/commit/de03e9e))
+
+
+
+
 <a name="0.1.12"></a>
 ## [0.1.12](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.11...@openchemistry/molecule-vtkjs@0.1.12) (2018-08-09)
 
