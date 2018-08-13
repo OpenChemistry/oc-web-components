@@ -23,18 +23,31 @@ export class Molecule {
 
   // The chemical json object in input
   @Prop() cjson: IChemJson;
-  @Watch('cjson')
-  cjsonHandler() {
-    this.cjsonHasChanged = true;
-    this.cjsonData = null;
-  }
 
-  @State() options: IDisplayOptions = composeDisplayOptions({});
+  defaultOptions: IDisplayOptions = composeDisplayOptions({});
+
+  // IsoSurface options
+  @State() isoValue: number = 0.005;
+  // Style options
+  @State() sphereScale: number = 0.3;
+  @State() stickRadius: number = 0.14;
+  // Normal mode options
+  @State() play: boolean = true;
+  @State() iMode: number = -1;
+  @State() animationScale: number = 1;
+  // Visibility options
+  @State() showVolume: boolean = false;
+  @State() showIsoSurface: boolean = true;
+  // Volume options
+  @State() colorsX: number[];
+  @State() opacities: number[];
+  @State() opacitiesX: number[];
+  @State() range: [number, number];
+  @State() histograms: number[];
+  @State() activeMapName: string;
 
   cjsonData: IChemJson;
-  cjsonHasChanged: boolean = false;
 
-  activeMap: string;
   colorMaps = {
     'Red Yellow Blue': redYelBlu,
     'Viridis': viridis,
@@ -44,47 +57,47 @@ export class Molecule {
 
   makeBins: Function;
 
+  @Watch('cjson')
+  cjsonHandler(val) {
+    this.cjsonData = null;
+    this.cjson = val;
+    this.cjsonData = this.getCjson();
+    this.updateVolumeOptions();
+  }
+
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
     this.getRange = memoizeOne(this.getRange);
     this.makeBins = memoizeOne(makeBins);
     this.cjsonData = this.getCjson();
-    this.activeMap = 'Red Yellow Blue';
-    this.options.volume.colors = this.colorMaps[this.activeMap];
+    this.activeMapName = 'Red Yellow Blue';
+    this.opacities = [1, 0, 1];
+    this.updateVolumeOptions();
+    this.range = [0, 1];
+  }
+
+  updateVolumeOptions() {
+    this.range = [0, 1];
     if (!isNil(this.cjsonData) && !isNil(this.cjsonData.cube)) {
-      let range = this.getRange(this.cjsonData.cube.scalars);
-      let histograms = this.makeBins(this.cjsonData.cube.scalars, 50, range);
-      this.options.volume.range = range;
-      this.options.volume.histograms = histograms;
+      this.range = this.getRange(this.cjsonData.cube.scalars);
+      this.histograms = this.makeBins(this.cjsonData.cube.scalars, 200, this.range);
     }
+    this.colorsX = linearSpace(this.range[0], this.range[1], this.colorMaps[this.activeMapName].length);
+    this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
   }
 
-  componentDidLoad() {
-    console.log('Molecule has been rendered');
-  }
-
-  componentWillUpdate() {
-    console.log('Molecule will update and re-render');
-    if (this.cjsonHasChanged) {
-      this.cjsonHasChanged = false;
-      this.cjsonData = this.getCjson();
-      if (!isNil(this.cjsonData) && !isNil(this.cjsonData.cube)) {
-        this.options.volume = {...this.options.volume};
-        let range = this.getRange(this.cjsonData.cube.scalars);
-        let histograms = this.makeBins(this.cjsonData.cube.scalars, 50, range);
-        this.options.volume.range = range;
-        this.options.volume.histograms = histograms;
-        this.options = {...this.options};
+  makeIsoSurfaces = (iso: number) => {
+    return [
+      {
+        value: iso,
+        color: 'blue',
+        opacity: 0.9,
+      }, {
+        value: -iso,
+        color: 'red',
+        opacity: 0.9
       }
-    }
-  }
-
-  componentDidUpdate() {
-    console.log('Molecule did update');
-  }
-
-  componentDidUnload() {
-    console.log('Molecule removed from the DOM');
+    ]
   }
 
   getRange(arr: number[]) : [number, number] {
@@ -116,64 +129,30 @@ export class Molecule {
     }
   }
 
-  onAnimationChanged = (e: CustomEvent, key: string) => {
-    this.options.normalMode = {...this.options.normalMode};
-    this.options.normalMode[key] = e.detail;
-    this.options = {...this.options};
-  }
-
-  onVolumeChanged = (e: CustomEvent, key: string) => {    
-    if (key === 'opacity') {
-      this.options.volume = {...this.options.volume, ...e.detail};
-    } else if (key === 'colormap') {
-      this.activeMap = e.detail;
-      this.options.volume = {...this.options.volume, ...{colors: this.colorMaps[e.detail]}};
-    } else {
-      this.options.volume = {...this.options.volume};
-      this.options.volume[key] = e.detail;
+  onValueChanged = (val: any, key: string) => {
+    if (key in this) {
+      if (this[key] === val) {
+        return;
+      }
+      this[key] = val;
     }
-    this.options = {...this.options};
   }
 
-  onMapRangeChanged = (e: CustomEvent) => {
-    if (!this.options.volume || !this.options.volume.colors) {
+  onMapRangeChanged = (range: [number, number]) => {
+    let colors = this.colorMaps[this.activeMapName];
+    if (!colors) {
       return;
     }
-    let range = e.detail;
-    let x = linearSpace(range[0], range[1], this.options.volume.colors.length);
-    this.options.volume = {...this.options.volume};
-    this.options.volume.colorsScalarValue = x;
-    this.options = {...this.options};
+    this.colorsX = linearSpace(range[0], range[1], colors.length);
   }
 
-  onIsoValueChanged = (e: CustomEvent) => {
-    let iso = e.detail;
-    this.options.isoSurfaces = [{
-      value: iso,
-      color: 'blue',
-      opacity: 0.9,
-    }, {
-      value: -iso,
-      color: 'red',
-      opacity: 0.9
+  onOpacitiesChanged = (val: any) => {
+    this.opacities = [...val.opacity];
+    if (val.opacityScalarValue) {
+      this.opacitiesX = [...val.opacityScalarValue];
+    } else {
+      this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
     }
-    ];
-    this.options = {...this.options};
-  }
-
-  onVisibilityChanged = (e: CustomEvent) => {
-    this.options.visibility = {...this.options.visibility, ...e.detail};
-    this.options = {...this.options};
-  }
-
-  onStyleChanged = (e: CustomEvent, key: string) => {
-    this.options.style = {...this.options.style};
-    if (key === 'sphere') {
-      this.options.style.sphere = {scale: e.detail};
-    } else if (key === 'stick') {
-      this.options.style.stick = {radius: e.detail};
-    }
-    this.options = {...this.options};
   }
 
   render() {
@@ -192,19 +171,57 @@ export class Molecule {
 
     return (
       <div class='main-container'>
+        <p>
+          {JSON.stringify(this.opacities)}
+        </p>
+        <p>
+          {JSON.stringify(this.opacitiesX)}
+        </p>
         <div class='molecule-container'>
           <split-me n={splitN} sizes={splitSizes}>
             <oc-molecule-vtkjs
               slot='0'
               cjson={cjson}
-              options={this.options}
+              options={
+                {
+                  ...this.defaultOptions,
+                  isoSurfaces: this.makeIsoSurfaces(this.isoValue),
+                  style: {
+                    sphere: {
+                      scale: this.sphereScale
+                    },
+                    stick: {
+                      radius: this.stickRadius
+                    }
+                  },
+                  normalMode: {
+                    play: this.play,
+                    modeIdx: this.iMode,
+                    scale: this.animationScale
+                  },
+                  volume: {
+                    colors: this.colorMaps[this.activeMapName],
+                    colorsScalarValue: this.colorsX,
+                    opacity: this.opacities,
+                    opacityScalarValue: this.opacitiesX,
+                    range: this.range
+                  },
+                  visibility: {
+                    isoSurfaces: this.showIsoSurface,
+                    volume: this.showVolume
+                  }
+                }
+              }
             />
             {hasSpectrum &&
             <oc-vibrational-spectrum
               slot='1'
               vibrations={cjson.vibrations}
-              options={this.options.normalMode}
-              onBarSelected={(e) => {this.onAnimationChanged(e, 'modeIdx')}}
+              options={{
+                modeIdx: this.iMode,
+                play: this.play
+              }}
+              onBarSelected={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
             />
             }
           </split-me>
@@ -212,24 +229,33 @@ export class Molecule {
         <div class='menu-container'>
           <oc-molecule-menu-popup>
             <oc-molecule-menu
+              // Props
               nModes={nModes}
-              iMode={this.options.normalMode.modeIdx}
-              scaleValue={this.options.normalMode.scale}
+              iMode={this.iMode}
+              animationScale={this.animationScale}
               hasVolume={hasVolume}
-              colorMaps={Object.keys(this.colorMaps)}
-              activeMap={this.activeMap}
-              volumeOptions={this.options.volume}
-              visibilityOptions={this.options.visibility}
-              onNormalModeChanged={(e) => {this.onAnimationChanged(e, 'modeIdx')}}
-              onPlayChanged={(e) => {this.onAnimationChanged(e, 'play')}}
-              onScaleValueChanged={(e) => {this.onAnimationChanged(e, 'scale')}}
-              onOpacitiesChanged={(e) => {this.onVolumeChanged(e, 'opacity')}}
-              onColorMapChanged={(e) => {this.onVolumeChanged(e, 'colormap')}}
-              onIsoValueChanged={this.onIsoValueChanged}
-              onVisibilityChanged={this.onVisibilityChanged}
-              onBallChanged={(e) => {this.onStyleChanged(e, 'sphere')}}
-              onStickChanged={(e) => {this.onStyleChanged(e, 'stick')}}
-              onMapRangeChanged={this.onMapRangeChanged}
+              colorMapNames={Object.keys(this.colorMaps)}
+              activeMapName={this.activeMapName}
+              showIsoSurface={this.showIsoSurface}
+              showVolume={this.showVolume}
+              colors={this.colorMaps[this.activeMapName]}
+              colorsX={this.colorsX}
+              opacities={this.opacities}
+              opacitiesX={this.opacitiesX}
+              range={this.range}
+              histograms={this.histograms}
+              // Events
+              onIModeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
+              onPlayChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'play')}}
+              onAnimationScaleChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'animationScale')}}
+              onOpacitiesChanged={(e: CustomEvent) => {this.onOpacitiesChanged(e.detail)}}
+              onActiveMapNameChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'activeMapName')}}
+              onIsoValueChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'isoValue')}}
+              onShowVolumeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'showVolume')}}
+              onShowIsoSurfaceChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'showIsoSurface')}}
+              onSphereScaleChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'sphereScale')}}
+              onStickRadiusChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'stickRadius')}}
+              onMapRangeChanged={(e: CustomEvent) => {this.onMapRangeChanged(e.detail)}}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>

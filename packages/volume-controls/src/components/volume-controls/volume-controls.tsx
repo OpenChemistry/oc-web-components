@@ -23,7 +23,7 @@ export class VolumeControls {
   @Prop() range: [number, number] = [0, 1];
   @Watch('range')
   watchRange() {
-    this.rangeChanged = true;
+    this.updateScales();
   }
 
   @Prop() histograms: number[] = [];
@@ -41,8 +41,6 @@ export class VolumeControls {
   xScale: ScaleLinear<number, number>;
   yScale: ScaleLinear<number, number>;
   yScaleHist: ScaleLogarithmic<number, number>;
-
-  rangeChanged:boolean = false;
 
   activeNode: number;
 
@@ -67,19 +65,14 @@ export class VolumeControls {
   }
 
   componentWillUpdate() {
-    if (this.rangeChanged) {
-      this.colorsX = [];
-    }
-
     if (this.colorsX.length !== this.colors.length) {
       this.colorsX = linearSpace(this.range[0], this.range[1], this.colors.length);
     }
 
-    if (this.opacitiesX.length !== this.opacities.length || this.rangeChanged) {
+    if (this.opacitiesX.length !== this.opacities.length) {
       this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
     }
     this.drawCanvas();
-    this.rangeChanged = false;
   }
 
   componentDidUnload() {
@@ -97,13 +90,19 @@ export class VolumeControls {
     this.canvas.height = h;
     this.ghostCanvas.width = w;
     this.ghostCanvas.height = h;
+    this.updateScales();
+    this.drawCanvas();
+  }
+
+  updateScales() {
+    let w = this.el.parentElement.clientWidth;
+    let h = this.el.parentElement.clientHeight;
     this.xScale = scaleLinear().domain(this.range).range([0, w]);
     this.yScale = scaleLinear().domain([0, 1]).range([h, 0]);
     if (this.histograms.length > 0) {
       let high = Math.max(...this.histograms);
       this.yScaleHist = scaleLog().domain([1, high]).range([h, h / 2]);
     }
-    this.drawCanvas();
   }
 
   onMouseDown(ev: MouseEvent) {
@@ -122,8 +121,10 @@ export class VolumeControls {
   onAuxClick(ev: MouseEvent) {
     let node = this._getNodeOnCanvas(ev.clientX, ev.clientY);
     if (node !== undefined) {
-      this.removeOpacityNode(node);
-      this.drawCanvas();
+      if (node > 0 && node < this.opacitiesX.length - 1) {
+        this.removeOpacityNode(node);
+        this.drawCanvas();
+      }
     }
   }
 
