@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.1.0...@openchemistry/volume-controls@0.1.1) (2018-08-13)
+
+
+### Bug Fixes
+
+* **volume-controls:** Fix scales when range changes ([6670836](https://github.com/OpenChemistry/oc-web-components/commit/6670836))
+
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.0.8...@openchemistry/volume-controls@0.1.0) (2018-08-10)
 

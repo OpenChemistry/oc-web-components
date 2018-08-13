@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.3.0...@openchemistry/molecule@0.3.1) (2018-08-13)
+
+
+### Bug Fixes
+
+* **molecule:** Flatten the options passed to the menu ([023d59f](https://github.com/OpenChemistry/oc-web-components/commit/023d59f))
+
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.2.11...@openchemistry/molecule@0.3.0) (2018-08-10)
 
