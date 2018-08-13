@@ -1,7 +1,4 @@
-import { Component, Prop, Event, EventEmitter, State } from '@stencil/core';
-
-import { IVolumeOptions, IVisibilityOptions } from '@openchemistry/types';
-import { composeVolumeOptions, composeVisibilityOptions } from '@openchemistry/utils';
+import { Component, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 import { PlayIcon, PauseIcon } from '../../icons';
 
@@ -16,34 +13,77 @@ import '@openchemistry/volume-controls';
 })
 export class MoleculeMenu {
 
-  @Prop() hasVolume: boolean = false;
-  @Prop() nModes: number = -1;
-  @Prop() volumeOptions: IVolumeOptions;
-  @Prop() colorMaps: string[];
-  @Prop({ mutable: true }) visibilityOptions: IVisibilityOptions;
-  @Prop({ mutable: true }) isoValue: number = 0.01;
-  @Prop({ mutable: true }) scaleValue: number = 1.0;
-  @Prop({ mutable: true }) iMode: number = -1;
-  @Prop({ mutable: true }) play: boolean = true;
-  @Prop({ mutable: true }) activeMap: string = 'Viridis';
-  @Prop({ mutable: true }) ballScale: number = 0.3;
+  // Style options
+  @Prop({ mutable: true }) sphereScale: number = 0.3;
   @Prop({ mutable: true }) stickRadius: number = 0.14;
+  // Normal mode options
+  @Prop() nModes: number = -1;
+  @Prop({ mutable: true }) iMode: number = -1;
+  @Prop({ mutable: true }) animationScale: number = 1.0;
+  @Prop({ mutable: true }) play: boolean = true;
+  // Visibility options
+  @Prop({ mutable: true }) showVolume: boolean;
+  @Prop({ mutable: true }) showIsoSurface: boolean;
+  // Volume options
+  @Prop() colors: [number, number, number][];
+  @Prop() colorsX: number[];
+  @Prop() opacities: number[];
+  @Prop() opacitiesX: number[];
+  @Prop() range: [number, number];
+  @Prop() histograms: number[];
+  // Other options
+  @Prop() hasVolume: boolean = false;
+  @Prop() colorMapNames: string[];
+  @Prop({ mutable: true }) activeMapName: string = 'Viridis';
+  // IsoSurface options
+  @Prop({ mutable: true }) isoValue: number = 0.01;
 
   @State() mapRange: [number, number];
 
-  @Event() isoValueChanged: EventEmitter;
-  @Event() scaleValueChanged: EventEmitter;
-  @Event() normalModeChanged: EventEmitter;
+  // Style events
+  @Event() sphereScaleChanged: EventEmitter;
+  @Event() stickRadiusChanged: EventEmitter;
+  // Normal mode events
+  @Event() iModeChanged: EventEmitter;
+  @Event() animationScaleChanged: EventEmitter;
   @Event() playChanged: EventEmitter;
+  // Visibility events
+  @Event() showVolumeChanged: EventEmitter;
+  @Event() showIsoSurfaceChanged: EventEmitter;
+  // Volume events
   @Event() opacitiesChanged: EventEmitter;
-  @Event() visibilityChanged: EventEmitter;
-  @Event() colorMapChanged: EventEmitter;
-  @Event() ballChanged: EventEmitter;
-  @Event() stickChanged: EventEmitter;
+  @Event() opacitiesXChanged: EventEmitter;
+  // Isosurface events
+  @Event() isoValueChanged: EventEmitter;
+  // Other events
+  @Event() activeMapNameChanged: EventEmitter;
   @Event() mapRangeChanged: EventEmitter;
+
+  // Reset the colormap range if the data range changes
+  @Watch('range')
+  watchRange(newVal) {
+    this.mapRange = newVal || [0, 1];
+  }
+
+  keyToEvent: Object;
 
   componentWillLoad() {
     console.log('MoleculeMenu is about to be rendered');
+    // Map props names to event emitters
+    this.keyToEvent = {
+      sphereScale: this.sphereScaleChanged,
+      stickRadius: this.stickRadiusChanged,
+      iMode: this.iModeChanged,
+      animationScale: this.animationScaleChanged,
+      play: this.playChanged,
+      showIsoSurface: this.showIsoSurfaceChanged,
+      showVolume: this.showVolumeChanged,
+      opacities: this.opacitiesChanged,
+      opacitiesX: this.opacitiesXChanged,
+      mapRange: this.mapRangeChanged,
+      activeMapName: this.activeMapNameChanged,
+      isoValue: this.isoValueChanged
+    }
   }
 
   componentDidLoad() {
@@ -62,62 +102,16 @@ export class MoleculeMenu {
     console.log('MoleculeMenu removed from the DOM');
   }
 
-  isoValueHandler(val: number) {
-    if (!isFinite(val) || val === this.isoValue) {
-      return;
+  onValueChanged(val: any, key: string) {
+    if (key in this) {
+      if (this[key] === val) {
+        return;
+      }
+      this[key] = val;
     }
-    this.isoValue = val;
-    this.isoValueChanged.emit(val);
-  }
-
-  scaleValueHandler(val: number) {
-    if (!isFinite(val) || val === this.scaleValue) {
-      return;
+    if (key in this.keyToEvent) {
+      this.keyToEvent[key].emit(val);
     }
-    this.scaleValue = val;
-    this.scaleValueChanged.emit(val);
-  }
-
-  normalModeHandler(valStr: string) {
-    let val = parseInt(valStr);
-    if (val === this.iMode) {
-      return;
-    }
-    this.iMode =val;
-    this.normalModeChanged.emit(val);
-  }
-
-  toggleVisibilityHandler(key: string, val: boolean) {
-    this.visibilityOptions = {...this.visibilityOptions, ...{[key]: !val}};
-    this.visibilityChanged.emit(this.visibilityOptions);
-  }
-
-  playHandler() {
-    this.play = !this.play;
-    this.playChanged.emit(this.play);
-  }
-
-  colorMapHandler(val: string) {
-    if (val !== this.activeMap) {
-      this.activeMap = val;
-      this.colorMapChanged.emit(val);
-    }
-  }
-  
-  ballScaleHandler(val: number) {
-    if (!isFinite(val) || val === this.ballScale) {
-      return;
-    }
-    this.ballScale = val;
-    this.ballChanged.emit(val);
-  }
-
-  stickRadiusHandler(val: number) {
-    if (!isFinite(val) || val === this.stickRadius) {
-      return;
-    }
-    this.stickRadius = val;
-    this.stickChanged.emit(val);
   }
 
   mapRangeHandler(val: any) {
@@ -156,14 +150,11 @@ export class MoleculeMenu {
     }
 
     const colorMapsOptions = [];
-    for (let mapName of this.colorMaps || []) {
+    for (let mapName of this.colorMapNames || []) {
       colorMapsOptions.push(
         <ion-select-option key={mapName} value={mapName}>{mapName}</ion-select-option>
       );
     }
-
-    const volumeOptions = composeVolumeOptions(this.volumeOptions);
-    const visibilityOptions = composeVisibilityOptions(this.visibilityOptions);
 
     let menuItems = [];
 
@@ -175,13 +166,13 @@ export class MoleculeMenu {
           min={0.0}
           max={1.0}
           step={0.01}
-          value={this.ballScale}
-          onIonChange={ (e: CustomEvent)=>{this.ballScaleHandler(e.detail.value)}}
+          value={this.sphereScale}
+          onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'sphereScale')}}
         />
         <div class="end-slot" slot="end">
-          <ion-input value={isFinite(this.ballScale) ? this.ballScale.toFixed(2) : "0.00"}
-            debounce={500}
-            onIonChange={(e: CustomEvent)=>{this.ballScaleHandler(parseFloat(e.detail.value))}}
+          <ion-input value={isFinite(this.sphereScale) ? this.sphereScale.toFixed(2) : "0.00"}
+            debounce={1000}
+            onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'sphereScale')}}
           ></ion-input>
         </div>
       </ion-item>
@@ -196,12 +187,12 @@ export class MoleculeMenu {
           max={0.5}
           step={0.01}
           value={this.stickRadius}
-          onIonChange={ (e: CustomEvent)=>{this.stickRadiusHandler(e.detail.value)}}
+          onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'stickRadius')}}
         />
         <div class="end-slot" slot="end">
           <ion-input value={isFinite(this.stickRadius) ? this.stickRadius.toFixed(2) : "0.00"}
-            debounce={500}
-            onIonChange={(e: CustomEvent)=>{this.stickRadiusHandler(parseFloat(e.detail.value))}}
+            debounce={1000}
+            onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'stickRadius')}}
           ></ion-input>
         </div>
       </ion-item>
@@ -212,12 +203,12 @@ export class MoleculeMenu {
         <ion-item key="isoSurfaceToggle">
           <ion-label>Show Isosurface</ion-label>
           <ion-toggle
-            checked={visibilityOptions.isoSurfaces}
-            onIonChange={()=>{this.toggleVisibilityHandler('isoSurfaces', visibilityOptions.isoSurfaces)}}
+            checked={this.showIsoSurface}
+            onClick={()=>{this.onValueChanged(!this.showIsoSurface, 'showIsoSurface')}}
           />
         </ion-item>
       );
-      if (visibilityOptions.isoSurfaces) {
+      if (this.showIsoSurface) {
         menuItems.push(
           <ion-item key="isoSurfaceSlider">
             <ion-label color="primary" position="stacked">Isovalue</ion-label>
@@ -227,12 +218,12 @@ export class MoleculeMenu {
               max={0.05}
               step={0.0001}
               value={this.isoValue}
-              onIonChange={ (e: CustomEvent)=>{this.isoValueHandler(e.detail.value)}}
+              onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'isoValue')}}
             />
             <div class="end-slot" slot="end">
               <ion-input value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0000"}
-                debounce={500}
-                onIonChange={(e: CustomEvent)=>{this.isoValueHandler(parseFloat(e.detail.value))}}
+                debounce={1000}
+                onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'isoValue')}}
               ></ion-input>
             </div>
           </ion-item>
@@ -242,22 +233,24 @@ export class MoleculeMenu {
         <ion-item key="volumeToggle">
           <ion-label>Show Volume</ion-label>
           <ion-toggle
-            checked={visibilityOptions.volume}
-            onIonChange={()=>{this.toggleVisibilityHandler('volume', visibilityOptions.volume)}}
+            checked={this.showVolume}
+            onClick={()=>{this.onValueChanged(!this.showVolume, 'showVolume')}}
           />
         </ion-item>
       );
-      if (visibilityOptions.volume) {
+      if (this.showVolume) {
         menuItems.push(
           <div style={{width: "100%", height: "8rem"}}>
             <oc-volume-controls
-              colors={volumeOptions.colors}
-              colorsX={volumeOptions.colorsScalarValue}
-              opacities={volumeOptions.opacity}
-              opacitiesX={volumeOptions.opacityScalarValue}
-              range={volumeOptions.range}
-              histograms={volumeOptions.histograms}
-              onOpacitiesChanged={(ev: CustomEvent) => {this.opacitiesChanged.emit(ev.detail);}}
+              colors={this.colors}
+              colorsX={this.colorsX}
+              opacities={this.opacities}
+              opacitiesX={this.opacitiesX}
+              range={this.range}
+              histograms={this.histograms}
+              onOpacitiesChanged={(ev: CustomEvent) => {
+                this.opacitiesChanged.emit(ev.detail);
+              }}
             />
           </div>
         );
@@ -265,25 +258,25 @@ export class MoleculeMenu {
           <ion-item key="mapRange">
             <ion-label color="primary" position="stacked">Color map range</ion-label>
             <div class="start-slot" slot="start">
-              <ion-input value={ this.mapRange && isFinite(this.mapRange[0]) ? this.mapRange[0].toFixed(3) : volumeOptions.range ? volumeOptions.range[0].toFixed(3) : "0.000"}
-                debounce={500}
+              <ion-input value={ this.mapRange && isFinite(this.mapRange[0]) ? this.mapRange[0].toFixed(3) : this.range ? this.range[0].toFixed(3) : "0.000"}
+                debounce={1000}
                 onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 0)}}
               ></ion-input>
             </div>
             <ion-range
               dualKnobs
-              min={volumeOptions.range ? volumeOptions.range[0] : 0}
-              max={volumeOptions.range ? volumeOptions.range[1] : 1}
+              min={this.range ? this.range[0] : 0}
+              max={this.range ? this.range[1] : 1}
               step={0.001}
               value={{
-                lower: this.mapRange ? this.mapRange[0] : volumeOptions.range ? volumeOptions.range[0] : 0,
-                upper: this.mapRange ? this.mapRange[1] : volumeOptions.range ? volumeOptions.range[1] : 1
+                lower: this.mapRange ? this.mapRange[0] : this.range ? this.range[0] : 0,
+                upper: this.mapRange ? this.mapRange[1] : this.range ? this.range[1] : 1
               }}
               onIonChange={ (e: CustomEvent)=>{this.mapRangeHandler(e.detail.value)}}
             />
             <div class="end-slot" slot="end">
-              <ion-input value={ this.mapRange && isFinite(this.mapRange[1]) ? this.mapRange[1].toFixed(3) : volumeOptions.range ? volumeOptions.range[1].toFixed(3) : "1.000"}
-                debounce={500}
+              <ion-input value={ this.mapRange && isFinite(this.mapRange[1]) ? this.mapRange[1].toFixed(3) : this.range ? this.range[1].toFixed(3) : "1.000"}
+                debounce={1000}
                 onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 1)}}
               ></ion-input>
             </div>
@@ -294,8 +287,8 @@ export class MoleculeMenu {
               <ion-label color="primary" position="stacked">Color Map</ion-label>
               <ion-select
                 style={{width: "100%"}}
-                value={this.activeMap}
-                onIonChange={(e: CustomEvent)=>{this.colorMapHandler(e.detail.value)}}
+                value={this.activeMapName}
+                onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'activeMapName')}}
               >
                 {colorMapsOptions}
               </ion-select>
@@ -311,12 +304,12 @@ export class MoleculeMenu {
           <ion-select
             style={{width: "100%"}}
             value={this.iMode.toString()}
-            onIonChange={(e: CustomEvent)=>{this.normalModeHandler(e.detail.value)}}
+            onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseInt(e.detail.value), 'iMode')}}
           >
             {normalModeOptions}
           </ion-select>
           <div class="end-slot" slot="end">
-            <ion-button fill="solid" color="light" shape="round" onClick={() => {this.playHandler()}}>
+            <ion-button fill="solid" color="light" shape="round" onClick={() => {this.onValueChanged(!this.play, 'play')}}>
               <ion-icon icon={this.play ? PauseIcon : PlayIcon}></ion-icon>
             </ion-button>
           </div>
@@ -330,13 +323,13 @@ export class MoleculeMenu {
             min={0.5}
             max={3}
             step={0.5}
-            value={this.scaleValue}
-            onIonChange={ (e: CustomEvent)=>{this.scaleValueHandler(e.detail.value)}}
+            value={this.animationScale}
+            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'animationScale')}}
           />
           <div class="end-slot" slot="end">
-            <ion-input value={isFinite(this.scaleValue) ? this.scaleValue.toFixed(1) : "0.0"}
-              debounce={500}
-              onIonChange={(e: CustomEvent)=>{this.scaleValueHandler(parseFloat(e.detail.value))}}
+            <ion-input value={isFinite(this.animationScale) ? this.animationScale.toFixed(1) : "0.0"}
+              debounce={1000}
+              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationScale')}}
             ></ion-input>
           </div>
         </ion-item>
