@@ -1,4 +1,4 @@
-import { Component, Prop, State, Watch } from '@stencil/core';
+import { Component, Prop, Watch } from '@stencil/core';
 
 import { isNil } from "lodash-es";
 
@@ -27,24 +27,26 @@ export class Molecule {
   defaultOptions: IDisplayOptions = composeDisplayOptions({});
 
   // IsoSurface options
-  @State() isoValue: number = 0.005;
+  @Prop({ mutable: true }) isoValue: number = 0.005;
   // Style options
-  @State() sphereScale: number = 0.3;
-  @State() stickRadius: number = 0.14;
+  @Prop({ mutable: true }) sphereScale: number = 0.3;
+  @Prop({ mutable: true }) stickRadius: number = 0.14;
   // Normal mode options
-  @State() play: boolean = true;
-  @State() iMode: number = -1;
-  @State() animationScale: number = 1;
+  @Prop({ mutable: true }) play: boolean = true;
+  @Prop({ mutable: true }) iMode: number = -1;
+  @Prop({ mutable: true }) animationScale: number = 1;
   // Visibility options
-  @State() showVolume: boolean = false;
-  @State() showIsoSurface: boolean = true;
+  @Prop({ mutable: true }) showVolume: boolean = false;
+  @Prop({ mutable: true }) showIsoSurface: boolean = true;
   // Volume options
-  @State() colorsX: number[];
-  @State() opacities: number[];
-  @State() opacitiesX: number[];
-  @State() range: [number, number];
-  @State() histograms: number[];
-  @State() activeMapName: string;
+  @Prop({ mutable: true }) colorsX: number[];
+  @Prop({ mutable: true }) opacities: number[];
+  @Prop({ mutable: true }) opacitiesX: number[];
+  @Prop({ mutable: true }) range: [number, number];
+  @Prop({ mutable: true }) histograms: number[];
+  @Prop({ mutable: true }) activeMapName: string;
+  // Other options
+  @Prop() rotate: boolean = false;
 
   cjsonData: IChemJson;
 
@@ -171,12 +173,6 @@ export class Molecule {
 
     return (
       <div class='main-container'>
-        <p>
-          {JSON.stringify(this.opacities)}
-        </p>
-        <p>
-          {JSON.stringify(this.opacitiesX)}
-        </p>
         <div class='molecule-container'>
           <split-me n={splitN} sizes={splitSizes}>
             <oc-molecule-vtkjs
@@ -212,6 +208,7 @@ export class Molecule {
                   }
                 }
               }
+              rotate={this.rotate}
             />
             {hasSpectrum &&
             <oc-vibrational-spectrum
