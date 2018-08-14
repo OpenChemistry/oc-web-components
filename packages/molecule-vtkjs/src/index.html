@@ -100,16 +100,17 @@
       }
     el.options = options;
     el.cjson = cjson;
+    el.rotate = true;
 
-    setTimeout(()=>{
-      options.visibility = {volume: false, isoSurfaces: true};
-      el.options = {...options};
-    }, 1000);
+    // setTimeout(()=>{
+    //   options.visibility = {volume: false, isoSurfaces: true};
+    //   el.options = {...options};
+    // }, 1000);
 
-    setTimeout(()=>{
-      options.visibility = {volume: true, isoSurfaces: false};
-      el.options = {...options};
-    }, 4000);
+    // setTimeout(()=>{
+    //   options.visibility = {volume: true, isoSurfaces: false};
+    //   el.options = {...options};
+    // }, 4000);
 
     // setTimeout(()=>{
     //   let options = {
