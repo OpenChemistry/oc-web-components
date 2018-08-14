@@ -141,9 +141,6 @@ export class MoleculeVtkjs {
     this.opacityFn = vtk.Common.DataModel.vtkPiecewiseFunction.newInstance();
     this.volumeActor.getProperty().setRGBTransferFunction(0, this.ctFn);
     this.volumeActor.getProperty().setScalarOpacity(0, this.opacityFn);
-    // this.volumeMapper.setSampleDistance(0.7);
-    // this.volumeActor.getProperty().setScalarOpacityUnitDistance(0, 4.5);
-    // this.volumeActor.getProperty().setInterpolationTypeToLinear();
 
     this.updateVolume();
     this.volumeMapper.setInputData(this.volume);
@@ -180,6 +177,16 @@ export class MoleculeVtkjs {
     let cjson = this.getCjson();
     let atoms: IAtoms = !isNil(cjson) && !isNil(cjson.atoms) ? cjson.atoms : null;
     let bonds: IBonds = !isNil(cjson) && !isNil(cjson.bonds) ? cjson.bonds : null;
+    // If there are no bonds in the cjson, explicitly set them to empty arrays,
+    // or else vtkjs will try to automatically find them (can be slow for larger molecules)
+    if (isNil(bonds)) {
+      bonds = {
+        connections: {
+          index: []
+        },
+        order: []
+      };
+    }
 
     this.molecule.setAtoms(atoms);
     this.molecule.setBonds(bonds);
