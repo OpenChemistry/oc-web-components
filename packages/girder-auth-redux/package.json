@@ -1,0 +1,37 @@
+{
+  "name": "@openchemistry/girder-auth-redux",
+  "version": "0.0.1",
+  "description": " ",
+  "module": "esm/index.js",
+  "files": [
+    "esm/"
+  ],
+  "scripts": {
+    "build": "babel src --out-dir esm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenChemistry/oc-web-components.git"
+  },
+  "author": "Kitware, Inc.",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/OpenChemistry/oc-web-components/issues"
+  },
+  "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "lodash-es": "^4.17.10",
+    "redux-actions": "^2.4.0",
+    "redux-saga": "^0.16.0",
+    "universal-cookie": "^2.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.54",
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
