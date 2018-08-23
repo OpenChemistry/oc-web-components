@@ -1,5 +1,5 @@
 {
-  "name": "@openchemistry/girder-auth-redux",
+  "name": "@openchemistry/girder-auth-ui",
   "version": "0.0.1",
   "description": " ",
   "module": "esm/index.js",
@@ -20,17 +20,21 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "axios": "^0.18.0",
+    "@material-ui/core": "^1.4.0",
+    "@material-ui/icons": "^2.0.3",
+    "@openchemistry/girder-auth-redux": "^0.0.1",
     "lodash-es": "^4.17.10",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",  
     "redux": "^4.0.0",
-    "redux-actions": "^2.4.0",
-    "redux-saga": "^0.16.0",
-    "universal-cookie": "^2.2.0"
+    "react-redux": "^5.0.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.54",
     "@babel/core": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54"
+    "@babel/plugin-proposal-class-properties": "^7.0.0-rc.2",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "@babel/preset-react": "^7.0.0-rc.2"
   },
   "publishConfig": {
     "access": "public"
