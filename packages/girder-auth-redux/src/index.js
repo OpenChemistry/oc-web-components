@@ -35,3 +35,5 @@ export {
   watchNewToken,
   watchUsernameLogin
 } from './sagas';
+
+export { default as girderClient } from './rest/girder-client';
