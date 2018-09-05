@@ -22,6 +22,7 @@ jobs:
     - run:
         name: Run build
         command: npm run build-serial
+        no_output_timeout: 30m
     - save_cache:
         paths:
           - node_modules
