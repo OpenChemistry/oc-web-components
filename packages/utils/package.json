@@ -23,8 +23,8 @@
   },
   "devDependencies": {
     "@openchemistry/types": "^0.6.1",
-    "@types/lodash-es": "^4.17.0",
-    "typescript": "^3.0.1"
+    "@types/lodash-es": "^4.17.1",
+    "typescript": "^3.0.3"
   },
   "publishConfig": {
     "access": "public"

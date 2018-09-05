@@ -22,14 +22,14 @@
     "@openchemistry/utils": "^0.4.0",
     "@openchemistry/vibrational-spectrum": "^0.1.10",
     "lodash-es": "^4.17.10",
-    "memoize-one": "^4.0.0",
-    "split-me": "^0.3.0"
+    "memoize-one": "^4.0.2",
+    "split-me": "^0.3.1"
   },
   "devDependencies": {
-    "@stencil/core": "^0.11.0",
+    "@stencil/core": "^0.12.4",
     "@types/jest": "^23.3.1",
-    "@types/lodash-es": "^4.17.0",
-    "jest": "^23.1.0"
+    "@types/lodash-es": "^4.17.1",
+    "jest": "^23.5.0"
   },
   "repository": {
     "type": "git",

@@ -17,16 +17,16 @@
   },
   "dependencies": {
     "@openchemistry/types": "^0.6.1",
-    "d3": "^5.5.0",
+    "d3": "^5.7.0",
     "lodash-es": "^4.17.10",
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.11.0",
+    "@stencil/core": "^0.12.4",
     "@types/d3": "^5.0.0",
     "@types/jest": "^23.3.1",
-    "@types/lodash-es": "^4.17.0",
-    "jest": "^23.1.0"
+    "@types/lodash-es": "^4.17.1",
+    "jest": "^23.5.0"
   },
   "repository": {
     "type": "git",
