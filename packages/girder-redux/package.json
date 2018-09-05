@@ -1,5 +1,5 @@
 {
-  "name": "@openchemistry/girder-auth-redux",
+  "name": "@openchemistry/girder-redux",
   "version": "0.0.1",
   "description": " ",
   "module": "esm/index.js",

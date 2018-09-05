@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es';
-import girderClient from './girder-client';
+import girderClient from '../girder-client';
 
 export function fetchProviders(redirect) {
   return girderClient().get('oauth/provider', {

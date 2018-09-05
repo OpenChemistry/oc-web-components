@@ -10,7 +10,7 @@ import {
   SET_TOKEN,
   USERNAME_LOGIN,
   TEST_OAUTH_ENABLED
-} from '../ducks';
+} from '../../ducks/auth';
 
 import {
   requestOauthProviders,
@@ -23,16 +23,16 @@ import {
   setMe,
   setOauthEnabled,
   loadOauthProviders
-} from '../ducks';
+} from '../../ducks/auth';
 
 import {
   fetchMe as fetchMeRest,
   fetchProviders,
   invalidateToken as invalidateTokenRest,
   logIn as logInRest
-} from '../rest';
+} from '../../rest/auth';
 
-import girderClient from '../rest/girder-client';
+import girderClient from '../../rest/girder-client';
 
 function* fetchOauthProviders(action) {
   try {

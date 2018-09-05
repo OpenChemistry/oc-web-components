@@ -1,6 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-const PREFIX = '@@girder-auth-redux/';
+const PREFIX = '@@girder-redux/auth/';
 
 const initialState = {
   token: null,
@@ -23,14 +23,16 @@ const initialState = {
 };
 
 // Selectors
-export const getMe = (state) => state.me;
-export const getToken = (state) => state.token;
-export const getOauthProviders = (state) => state.oauth.providers;
-export const isAuthenticating = state => state.authenticating;
-export const isAuthenticated = state => state.token && !state.authenticating;
-export const isOauthEnabled = state => state.oauth.enabled;
-export const getShowLoginOptions = (state) => state.ui.showLoginOptions;
-export const getShowGirderLogin = (state) => state.ui.girder.show;
+let getRoot = (state) => state;
+export const setRoot = (getRootFn) => {getRoot = getRootFn;};
+export const getMe = (state) => getRoot(state).me;
+export const getToken = (state) => getRoot(state).token;
+export const getOauthProviders = (state) => getRoot(state).oauth.providers;
+export const isAuthenticating = (state) => getRoot(state).authenticating;
+export const isAuthenticated = (state) => getRoot(state).token && !getRoot(state).authenticating;
+export const isOauthEnabled = (state) => getRoot(state).oauth.enabled;
+export const getShowLoginOptions = (state) => getRoot(state).ui.showLoginOptions;
+export const getShowGirderLogin = (state) => getRoot(state).ui.girder.show;
 
 // Actions
 
