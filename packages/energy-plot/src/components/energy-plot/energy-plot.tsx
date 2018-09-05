@@ -2,12 +2,7 @@ import { Component, Prop, Event, EventEmitter, Watch } from '@stencil/core';
 
 import { isNil } from "lodash-es";
 import * as d3 from "d3";
-
-
-export interface IEnergy {
-  label: string;
-  energy: number;
-}
+import { IEnergy } from '../../interfaces';
 
 @Component({
   tag: 'oc-energy-plot',
