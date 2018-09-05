@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/energy-plot",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Component to plot the free energy of a set of reactions",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
