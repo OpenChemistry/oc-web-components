@@ -2,31 +2,24 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { getAuthState } from '../../utils';
 import LoginOptions from '../../components/login-options';
 
-import {
-  showLoginOptions,
-  showGirderLogin,
-  authenticate,
-  isOauthEnabled,
-  getShowLoginOptions
-} from '@openchemistry/girder-auth-redux';
+import { auth } from '@openchemistry/girder-redux';
 
 class LoginOptionsContainer extends Component {
 
   handleClose = () => {
-    this.props.dispatch(showLoginOptions(false));
+    this.props.dispatch(auth.actions.showLoginOptions(false));
   };
 
   handleGoogle = () => {
-    this.props.dispatch(showLoginOptions(false));
-    this.props.dispatch(authenticate({token: null, redirect: true}));
+    this.props.dispatch(auth.actions.showLoginOptions(false));
+    this.props.dispatch(auth.actions.authenticate({token: null, redirect: true}));
   }
 
   handleGirder = () => {
-    this.props.dispatch(showLoginOptions(false));
-    this.props.dispatch(showGirderLogin(true));
+    this.props.dispatch(auth.actions.showLoginOptions(false));
+    this.props.dispatch(auth.actions.showGirderLogin(true));
   }
 
   render() {
@@ -49,8 +42,8 @@ class LoginOptionsContainer extends Component {
 }
 
 function loginOptionsMapStateToProps(state, ownProps) {
-  const show = getShowLoginOptions(getAuthState(state));
-  const oauth =  isOauthEnabled(getAuthState(state));
+  const show = auth.selectors.getShowLoginOptions(state);
+  const oauth =  auth.selectors.isOauthEnabled(state);
 
   return {
     show,

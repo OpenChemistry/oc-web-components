@@ -3,14 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, SubmissionError } from 'redux-form';
 
-import { getAuthState } from '../../utils';
 import GirderLogin from '../../components/girder-login';
 
-import {
-  showGirderLogin,
-  usernameLogin,
-  getShowGirderLogin
-} from '@openchemistry/girder-auth-redux';
+import { auth } from '@openchemistry/girder-redux';
 
 const validate = values => {
   const errors = {};
@@ -27,7 +22,7 @@ const validate = values => {
 class GirderLoginContainer extends Component {
 
   handleClose = () => {
-    this.props.dispatch(showGirderLogin(false));
+    this.props.dispatch(auth.actions.showGirderLogin(false));
   };
 
   handleLogin = (values, dispatch) => {
@@ -35,10 +30,10 @@ class GirderLoginContainer extends Component {
     const { username, password } = values;
   
     let onSubmitPromise = new Promise((resolve, reject) => {
-      dispatch(usernameLogin({username, password, resolve, reject}));
+      dispatch(auth.actions.usernameLogin({username, password, resolve, reject}));
     })
     .then(val => {
-      dispatch(showGirderLogin(false));
+      dispatch(auth.actions.showGirderLogin(false));
     })
     .catch(_error => {
       throw new SubmissionError({ _error });
@@ -65,7 +60,7 @@ class GirderLoginContainer extends Component {
 }
 
 function girderLoginMapStateToProps(state, ownProps) {
-  const show = getShowGirderLogin(getAuthState(state));
+  const show = auth.selectors.getShowGirderLogin(state);
   return {
     show
   }

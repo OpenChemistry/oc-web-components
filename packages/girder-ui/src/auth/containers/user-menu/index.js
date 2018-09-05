@@ -4,13 +4,12 @@ import { connect } from 'react-redux';
 
 import UserMenu from '../../components/user-menu';
 
-import { getAuthState } from '../../utils';
-import { invalidateToken, getMe } from '@openchemistry/girder-auth-redux';
+import { auth } from '@openchemistry/girder-redux';
 
 class UserMenuContainer extends Component {
   
   onSignOutClick = () => {
-    this.props.dispatch(invalidateToken());
+    this.props.dispatch(auth.actions.invalidateToken());
   }
 
   render() {
@@ -24,7 +23,7 @@ class UserMenuContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const me = getMe(getAuthState(state));
+  const me = auth.selectors.getMe(state);
   return {
     me
   }

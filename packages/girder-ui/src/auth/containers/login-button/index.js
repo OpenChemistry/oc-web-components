@@ -4,15 +4,13 @@ import { connect } from 'react-redux';
 
 import LoginButton from '../../components/login-button';
 
-import {
-  showLoginOptions
-} from '@openchemistry/girder-auth-redux';
+import { auth } from '@openchemistry/girder-redux';
 
 // Login Button
 
 class LoginButtonContainer extends Component {
   handleClick = (event) => {
-    this.props.dispatch(showLoginOptions(true));
+    this.props.dispatch(auth.actions.showLoginOptions(true));
   };
 
   render = () => {
