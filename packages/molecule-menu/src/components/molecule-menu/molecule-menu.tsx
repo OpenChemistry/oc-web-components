@@ -1,6 +1,7 @@
 import { Component, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 import { PlayIcon, PauseIcon } from '../../icons';
+import { presets } from './constants';
 
 import '@ionic/core';
 import 'ionicons';
@@ -14,8 +15,9 @@ import '@openchemistry/volume-controls';
 export class MoleculeMenu {
 
   // Style options
-  @Prop({ mutable: true }) sphereScale: number = 0.3;
-  @Prop({ mutable: true }) stickRadius: number = 0.14;
+  @Prop({ mutable: true} ) displayStyle: string = 'ballAndStick'
+  @Prop({ mutable: true }) sphereScale: number = presets['ballAndStick'].sphereScale;
+  @Prop({ mutable: true }) stickRadius: number = presets['ballAndStick'].stickRadius;
   // Normal mode options
   @Prop() nModes: number = -1;
   @Prop({ mutable: true }) iMode: number = -1;
@@ -114,6 +116,14 @@ export class MoleculeMenu {
     }
   }
 
+  onDisplayStyleChanged(val: string) {
+    if (val !== 'custom') {
+      this.onValueChanged(presets[val].sphereScale, 'sphereScale');
+      this.onValueChanged(presets[val].stickRadius, 'stickRadius');
+    }
+    this.displayStyle = val;
+  }
+
   mapRangeHandler(val: any) {
     if (!val) {
       return;
@@ -156,47 +166,71 @@ export class MoleculeMenu {
       );
     }
 
+    const displayStyleOptions = [];
+    for (let key in presets) {
+      displayStyleOptions.push(
+        <ion-select-option key={key} value={key}>{presets[key].label}</ion-select-option>
+      );
+    }
+
     let menuItems = [];
 
     menuItems.push(
-      <ion-item key="ballSlider">
-        <ion-label color="primary" position="stacked">Ball scale</ion-label>
-        <ion-range
-          debounce={150}
-          min={0.0}
-          max={1.0}
-          step={0.01}
-          value={this.sphereScale}
-          onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'sphereScale')}}
-        />
-        <div class="end-slot" slot="end">
-          <ion-input value={isFinite(this.sphereScale) ? this.sphereScale.toFixed(2) : "0.00"}
-            debounce={1000}
-            onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'sphereScale')}}
-          ></ion-input>
-        </div>
+      <ion-item key="displayStyle">
+        <ion-label color="primary" position="stacked">Molecule Style</ion-label>
+        <ion-select
+          style={{width: "100%"}}
+          value={this.displayStyle}
+          onIonChange={(e: CustomEvent)=>{this.onDisplayStyleChanged(e.detail.value)}}
+        >
+          {displayStyleOptions}
+        </ion-select>
       </ion-item>
     );
 
-    menuItems.push(
-      <ion-item key="stickSlider">
-        <ion-label color="primary" position="stacked">Stick radius</ion-label>
-        <ion-range
-          debounce={150}
-          min={0.0}
-          max={0.5}
-          step={0.01}
-          value={this.stickRadius}
-          onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'stickRadius')}}
-        />
-        <div class="end-slot" slot="end">
-          <ion-input value={isFinite(this.stickRadius) ? this.stickRadius.toFixed(2) : "0.00"}
-            debounce={1000}
-            onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'stickRadius')}}
-          ></ion-input>
-        </div>
-      </ion-item>
-    );
+    if (this.displayStyle === 'custom') {
+
+      menuItems.push(
+        <ion-item key="ballSlider">
+          <ion-label color="primary" position="stacked">Ball scale</ion-label>
+          <ion-range
+            // debounce={150}
+            min={0.0}
+            max={1.0}
+            step={0.01}
+            value={this.sphereScale}
+            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'sphereScale')}}
+          />
+          <div class="end-slot" slot="end">
+            <ion-input value={isFinite(this.sphereScale) ? this.sphereScale.toFixed(2) : "0.00"}
+              debounce={1000}
+              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'sphereScale')}}
+            ></ion-input>
+          </div>
+        </ion-item>
+      );
+
+      menuItems.push(
+        <ion-item key="stickSlider">
+          <ion-label color="primary" position="stacked">Stick radius</ion-label>
+          <ion-range
+            // debounce={150}
+            min={0.0}
+            max={this.sphereScale}
+            step={0.01}
+            value={this.stickRadius}
+            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'stickRadius')}}
+          />
+          <div class="end-slot" slot="end">
+            <ion-input value={isFinite(this.stickRadius) ? this.stickRadius.toFixed(2) : "0.00"}
+              debounce={1000}
+              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'stickRadius')}}
+            ></ion-input>
+          </div>
+        </ion-item>
+      );
+
+    }
 
     if (this.hasVolume) {
       menuItems.push(
