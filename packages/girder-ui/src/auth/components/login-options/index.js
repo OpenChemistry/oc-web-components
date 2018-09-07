@@ -16,7 +16,7 @@ import {
 
 class LoginOptions extends Component {
   render = () => {
-    const {show, oauth, handleClose, handleGoogle, handleGirder} = this.props;
+    const {show, girder, oauth, handleClose, handleGoogle, handleGirder} = this.props;
 
     const actions = [
       <Button key="cancel" color="primary" onClick={handleClose}>
@@ -40,12 +40,14 @@ class LoginOptions extends Component {
               </ListItemIcon>
             </ListItem>
             }
+            { girder &&
             <ListItem button onClick={handleGirder}>
               <ListItemText primary="Sign in with Girder" />
               <ListItemIcon>
                 <img style={{height: "1.25rem"}} src={girderLogo} alt="girder" />
               </ListItemIcon>
             </ListItem>
+            }
           </List>
         <DialogActions>
           {actions}
