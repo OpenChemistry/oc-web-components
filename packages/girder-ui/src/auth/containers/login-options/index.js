@@ -31,6 +31,7 @@ class LoginOptionsContainer extends Component {
 
     return (
       <LoginOptions
+        {...this.props}
         show={this.props.show}
         oauth={this.props.oauth}
         handleClose={this.handleClose}
