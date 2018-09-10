@@ -4,11 +4,11 @@ export const presets = {
     sphereScale: 0.3,
     stickRadius: 0.14
   },
-  'stick': {
-    label: 'Stick',
-    sphereScale: 0.02,
-    stickRadius: 0.02
-  },
+  // 'licorice': {
+  //   label: 'Licorice',
+  //   sphereScale: 0.02,
+  //   stickRadius: 0.02
+  // },
   'vdW': {
     label: 'Van der Waals',
     sphereScale: 1.0,
