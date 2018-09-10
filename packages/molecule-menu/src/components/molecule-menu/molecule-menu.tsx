@@ -22,6 +22,7 @@ export class MoleculeMenu {
   @Prop() nModes: number = -1;
   @Prop({ mutable: true }) iMode: number = -1;
   @Prop({ mutable: true }) animationScale: number = 1.0;
+  @Prop({ mutable: true }) animationSpeed: number = 1.0;
   @Prop({ mutable: true }) play: boolean = true;
   // Visibility options
   @Prop({ mutable: true }) showVolume: boolean;
@@ -48,6 +49,7 @@ export class MoleculeMenu {
   // Normal mode events
   @Event() iModeChanged: EventEmitter;
   @Event() animationScaleChanged: EventEmitter;
+  @Event() animationSpeedChanged: EventEmitter;
   @Event() playChanged: EventEmitter;
   // Visibility events
   @Event() showVolumeChanged: EventEmitter;
@@ -77,6 +79,7 @@ export class MoleculeMenu {
       stickRadius: this.stickRadiusChanged,
       iMode: this.iModeChanged,
       animationScale: this.animationScaleChanged,
+      animationSpeed: this.animationSpeedChanged,
       play: this.playChanged,
       showIsoSurface: this.showIsoSurfaceChanged,
       showVolume: this.showVolumeChanged,
@@ -364,6 +367,25 @@ export class MoleculeMenu {
             <ion-input value={isFinite(this.animationScale) ? this.animationScale.toFixed(1) : "0.0"}
               debounce={1000}
               onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationScale')}}
+            ></ion-input>
+          </div>
+        </ion-item>
+      );
+      menuItems.push(
+        <ion-item disabled={!this.play || this.iMode < 0} key="animationSpeedSlider">
+          <ion-label color="primary" position="stacked">Animation Scale</ion-label>
+          <ion-range
+            debounce={150}
+            min={0.5}
+            max={3}
+            step={0.5}
+            value={this.animationSpeed}
+            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'animationSpeed')}}
+          />
+          <div class="end-slot" slot="end">
+            <ion-input value={isFinite(this.animationSpeed) ? this.animationSpeed.toFixed(1) : "0.0"}
+              debounce={1000}
+              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationSpeed')}}
             ></ion-input>
           </div>
         </ion-item>
