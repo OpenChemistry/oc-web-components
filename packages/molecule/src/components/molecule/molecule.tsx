@@ -35,6 +35,7 @@ export class Molecule {
   @Prop({ mutable: true }) play: boolean = true;
   @Prop({ mutable: true }) iMode: number = -1;
   @Prop({ mutable: true }) animationScale: number = 1;
+  @Prop({ mutable: true }) animationSpeed: number = 1;
   // Visibility options
   @Prop({ mutable: true }) showVolume: boolean = false;
   @Prop({ mutable: true }) showIsoSurface: boolean = true;
@@ -193,7 +194,9 @@ export class Molecule {
                   normalMode: {
                     play: this.play,
                     modeIdx: this.iMode,
-                    scale: this.animationScale
+                    scale: this.animationScale,
+                    periodsPerSecond: this.animationSpeed,
+                    framesPerPeriod: 20
                   },
                   volume: {
                     colors: this.colorMaps[this.activeMapName],
@@ -230,6 +233,7 @@ export class Molecule {
               nModes={nModes}
               iMode={this.iMode}
               animationScale={this.animationScale}
+              animationSpeed={this.animationSpeed}
               hasVolume={hasVolume}
               colorMapNames={Object.keys(this.colorMaps)}
               activeMapName={this.activeMapName}
@@ -245,6 +249,7 @@ export class Molecule {
               onIModeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
               onPlayChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'play')}}
               onAnimationScaleChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'animationScale')}}
+              onAnimationSpeedChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'animationSpeed')}}
               onOpacitiesChanged={(e: CustomEvent) => {this.onOpacitiesChanged(e.detail)}}
               onActiveMapNameChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'activeMapName')}}
               onIsoValueChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'isoValue')}}
