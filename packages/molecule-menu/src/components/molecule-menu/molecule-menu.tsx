@@ -1,7 +1,7 @@
 import { Component, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 import { PlayIcon, PauseIcon } from '../../icons';
-import { presets } from './constants';
+import { presets, renderers } from './constants';
 
 import '@ionic/core';
 import 'ionicons';
@@ -40,6 +40,8 @@ export class MoleculeMenu {
   @Prop({ mutable: true }) activeMapName: string = 'Viridis';
   // IsoSurface options
   @Prop({ mutable: true }) isoValue: number = 0.01;
+  // Renderers
+  @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
 
   @State() mapRange: [number, number];
 
@@ -62,6 +64,8 @@ export class MoleculeMenu {
   // Other events
   @Event() activeMapNameChanged: EventEmitter;
   @Event() mapRangeChanged: EventEmitter;
+  // Renderers
+  @Event() moleculeRendererChanged: EventEmitter;
 
   // Reset the colormap range if the data range changes
   @Watch('range')
@@ -87,7 +91,8 @@ export class MoleculeMenu {
       opacitiesX: this.opacitiesXChanged,
       mapRange: this.mapRangeChanged,
       activeMapName: this.activeMapNameChanged,
-      isoValue: this.isoValueChanged
+      isoValue: this.isoValueChanged,
+      moleculeRenderer: this.moleculeRendererChanged
     }
   }
 
@@ -173,6 +178,13 @@ export class MoleculeMenu {
     for (let key in presets) {
       displayStyleOptions.push(
         <ion-select-option key={key} value={key}>{presets[key].label}</ion-select-option>
+      );
+    }
+
+    const moleculeRendererOptions = [];
+    for (let key in renderers) {
+      moleculeRendererOptions.push(
+        <ion-select-option key={key} value={key}>{renderers[key].label}</ion-select-option>
       );
     }
 
@@ -267,15 +279,15 @@ export class MoleculeMenu {
         );
       }
       menuItems.push(
-        <ion-item key="volumeToggle">
-          <ion-label>Show Volume</ion-label>
+        <ion-item key="volumeToggle" disabled={this.moleculeRenderer !== 'vtkjs'}>
+          <ion-label>Show Volume {this.moleculeRenderer !== 'vtkjs' ? '(VTK.js only)' : ''}</ion-label>
           <ion-toggle
             checked={this.showVolume}
             onClick={()=>{this.onValueChanged(!this.showVolume, 'showVolume')}}
           />
         </ion-item>
       );
-      if (this.showVolume) {
+      if (this.showVolume && this.moleculeRenderer === 'vtkjs') {
         menuItems.push(
           <div style={{width: "100%", height: "8rem"}}>
             <oc-volume-controls
@@ -373,7 +385,7 @@ export class MoleculeMenu {
       );
       menuItems.push(
         <ion-item disabled={!this.play || this.iMode < 0} key="animationSpeedSlider">
-          <ion-label color="primary" position="stacked">Animation Scale</ion-label>
+          <ion-label color="primary" position="stacked">Animation Speed</ion-label>
           <ion-range
             debounce={150}
             min={0.5}
@@ -391,6 +403,19 @@ export class MoleculeMenu {
         </ion-item>
       );
     }
+
+    menuItems.push(
+      <ion-item key="moleculeRenderer">
+        <ion-label color="primary" position="stacked">Molecule renderer</ion-label>
+        <ion-select
+          style={{width: "100%"}}
+          value={this.moleculeRenderer}
+          onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'moleculeRenderer')}}
+        >
+          {moleculeRendererOptions}
+        </ion-select>
+      </ion-item>
+    );
 
     return (
       <div>

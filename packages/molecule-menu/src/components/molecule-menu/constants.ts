@@ -20,3 +20,12 @@ export const presets = {
     stickRadius: 0.14
   },
 }
+
+export const renderers = {
+  'moljs': {
+    label: "3dMol.js"
+  },
+  'vtkjs': {
+    label: "VTK.js"
+  }
+}
