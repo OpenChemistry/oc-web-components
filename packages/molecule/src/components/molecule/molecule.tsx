@@ -11,6 +11,7 @@ import memoizeOne from 'memoize-one';
 
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-vtkjs';
+import '@openchemistry/molecule-moljs';
 import '@openchemistry/vibrational-spectrum';
 import 'split-me';
 
@@ -48,6 +49,8 @@ export class Molecule {
   @Prop({ mutable: true }) activeMapName: string;
   // Other options
   @Prop() rotate: boolean = false;
+  // Molecule renderer
+  @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
 
   cjsonData: IChemJson;
 
@@ -168,6 +171,37 @@ export class Molecule {
     const splitN = hasSpectrum ? 2 : 1;
     const splitSizes = hasSpectrum ? "0.4, 0.6" : "1";
 
+    const moleculeOptions = {
+      ...this.defaultOptions,
+      isoSurfaces: this.makeIsoSurfaces(this.isoValue),
+      style: {
+        sphere: {
+          scale: this.sphereScale
+        },
+        stick: {
+          radius: this.stickRadius
+        }
+      },
+      normalMode: {
+        play: this.play,
+        modeIdx: this.iMode,
+        scale: this.animationScale,
+        periodsPerSecond: this.animationSpeed,
+        framesPerPeriod: Math.round(15 / this.animationSpeed)
+      },
+      volume: {
+        colors: this.colorMaps[this.activeMapName],
+        colorsScalarValue: this.colorsX,
+        opacity: this.opacities,
+        opacityScalarValue: this.opacitiesX,
+        range: this.range
+      },
+      visibility: {
+        isoSurfaces: this.showIsoSurface,
+        volume: this.showVolume
+      }
+    }
+
     if (isNil(cjson)) {
       return (null);
     }
@@ -176,43 +210,22 @@ export class Molecule {
       <div class='main-container'>
         <div class='molecule-container'>
           <split-me n={splitN} sizes={splitSizes}>
+            <div slot='0' style={{width: '100%', height: '100%'}}>
+            { this.moleculeRenderer === 'vtkjs' &&
             <oc-molecule-vtkjs
-              slot='0'
               cjson={cjson}
-              options={
-                {
-                  ...this.defaultOptions,
-                  isoSurfaces: this.makeIsoSurfaces(this.isoValue),
-                  style: {
-                    sphere: {
-                      scale: this.sphereScale
-                    },
-                    stick: {
-                      radius: this.stickRadius
-                    }
-                  },
-                  normalMode: {
-                    play: this.play,
-                    modeIdx: this.iMode,
-                    scale: this.animationScale,
-                    periodsPerSecond: this.animationSpeed,
-                    framesPerPeriod: 20
-                  },
-                  volume: {
-                    colors: this.colorMaps[this.activeMapName],
-                    colorsScalarValue: this.colorsX,
-                    opacity: this.opacities,
-                    opacityScalarValue: this.opacitiesX,
-                    range: this.range
-                  },
-                  visibility: {
-                    isoSurfaces: this.showIsoSurface,
-                    volume: this.showVolume
-                  }
-                }
-              }
+              options={moleculeOptions}
               rotate={this.rotate}
             />
+            }
+            { this.moleculeRenderer !== 'vtkjs' &&
+            <oc-molecule-moljs
+              cjson={cjson}
+              options={moleculeOptions}
+              rotate={this.rotate}
+            />
+            }
+            </div>
             {hasSpectrum &&
             <oc-vibrational-spectrum
               slot='1'
@@ -245,6 +258,7 @@ export class Molecule {
               opacitiesX={this.opacitiesX}
               range={this.range}
               histograms={this.histograms}
+              moleculeRenderer={this.moleculeRenderer}
               // Events
               onIModeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
               onPlayChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'play')}}
@@ -258,6 +272,7 @@ export class Molecule {
               onSphereScaleChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'sphereScale')}}
               onStickRadiusChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'stickRadius')}}
               onMapRangeChanged={(e: CustomEvent) => {this.onMapRangeChanged(e.detail)}}
+              onMoleculeRendererChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'moleculeRenderer')}}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>
