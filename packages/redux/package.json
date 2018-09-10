@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
+    "core-js": "^2.5.7",
     "enumify": "^1.0.4",
     "jsonpath": "^1.0.0",
     "lodash-es": "^4.17.10",
