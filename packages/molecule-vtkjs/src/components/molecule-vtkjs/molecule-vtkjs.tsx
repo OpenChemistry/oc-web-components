@@ -33,6 +33,8 @@ export class MoleculeVtkjs {
     this.optionsData = null;
   }
 
+  @Prop() rotate: boolean = false;
+
   cjsonData: IChemJson;
   optionsData: IDisplayOptions;
 
@@ -40,6 +42,7 @@ export class MoleculeVtkjs {
   optionsHasChanged: boolean = false;
 
   animationInterval: any;
+  rotateInterval: any;
 
   viewerContainer: HTMLElement;
   viewer: any;
@@ -83,6 +86,7 @@ export class MoleculeVtkjs {
     ro.observe(this.viewerContainer);
 
     this.startAnimation();
+    this.handleRotate();
   }
 
   componentWillUpdate() {
@@ -104,6 +108,7 @@ export class MoleculeVtkjs {
     }
 
     this.startAnimation();
+    this.handleRotate();
   }
 
   initVtkJs() {
@@ -141,9 +146,6 @@ export class MoleculeVtkjs {
     this.opacityFn = vtk.Common.DataModel.vtkPiecewiseFunction.newInstance();
     this.volumeActor.getProperty().setRGBTransferFunction(0, this.ctFn);
     this.volumeActor.getProperty().setScalarOpacity(0, this.opacityFn);
-    // this.volumeMapper.setSampleDistance(0.7);
-    // this.volumeActor.getProperty().setScalarOpacityUnitDistance(0, 4.5);
-    // this.volumeActor.getProperty().setInterpolationTypeToLinear();
 
     this.updateVolume();
     this.volumeMapper.setInputData(this.volume);
@@ -180,6 +182,16 @@ export class MoleculeVtkjs {
     let cjson = this.getCjson();
     let atoms: IAtoms = !isNil(cjson) && !isNil(cjson.atoms) ? cjson.atoms : null;
     let bonds: IBonds = !isNil(cjson) && !isNil(cjson.bonds) ? cjson.bonds : null;
+    // If there are no bonds in the cjson, explicitly set them to empty arrays,
+    // or else vtkjs will try to automatically find them (can be slow for larger molecules)
+    if (isNil(bonds)) {
+      bonds = {
+        connections: {
+          index: []
+        },
+        order: []
+      };
+    }
 
     this.molecule.setAtoms(atoms);
     this.molecule.setBonds(bonds);
@@ -382,6 +394,23 @@ export class MoleculeVtkjs {
     }
   }
 
+  handleRotate() {
+    if (this.rotate && isNil(this.rotateInterval)) {
+      let period = 30000;
+      let dt = 50;
+      let angle = 360 * dt / period;
+      this.rotateInterval = setInterval(() => {
+        let camera = this.renderer.getActiveCamera();
+        camera.azimuth(angle);
+        this.renderWindow.render();
+      }, dt);
+    }
+    else if (!this.rotate && !isNil(this.rotateInterval)) {
+      clearInterval(this.rotateInterval);
+      this.rotateInterval = null;
+    }
+  }
+
   applyStyle() {
     let style = this.getOptions().style;
     this.filter.setAtomicRadiusScaleFactor(style.sphere.scale);
@@ -392,6 +421,9 @@ export class MoleculeVtkjs {
     console.log('Component removed from the DOM');
     if (!isNil(this.animationInterval)) {
       clearInterval(this.animationInterval);
+    }
+    if (!isNil(this.rotateInterval)) {
+      clearInterval(this.rotateInterval);
     }
     this.cleanupVtkjs();
   }
