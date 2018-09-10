@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.15...@openchemistry/molecule-vtkjs@0.2.0) (2018-09-10)
+
+
+### Bug Fixes
+
+* **molecule-vtkjs:** Prevent vtkjs from automatically search for bonds ([dc3a735](https://github.com/OpenChemistry/oc-web-components/commit/dc3a735))
+
+
+### Features
+
+* **molecule-vtkjs:** Add rotation to the vtkjs component ([289c55e](https://github.com/OpenChemistry/oc-web-components/commit/289c55e))
+
+
+
+
 <a name="0.1.15"></a>
 ## [0.1.15](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.1.14...@openchemistry/molecule-vtkjs@0.1.15) (2018-09-05)
 
