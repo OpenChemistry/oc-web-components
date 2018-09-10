@@ -39,6 +39,7 @@ export class MoleculeMoljs {
   @Prop() cjson: IChemJson | string;
   @Watch('cjson') cjsonHandler() {
     this.cjsonHasChanged = true;
+    this.cjsonData = null;
   }
 
   @Prop() options: IDisplayOptions;
@@ -58,6 +59,8 @@ export class MoleculeMoljs {
   currAtoms: IAtomSpec[];
   currModel: any;
   rotateInterval: any;
+
+  molViewer: any;
 
   /**
    * The component is about to load and it has not
@@ -82,9 +85,13 @@ export class MoleculeMoljs {
    */
   componentDidLoad() {
     console.log('Component has been rendered');
-    let config = { };
     if (isNil(this.viewer)) {
-      this.viewer = $3Dmol.createViewer( 'mol-viewer', config );
+      let config = { };
+      // 3dmoljs expects the container element to have width and height functions
+      // go figure, I guess they assume jQuery
+      this.molViewer.width = function() {return this.clientWidth};
+      this.molViewer.height = function() {return this.clientHeight};
+      this.viewer = $3Dmol.createViewer( this.molViewer, config );
     }
     this.convertCjson();
     this.renderMolecule();
@@ -239,7 +246,7 @@ export class MoleculeMoljs {
 
   setVolume() {
     const cjson = this.getCjson();
-    if (isNil(cjson) || isNil(cjson.cube)) {
+    if (isNil(cjson) || isNil(cjson.cube) || !this.getOptions().visibility.isoSurfaces) {
       return;
     }
     const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
@@ -287,7 +294,7 @@ export class MoleculeMoljs {
 
   render() {
     return (
-      <div id='mol-viewer'></div>
+      <div id='mol-viewer' ref={ref => {this.molViewer = ref;}}></div>
     );
   }
 }
