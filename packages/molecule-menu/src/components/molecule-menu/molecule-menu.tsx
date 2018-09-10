@@ -6,6 +6,7 @@ import { presets, renderers } from './constants';
 import '@ionic/core';
 import 'ionicons';
 import '@openchemistry/volume-controls';
+import { isNil } from 'lodash-es';
 
 @Component({
   tag: 'oc-molecule-menu',
@@ -42,6 +43,12 @@ export class MoleculeMenu {
   @Prop({ mutable: true }) isoValue: number = 0.01;
   // Renderers
   @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
+  // Orbitals options
+  @Prop({ mutable: true }) iOrbital: number = -1;
+  @Prop() nOrbitals: number;
+  @Prop() nElectrons: number = 0;
+  @Prop() scfType: string = 'rhf';
+  @Prop() orbitalSelect: boolean = false;
 
   @State() mapRange: [number, number];
 
@@ -66,6 +73,8 @@ export class MoleculeMenu {
   @Event() mapRangeChanged: EventEmitter;
   // Renderers
   @Event() moleculeRendererChanged: EventEmitter;
+  // Orbitals
+  @Event() iOrbitalChanged: EventEmitter;
 
   // Reset the colormap range if the data range changes
   @Watch('range')
@@ -92,7 +101,8 @@ export class MoleculeMenu {
       mapRange: this.mapRangeChanged,
       activeMapName: this.activeMapNameChanged,
       isoValue: this.isoValueChanged,
-      moleculeRenderer: this.moleculeRendererChanged
+      moleculeRenderer: this.moleculeRendererChanged,
+      iOrbital: this.iOrbitalChanged
     }
   }
 
@@ -188,6 +198,30 @@ export class MoleculeMenu {
       );
     }
 
+    const iLumo = this.scfType === 'rhf' ? Math.floor(this.nElectrons / 2) : this.nElectrons;
+    const iHomo = iLumo - 1;
+    let nOrbitals = this.nOrbitals;
+    if (isNil(nOrbitals)) {
+      nOrbitals = iHomo * 2;
+    }
+    const orbitalOptions = [];
+    orbitalOptions.push(
+      <ion-select-option key={'-1'} value={-1}>None</ion-select-option>
+    );
+    for (let i = 0; i < nOrbitals; ++i) {
+      let label: string;
+      if (i === iHomo) {
+        label = `${i} (HOMO)`;
+      } else if (i === iLumo) {
+        label = `${i} (LUMO)`;
+      } else {
+        label = `${i}`;
+      }
+      orbitalOptions.push(
+        <ion-select-option key={i} value={i}>{label}</ion-select-option>
+      );
+    }
+
     let menuItems = [];
 
     menuItems.push(
@@ -245,6 +279,21 @@ export class MoleculeMenu {
         </ion-item>
       );
 
+    }
+
+    if (this.orbitalSelect) {
+      menuItems.push(
+        <ion-item key="orbitalSelect">
+          <ion-label color="primary" position="stacked">Molecular orbital</ion-label>
+          <ion-select
+            style={{width: "100%"}}
+            value={this.iOrbital}
+            onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'iOrbital')}}
+          >
+            {orbitalOptions}
+          </ion-select>
+        </ion-item>
+      );
     }
 
     if (this.hasVolume) {
