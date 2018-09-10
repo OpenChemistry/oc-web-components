@@ -1,6 +1,6 @@
-import { Component, Prop, Watch } from '@stencil/core';
+import { Component, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 
-import { isNil } from "lodash-es";
+import { isNil, has } from "lodash-es";
 
 import { IChemJson, IDisplayOptions } from '@openchemistry/types';
 import { isChemJson, validateChemJson, composeDisplayOptions, makeBins } from '@openchemistry/utils';
@@ -47,10 +47,15 @@ export class Molecule {
   @Prop({ mutable: true }) range: [number, number];
   @Prop({ mutable: true }) histograms: number[];
   @Prop({ mutable: true }) activeMapName: string;
+  // Orbital options
+  @Prop({ mutable: true }) iOrbital: number = -1;
   // Other options
   @Prop() rotate: boolean = false;
+  @Prop() orbitalSelect: boolean = false;
   // Molecule renderer
   @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
+
+  @Event() iOrbitalChanged: EventEmitter;
 
   cjsonData: IChemJson;
 
@@ -63,6 +68,8 @@ export class Molecule {
 
   makeBins: Function;
 
+  keyToEvent: Object;
+
   @Watch('cjson')
   cjsonHandler(val) {
     this.cjsonData = null;
@@ -73,6 +80,10 @@ export class Molecule {
 
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
+    // Map props names to event emitters
+    this.keyToEvent = {
+      iOrbital: this.iOrbitalChanged,
+    }
     this.getRange = memoizeOne(this.getRange);
     this.makeBins = memoizeOne(makeBins);
     this.cjsonData = this.getCjson();
@@ -141,6 +152,9 @@ export class Molecule {
         return;
       }
       this[key] = val;
+    }
+    if (key in this.keyToEvent) {
+      this.keyToEvent[key].emit(val);
     }
   }
 
@@ -259,6 +273,11 @@ export class Molecule {
               range={this.range}
               histograms={this.histograms}
               moleculeRenderer={this.moleculeRenderer}
+              nElectrons={has(cjson, 'properties.electronCount') ? cjson.properties.electronCount : 0}
+              nOrbitals={has(cjson, 'molecularOrbitals.numbers') ? cjson.molecularOrbitals.numbers.length : null}
+              scfType={has(cjson, 'properties.scfType') ? cjson.properties.scfType : 'rhf'}
+              iOrbital={this.iOrbital}
+              orbitalSelect={this.orbitalSelect}
               // Events
               onIModeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
               onPlayChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'play')}}
@@ -273,6 +292,7 @@ export class Molecule {
               onStickRadiusChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'stickRadius')}}
               onMapRangeChanged={(e: CustomEvent) => {this.onMapRangeChanged(e.detail)}}
               onMoleculeRendererChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'moleculeRenderer')}}
+              onIOrbitalChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iOrbital')}}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>
