@@ -90,7 +90,6 @@ export class Molecule {
     this.activeMapName = 'Red Yellow Blue';
     this.opacities = [1, 0, 1];
     this.updateVolumeOptions();
-    this.range = [0, 1];
   }
 
   updateVolumeOptions() {
