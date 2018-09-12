@@ -10,9 +10,11 @@ interface IIsoSurfaceOptions {
 interface IStyleOptions {
   stick: {
     radius: number;
+    colorscheme?: string;
   };
   sphere: {
     scale: number;
+    colorscheme?: string;
   }
 }
 
