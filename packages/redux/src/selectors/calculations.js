@@ -19,3 +19,5 @@ export const getNotebooks = (state, id) => {
 
   return []
 }
+
+export const getCalculations = (state) => state.calculations.calculations;

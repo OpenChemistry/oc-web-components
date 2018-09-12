@@ -1,7 +1,11 @@
 import { createAction, handleActions } from 'redux-actions';
 
 // Actions
-export const LOAD_CALCULATION_BY_ID   = 'LOAD_CALCULATION_BY_ID';
+export const LOAD_CALCULATIONS = 'LOAD_CALCULATIONS';
+export const REQUEST_CALCULATIONS = 'REQUEST_CALCULATIONS';
+export const RECEIVE_CALCULATIONS = 'RECEIVE_CALCULATIONS';
+
+export const LOAD_CALCULATION_BY_ID  = 'LOAD_CALCULATION_BY_ID';
 export const REQUEST_CALCULATION_BY_ID = 'REQUEST_CALCULATION_BY_ID';
 export const RECEIVE_CALCULATION   = 'RECEIVE_CALCULATION';
 
@@ -15,11 +19,12 @@ export const RECEIVE_CALCULATION_NOTEBOOKS   = 'RECEIVE_CALCULATION_NOTEBOOKS';
 
 
 const initialState = {
-    byId: {},
-    orbitalsById: {},
-    noteBooksById: {},
-    error: null,
-  };
+  calculations: [],
+  byId: {},
+  orbitalsById: {},
+  noteBooksById: {},
+  error: null,
+};
 
 // Reducer
 const reducer = handleActions({
@@ -68,9 +73,26 @@ const reducer = handleActions({
     const noteBooksById = {...state.noteBooksById, [calculationId]: notebooks };
     return {...state,  noteBooksById};
   },
+  REQUEST_CALCULATIONS: (state, action) => {
+    if (action.error) {
+      return {...state, error: action.payload.error};
+    }
+    else {
+      return {...state,  error:null };
+    }
+  },
+  RECEIVE_CALCULATIONS: (state, action) => {
+    const {calculations} = action.payload;
+    return {...state, calculations};
+  }
 }, initialState);
 
 // Action Creators
+
+// Fetch calculations
+export const loadCalculations = createAction(LOAD_CALCULATIONS);
+export const requestCalculations = createAction(REQUEST_CALCULATIONS);
+export const receiveCalculations = createAction(RECEIVE_CALCULATIONS);
 
 // Fetch calculation
 export const loadCalculationById = createAction(LOAD_CALCULATION_BY_ID, (id) => ({ id }));
@@ -87,4 +109,3 @@ export const requestCalculationNotebooks = createAction(REQUEST_CALCULATION_NOTE
 export const receiveCalculationNotebooks = createAction(RECEIVE_CALCULATION_NOTEBOOKS, (calculationId, notebooks) => ({ calculationId, notebooks }));
 
 export default reducer;
-
