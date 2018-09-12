@@ -5,6 +5,13 @@ import { file } from '@openchemistry/rest'
 import { calculations as calculationsRedux } from '@openchemistry/redux'
 import { selectors } from '@openchemistry/redux';
 
+import { girderClient } from '@openchemistry/rest';
+
+function fetchCalculations() {
+  return girderClient().get('calculations')
+          .then(response => response.data )
+}
+
 export function* loadCalculationNotebooks(action) {
   try {
     const { calculationId } = action.payload;
@@ -37,3 +44,15 @@ export function* watchLoadCalculationNotebooks() {
   yield takeEvery(calculationsRedux.LOAD_CALCULATION_NOTEBOOKS, loadCalculationNotebooks);
 }
 
+function* loadCalculations(action) {
+  try {
+    const calculations = yield call(fetchCalculations);
+    yield put(calculationsRedux.receiveCalculations({calculations}));
+  } catch(error) {
+    yield put(calculationsRedux.requestCalculations(error))
+  }
+}
+
+export function* watchLoadCalculations() {
+  yield takeEvery(calculationsRedux.LOAD_CALCULATIONS, loadCalculations);
+}
