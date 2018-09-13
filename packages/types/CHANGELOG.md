@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.6.2"></a>
+## [0.6.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.6.1...@openchemistry/types@0.6.2) (2018-09-13)
+
+
+### Bug Fixes
+
+* Add colorscheme to IStyleOption interface ([1fce568](https://github.com/OpenChemistry/oc-web-components/commit/1fce568))
+
+
+
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.6.0...@openchemistry/types@0.6.1) (2018-08-01)
 
