@@ -21,9 +21,11 @@ const defaultIsoSurfaces : IIsoSurfaceOptions[] = [
 const defaultStyleOptions : IStyleOptions = {
   stick: {
     radius: 0.14,
+    colorscheme: 'Jmol'
   },
   sphere: {
     scale: 0.3,
+    colorscheme: 'Jmol'
   },
 }
 
