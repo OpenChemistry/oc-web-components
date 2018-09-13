@@ -20,4 +20,4 @@ export const getNotebooks = (state, id) => {
   return []
 }
 
-export const getCalculations = (state) => state.calculations.calculations;
+export const getCalculations = state => Object.values(state.calculations.byId);
