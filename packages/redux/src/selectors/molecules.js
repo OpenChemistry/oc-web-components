@@ -1,5 +1,5 @@
 // Pure state selection
-export const getMolecules = state => state.molecules.molecules;
+export const getMolecules = state => Object.values(state.molecules.byId);
 
 export const getMoleculesById = state => state.molecules.byId;
 

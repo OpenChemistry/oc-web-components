@@ -14,7 +14,6 @@ export const RECEIVE_MOLECULE   = 'RECEIVE_MOLECULE';
 export const SELECT_MOLECULE = 'SELECT_MOLECULE';
 
 const initialState = {
-    molecules: [],
     byId: {},
     byInchiKey: {},
     error: null,
@@ -48,7 +47,17 @@ const reducer = handleActions({
   },
   RECEIVE_MOLECULES: (state, action) => {
     const molecules = action.payload.molecules;
-    return {...state,  molecules };
+    let byId = {};
+    byId = molecules.reduce((result, item) => {
+      result[item._id] = item;
+      return result;
+    }, byId);
+    let byInchiKey = {...state.byInchiKey};
+    byInchiKey = molecules.reduce((result, item) => {
+      result[item.inchikey] = item._id;
+      return result;
+    }, byInchiKey);
+    return {...state,  byId, byInchiKey };
   },
   RECEIVE_MOLECULE: (state, action) => {
     const molecule = action.payload.molecule;

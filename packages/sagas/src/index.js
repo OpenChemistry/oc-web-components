@@ -18,7 +18,7 @@ import { watchRedirectToJupyterHub, watchInvalidateSession } from './jupyterlab'
 import { user, token } from '@openchemistry/rest'
 import * as rest from '@openchemistry/rest'
 import { girderClient  } from '@openchemistry/rest'
-import { watchLoadCalculationNotebooks } from './calculations'
+import { watchLoadCalculationNotebooks, watchLoadCalculations } from './calculations'
 
 import jp from 'jsonpath';
 
@@ -77,8 +77,8 @@ export function isValidToken(token) {
 export function* fetchMolecules() {
   try {
     yield put( molecules.requestMolecules() )
-    const molecules = yield call(fetchMoleculesFromGirder)
-    yield put( molecules.receiveMolecules(molecules) )
+    const newMolecules = yield call(fetchMoleculesFromGirder)
+    yield put( molecules.receiveMolecules(newMolecules) )
   }
   catch(error) {
     yield put( molecules.requestMolecules(error) )
@@ -440,5 +440,6 @@ export default function* root() {
   yield fork(watchInvalidateSession)
   yield fork(watchLoadCalculationNotebooks)
   yield fork(watchLoginGirder)
+  yield fork(watchLoadCalculations)
 }
 
