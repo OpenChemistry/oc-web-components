@@ -46,7 +46,7 @@ export class MoleculeMenu {
   // Renderers
   @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
   // Orbitals options
-  @Prop({ mutable: true }) iOrbital: number = -1;
+  @Prop({ mutable: true }) iOrbital: number | string = -1;
   @Prop() orbitals: IMolecularOrbitals;
   @Prop() nOrbitals: number = 0;
   @Prop() nElectrons: number = 0;
@@ -204,7 +204,7 @@ export class MoleculeMenu {
 
     const orbitalOptions = [];
     orbitalOptions.push(
-      <ion-select-option key={'-1'} value={-1}>None</ion-select-option>
+      <ion-select-option key={'-1'} value={'-1'}>None</ion-select-option>
     );
     if (!isNil(this.orbitals)) {
       const { numbers, energies, occupations } = this.orbitals;
@@ -212,16 +212,19 @@ export class MoleculeMenu {
       const iHomo = iLumo - 1;
       const nOrbitals = numbers.length;
       for (let i = 0; i < nOrbitals; ++i) {
+        let value = i.toString();
         let label: string;
         if (i === iHomo) {
+          value = 'homo';
           label = `${numbers[i]} ${energies[i].toFixed(3)} Ha (HOMO)`;
         } else if (i === iLumo) {
+          value = 'lumo';
           label = `${numbers[i]} ${energies[i].toFixed(3)} Ha (LUMO)`;
         } else {
           label = `${numbers[i]} ${energies[i].toFixed(3)} Ha`;
         }
         orbitalOptions.push(
-          <ion-select-option key={i.toString()} value={i.toString()}>{label}</ion-select-option>
+          <ion-select-option key={i.toString()} value={value}>{label}</ion-select-option>
         );
       }
     } else {
@@ -233,16 +236,19 @@ export class MoleculeMenu {
         nOrbitals = iLumo + 1;
       }
       for (let i = 0; i < nOrbitals; ++i) {
+        let value = i.toString();
         let label: string;
         if (i === iHomo) {
+          value = 'homo';
           label = `${i} (HOMO)`;
         } else if (i === iLumo) {
+          value = 'lumo';
           label = `${i} (LUMO)`;
         } else {
           label = `${i}`;
         }
         orbitalOptions.push(
-          <ion-select-option key={i.toString()} value={i.toString()}>{label}</ion-select-option>
+          <ion-select-option key={i.toString()} value={value}>{label}</ion-select-option>
         );
       }  
     }
@@ -312,7 +318,7 @@ export class MoleculeMenu {
           <ion-label color="primary" position="stacked">Molecular orbital</ion-label>
           <ion-select
             style={{width: "100%"}}
-            value={this.iOrbital}
+            value={this.iOrbital.toString()}
             onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'iOrbital')}}
           >
             {orbitalOptions}

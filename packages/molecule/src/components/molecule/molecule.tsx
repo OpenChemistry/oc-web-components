@@ -48,7 +48,7 @@ export class Molecule {
   @Prop({ mutable: true }) histograms: number[];
   @Prop({ mutable: true }) activeMapName: string;
   // Orbital options
-  @Prop({ mutable: true }) iOrbital: number = -1;
+  @Prop({ mutable: true }) iOrbital: number | string = -1;
   // Other options
   @Prop() rotate: boolean = false;
   @Prop() orbitalSelect: boolean = false;
