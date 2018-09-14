@@ -272,7 +272,8 @@ export class Molecule {
               range={this.range}
               histograms={this.histograms}
               moleculeRenderer={this.moleculeRenderer}
-              nElectrons={has(cjson, 'properties.electronCount') ? cjson.properties.electronCount : 0}
+              orbitals={has(cjson, 'molecularOrbitals') ? cjson.molecularOrbitals : null}
+              nElectrons={has(cjson, 'orbitals.electronCount') ? cjson.orbitals.electronCount : 0}
               nOrbitals={has(cjson, 'molecularOrbitals.numbers') ? cjson.molecularOrbitals.numbers.length : null}
               scfType={has(cjson, 'properties.scfType') ? cjson.properties.scfType : 'rhf'}
               iOrbital={this.iOrbital}
