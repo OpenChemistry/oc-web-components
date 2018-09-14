@@ -1,5 +1,7 @@
 import { Component, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
+import { IMolecularOrbitals } from '@openchemistry/types';
+
 import { PlayIcon, PauseIcon } from '../../icons';
 import { presets, renderers } from './constants';
 
@@ -45,9 +47,11 @@ export class MoleculeMenu {
   @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
   // Orbitals options
   @Prop({ mutable: true }) iOrbital: number = -1;
-  @Prop() nOrbitals: number;
+  @Prop() orbitals: IMolecularOrbitals;
+  @Prop() nOrbitals: number = 0;
   @Prop() nElectrons: number = 0;
   @Prop() scfType: string = 'rhf';
+
   @Prop() orbitalSelect: boolean = false;
 
   @State() mapRange: [number, number];
@@ -198,28 +202,49 @@ export class MoleculeMenu {
       );
     }
 
-    const iLumo = this.scfType === 'rhf' ? Math.floor(this.nElectrons / 2) : this.nElectrons;
-    const iHomo = iLumo - 1;
-    let nOrbitals = this.nOrbitals;
-    if (isNil(nOrbitals)) {
-      nOrbitals = iHomo * 2;
-    }
     const orbitalOptions = [];
     orbitalOptions.push(
       <ion-select-option key={'-1'} value={-1}>None</ion-select-option>
     );
-    for (let i = 0; i < nOrbitals; ++i) {
-      let label: string;
-      if (i === iHomo) {
-        label = `${i} (HOMO)`;
-      } else if (i === iLumo) {
-        label = `${i} (LUMO)`;
-      } else {
-        label = `${i}`;
+    if (!isNil(this.orbitals)) {
+      const { numbers, energies, occupations } = this.orbitals;
+      const iLumo = occupations.findIndex((val) => val === 0);
+      const iHomo = iLumo - 1;
+      const nOrbitals = numbers.length;
+      for (let i = 0; i < nOrbitals; ++i) {
+        let label: string;
+        if (i === iHomo) {
+          label = `${numbers[i]} ${energies[i].toFixed(3)} Ha (HOMO)`;
+        } else if (i === iLumo) {
+          label = `${numbers[i]} ${energies[i].toFixed(3)} Ha (LUMO)`;
+        } else {
+          label = `${numbers[i]} ${energies[i].toFixed(3)} Ha`;
+        }
+        orbitalOptions.push(
+          <ion-select-option key={i.toString()} value={i.toString()}>{label}</ion-select-option>
+        );
       }
-      orbitalOptions.push(
-        <ion-select-option key={i} value={i}>{label}</ion-select-option>
-      );
+    } else {
+      const iLumo = this.scfType === 'rhf' ? Math.floor(this.nElectrons / 2) : this.nElectrons;
+      const iHomo = iLumo - 1;
+      let nOrbitals = this.nOrbitals;
+      if (isNil(nOrbitals)) {
+        // If we don't know the number of orbitals, show up to the LUMO.
+        nOrbitals = iLumo + 1;
+      }
+      for (let i = 0; i < nOrbitals; ++i) {
+        let label: string;
+        if (i === iHomo) {
+          label = `${i} (HOMO)`;
+        } else if (i === iLumo) {
+          label = `${i} (LUMO)`;
+        } else {
+          label = `${i}`;
+        }
+        orbitalOptions.push(
+          <ion-select-option key={i.toString()} value={i.toString()}>{label}</ion-select-option>
+        );
+      }  
     }
 
     let menuItems = [];
