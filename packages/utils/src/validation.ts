@@ -9,29 +9,34 @@ function isChemJson(obj: any) : obj is IChemJson {
 
 function validateChemJson(obj: IChemJson) : boolean {
   if (!validateAtoms(obj.atoms)) {
+    console.warn('Invalid CJSON data, missing atoms');
     return false;
   }
   if (!isNil(obj.bonds)) {
     // If bonds are invalid, throw them out but still keep the atoms
     if (!validateBonds(obj.atoms, obj.bonds)) {
+      console.warn('Invalid CJSON data, discarding bonds');
       obj.bonds = undefined;
     }
   }
   if (!isNil(obj.cube)) {
     // If cube data is invalid, throw it out but still keep the rest
     if (!validateCube(obj.cube)) {
+      console.warn('Invalid CJSON data, discarding cube');
       obj.cube = undefined;
     }
   }
   if (!isNil(obj.vibrations)) {
     // If vibration data is invalid, throw it out but still keep the rest
     if (!validateVibrations(obj.atoms, obj.vibrations)) {
+      console.warn('Invalid CJSON data, discarding vibrations');
       obj.vibrations = undefined;
     }
   }
   if (!isNil(obj.molecularOrbitals)) {
     // If orbitals data is invalid, throw it out but still keep the rest
     if (!validateMolecularOrbitals(obj.molecularOrbitals)) {
+      console.warn('Invalid CJSON data, discarding molecular orbitals');
       obj.molecularOrbitals = undefined;
     }
   }
@@ -101,6 +106,11 @@ function validateVibrations(atoms: IAtoms, vibrations: IVibrations) : boolean {
 }
 
 function validateMolecularOrbitals(mo: IMolecularOrbitals) : boolean {
+  // There was a typo in avogadrolibs code...
+  if (isNil(mo.occupations) && !isNil((mo as any).occpupations)) {
+    mo.occupations = (mo as any).occpupations;
+    return false;
+  }
   if (mo.energies.length === mo.numbers.length && mo.energies.length === mo.occupations.length) {
     return true;
   }
