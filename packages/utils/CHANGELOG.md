@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.4.2...@openchemistry/utils@0.5.0) (2018-09-17)
+
+
+### Bug Fixes
+
+* **utils:** Add warning if cjson validation fails ([d0ab0b8](https://github.com/OpenChemistry/oc-web-components/commit/d0ab0b8))
+
+
+### Features
+
+* **utils:** Add orbitals to cjson validation ([4dcb998](https://github.com/OpenChemistry/oc-web-components/commit/4dcb998))
+
+
+
+
 <a name="0.4.2"></a>
 ## [0.4.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.4.1...@openchemistry/utils@0.4.2) (2018-09-13)
 

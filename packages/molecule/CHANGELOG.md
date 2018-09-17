@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.4.1...@openchemistry/molecule@0.4.2) (2018-09-17)
+
+
+### Bug Fixes
+
+* **molecule:** Add animation speed option ([47808cd](https://github.com/OpenChemistry/oc-web-components/commit/47808cd))
+* **molecule:** Add orbital select ([112cf5a](https://github.com/OpenChemistry/oc-web-components/commit/112cf5a))
+* **molecule:** Better orbital props ([83023ee](https://github.com/OpenChemistry/oc-web-components/commit/83023ee))
+* **molecule:** Calculate the initial scalar range correctly ([56924b8](https://github.com/OpenChemistry/oc-web-components/commit/56924b8))
+* **molecule:** Switch between 3dmol and vtkjs ([7a33cb1](https://github.com/OpenChemistry/oc-web-components/commit/7a33cb1))
+
+
+
+
 <a name="0.4.1"></a>
 ## [0.4.1](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.4.0...@openchemistry/molecule@0.4.1) (2018-09-13)
 

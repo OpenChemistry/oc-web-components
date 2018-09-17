@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.6.3"></a>
+## [0.6.3](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-menu@0.6.2...@openchemistry/molecule-menu@0.6.3) (2018-09-17)
+
+
+### Bug Fixes
+
+* **menu:** Better orbital select ([73aba4b](https://github.com/OpenChemistry/oc-web-components/commit/73aba4b))
+* **molecule-menu:** Add animation speed slider ([663d8f1](https://github.com/OpenChemistry/oc-web-components/commit/663d8f1))
+* **molecule-menu:** Add orbital select ([7c4cf77](https://github.com/OpenChemistry/oc-web-components/commit/7c4cf77))
+* **molecule-menu:** Switch between 3dmol and vtkjs ([c21ad74](https://github.com/OpenChemistry/oc-web-components/commit/c21ad74))
+
+
+
+
 <a name="0.6.2"></a>
 ## [0.6.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-menu@0.6.1...@openchemistry/molecule-menu@0.6.2) (2018-09-13)
 

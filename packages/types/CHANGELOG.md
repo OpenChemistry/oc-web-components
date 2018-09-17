@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.6.2...@openchemistry/types@0.7.0) (2018-09-17)
+
+
+### Features
+
+* **types:** Add orbitals to types definition ([ba8c73f](https://github.com/OpenChemistry/oc-web-components/commit/ba8c73f))
+* **utils:** Add orbitals to cjson validation ([4dcb998](https://github.com/OpenChemistry/oc-web-components/commit/4dcb998))
+
+
+
+
 <a name="0.6.2"></a>
 ## [0.6.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.6.1...@openchemistry/types@0.6.2) (2018-09-13)
 
