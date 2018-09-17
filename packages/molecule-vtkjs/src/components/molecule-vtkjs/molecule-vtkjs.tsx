@@ -15,7 +15,7 @@ declare var vtk: any;
 @Component({
   tag: 'oc-molecule-vtkjs',
   styleUrl: 'molecule-vtkjs.css',
-  shadow: false
+  shadow: true
 })
 export class MoleculeVtkjs {
 
@@ -95,6 +95,7 @@ export class MoleculeVtkjs {
       this.updateMolecule();
       this.updateVolume();
       this.renderer.resetCamera();
+      this.renderer.getActiveCamera().zoom(0.75);
       this.renderWindow.render();
       this.cjsonHasChanged = false;
     }
@@ -158,6 +159,7 @@ export class MoleculeVtkjs {
     this.renderer.addVolume(this.volumeActor);
 
     this.renderer.resetCamera();
+    this.renderer.getActiveCamera().zoom(0.75);
     this.renderWindow.render();
   }
 
@@ -396,12 +398,13 @@ export class MoleculeVtkjs {
 
   handleRotate() {
     if (this.rotate && isNil(this.rotateInterval)) {
-      let period = 30000;
+      let period = 60000;
       let dt = 50;
       let angle = 360 * dt / period;
       this.rotateInterval = setInterval(() => {
         let camera = this.renderer.getActiveCamera();
         camera.azimuth(angle);
+        this.renderer.resetCameraClippingRange();
         this.renderWindow.render();
       }, dt);
     }
