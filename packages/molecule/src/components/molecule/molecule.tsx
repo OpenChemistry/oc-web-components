@@ -1,6 +1,6 @@
-import { Component, Prop, Watch } from '@stencil/core';
+import { Component, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 
-import { isNil } from "lodash-es";
+import { isNil, has } from "lodash-es";
 
 import { IChemJson, IDisplayOptions } from '@openchemistry/types';
 import { isChemJson, validateChemJson, composeDisplayOptions, makeBins } from '@openchemistry/utils';
@@ -11,6 +11,7 @@ import memoizeOne from 'memoize-one';
 
 import '@openchemistry/molecule-menu';
 import '@openchemistry/molecule-vtkjs';
+import '@openchemistry/molecule-moljs';
 import '@openchemistry/vibrational-spectrum';
 import 'split-me';
 
@@ -35,6 +36,7 @@ export class Molecule {
   @Prop({ mutable: true }) play: boolean = true;
   @Prop({ mutable: true }) iMode: number = -1;
   @Prop({ mutable: true }) animationScale: number = 1;
+  @Prop({ mutable: true }) animationSpeed: number = 1;
   // Visibility options
   @Prop({ mutable: true }) showVolume: boolean = false;
   @Prop({ mutable: true }) showIsoSurface: boolean = true;
@@ -45,8 +47,15 @@ export class Molecule {
   @Prop({ mutable: true }) range: [number, number];
   @Prop({ mutable: true }) histograms: number[];
   @Prop({ mutable: true }) activeMapName: string;
+  // Orbital options
+  @Prop({ mutable: true }) iOrbital: number | string = -1;
   // Other options
   @Prop() rotate: boolean = false;
+  @Prop() orbitalSelect: boolean = false;
+  // Molecule renderer
+  @Prop({ mutable: true }) moleculeRenderer: string = 'vtkjs';
+
+  @Event() iOrbitalChanged: EventEmitter;
 
   cjsonData: IChemJson;
 
@@ -59,6 +68,8 @@ export class Molecule {
 
   makeBins: Function;
 
+  keyToEvent: Object;
+
   @Watch('cjson')
   cjsonHandler(val) {
     this.cjsonData = null;
@@ -69,13 +80,16 @@ export class Molecule {
 
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
+    // Map props names to event emitters
+    this.keyToEvent = {
+      iOrbital: this.iOrbitalChanged,
+    }
     this.getRange = memoizeOne(this.getRange);
     this.makeBins = memoizeOne(makeBins);
     this.cjsonData = this.getCjson();
     this.activeMapName = 'Red Yellow Blue';
     this.opacities = [1, 0, 1];
     this.updateVolumeOptions();
-    this.range = [0, 1];
   }
 
   updateVolumeOptions() {
@@ -138,6 +152,9 @@ export class Molecule {
       }
       this[key] = val;
     }
+    if (key in this.keyToEvent) {
+      this.keyToEvent[key].emit(val);
+    }
   }
 
   onMapRangeChanged = (range: [number, number]) => {
@@ -167,6 +184,37 @@ export class Molecule {
     const splitN = hasSpectrum ? 2 : 1;
     const splitSizes = hasSpectrum ? "0.4, 0.6" : "1";
 
+    const moleculeOptions = {
+      ...this.defaultOptions,
+      isoSurfaces: this.makeIsoSurfaces(this.isoValue),
+      style: {
+        sphere: {
+          scale: this.sphereScale
+        },
+        stick: {
+          radius: this.stickRadius
+        }
+      },
+      normalMode: {
+        play: this.play,
+        modeIdx: this.iMode,
+        scale: this.animationScale,
+        periodsPerSecond: this.animationSpeed,
+        framesPerPeriod: Math.round(15 / this.animationSpeed)
+      },
+      volume: {
+        colors: this.colorMaps[this.activeMapName],
+        colorsScalarValue: this.colorsX,
+        opacity: this.opacities,
+        opacityScalarValue: this.opacitiesX,
+        range: this.range
+      },
+      visibility: {
+        isoSurfaces: this.showIsoSurface,
+        volume: this.showVolume
+      }
+    }
+
     if (isNil(cjson)) {
       return (null);
     }
@@ -175,41 +223,22 @@ export class Molecule {
       <div class='main-container'>
         <div class='molecule-container'>
           <split-me n={splitN} sizes={splitSizes}>
+            <div slot='0' style={{width: '100%', height: '100%'}}>
+            { this.moleculeRenderer === 'vtkjs' &&
             <oc-molecule-vtkjs
-              slot='0'
               cjson={cjson}
-              options={
-                {
-                  ...this.defaultOptions,
-                  isoSurfaces: this.makeIsoSurfaces(this.isoValue),
-                  style: {
-                    sphere: {
-                      scale: this.sphereScale
-                    },
-                    stick: {
-                      radius: this.stickRadius
-                    }
-                  },
-                  normalMode: {
-                    play: this.play,
-                    modeIdx: this.iMode,
-                    scale: this.animationScale
-                  },
-                  volume: {
-                    colors: this.colorMaps[this.activeMapName],
-                    colorsScalarValue: this.colorsX,
-                    opacity: this.opacities,
-                    opacityScalarValue: this.opacitiesX,
-                    range: this.range
-                  },
-                  visibility: {
-                    isoSurfaces: this.showIsoSurface,
-                    volume: this.showVolume
-                  }
-                }
-              }
+              options={moleculeOptions}
               rotate={this.rotate}
             />
+            }
+            { this.moleculeRenderer !== 'vtkjs' &&
+            <oc-molecule-moljs
+              cjson={cjson}
+              options={moleculeOptions}
+              rotate={this.rotate}
+            />
+            }
+            </div>
             {hasSpectrum &&
             <oc-vibrational-spectrum
               slot='1'
@@ -230,6 +259,7 @@ export class Molecule {
               nModes={nModes}
               iMode={this.iMode}
               animationScale={this.animationScale}
+              animationSpeed={this.animationSpeed}
               hasVolume={hasVolume}
               colorMapNames={Object.keys(this.colorMaps)}
               activeMapName={this.activeMapName}
@@ -241,10 +271,18 @@ export class Molecule {
               opacitiesX={this.opacitiesX}
               range={this.range}
               histograms={this.histograms}
+              moleculeRenderer={this.moleculeRenderer}
+              orbitals={has(cjson, 'molecularOrbitals') ? cjson.molecularOrbitals : null}
+              nElectrons={has(cjson, 'orbitals.electronCount') ? cjson.orbitals.electronCount : 0}
+              nOrbitals={has(cjson, 'molecularOrbitals.numbers') ? cjson.molecularOrbitals.numbers.length : null}
+              scfType={has(cjson, 'properties.scfType') ? cjson.properties.scfType : 'rhf'}
+              iOrbital={this.iOrbital}
+              orbitalSelect={this.orbitalSelect}
               // Events
               onIModeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
               onPlayChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'play')}}
               onAnimationScaleChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'animationScale')}}
+              onAnimationSpeedChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'animationSpeed')}}
               onOpacitiesChanged={(e: CustomEvent) => {this.onOpacitiesChanged(e.detail)}}
               onActiveMapNameChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'activeMapName')}}
               onIsoValueChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'isoValue')}}
@@ -253,6 +291,8 @@ export class Molecule {
               onSphereScaleChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'sphereScale')}}
               onStickRadiusChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'stickRadius')}}
               onMapRangeChanged={(e: CustomEvent) => {this.onMapRangeChanged(e.detail)}}
+              onMoleculeRendererChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'moleculeRenderer')}}
+              onIOrbitalChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iOrbital')}}
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>

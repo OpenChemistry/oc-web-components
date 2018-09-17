@@ -1,4 +1,4 @@
-export { IAtoms, IBonds, ICube, IChemJson, IVibrations };
+export { IAtoms, IBonds, ICube, IChemJson, IVibrations, IMolecularOrbitals, IProperties, IBasisSet };
 
 interface IAtoms {
   coords : {
@@ -31,10 +31,32 @@ interface IVibrations {
   modes: number[];
 }
 
+interface IMolecularOrbitals {
+  energies: number[];
+  numbers: number[];
+  occupations: number[];
+}
+
+interface IProperties {
+  electronCount: number;
+  functionalName: string;
+  scfType: string;
+  theory: string;
+}
+
+interface IBasisSet {
+  basisType: string;
+  electronCount: number;
+  scfType: string;
+}
+
 interface IChemJson {
   atoms : IAtoms;
   bonds? : IBonds;
   cube? : ICube;
   vibrations?: IVibrations;
+  molecularOrbitals?: IMolecularOrbitals;
+  properties?: IProperties;
+  basisSet?: IBasisSet;
   [propName: string]: any;
 }
