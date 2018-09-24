@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.7.0...@openchemistry/types@0.8.0) (2018-09-24)
+
+
+### Features
+
+* **types:** Add unit cell to cjson definition ([15f9813](https://github.com/OpenChemistry/oc-web-components/commit/15f9813))
+
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.6.2...@openchemistry/types@0.7.0) (2018-09-17)
 

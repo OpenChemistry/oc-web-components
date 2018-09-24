@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/sample-data",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Collection of chemical JSON data for demo purposes",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "devDependencies": {
-    "@openchemistry/types": "^0.7.0",
+    "@openchemistry/types": "^0.8.0",
     "typescript": "^3.0.3"
   },
   "publishConfig": {

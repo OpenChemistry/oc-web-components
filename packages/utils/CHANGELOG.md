@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.5.0...@openchemistry/utils@0.6.0) (2018-09-24)
+
+
+### Features
+
+* **utils:** Add unit cell to cjson validation ([227e16e](https://github.com/OpenChemistry/oc-web-components/commit/227e16e))
+
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.4.2...@openchemistry/utils@0.5.0) (2018-09-17)
 

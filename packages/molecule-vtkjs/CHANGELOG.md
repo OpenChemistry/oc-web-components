@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.2.2...@openchemistry/molecule-vtkjs@0.3.0) (2018-09-24)
+
+
+### Features
+
+* **molecule-vtkjs:** Add crystal unit cell to the scene ([54b2b21](https://github.com/OpenChemistry/oc-web-components/commit/54b2b21))
+
+
+
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.2.1...@openchemistry/molecule-vtkjs@0.2.2) (2018-09-17)
 
