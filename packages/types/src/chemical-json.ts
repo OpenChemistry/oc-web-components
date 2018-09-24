@@ -1,4 +1,14 @@
-export { IAtoms, IBonds, ICube, IChemJson, IVibrations, IMolecularOrbitals, IProperties, IBasisSet };
+export {
+  IAtoms,
+  IBonds,
+  ICube,
+  IChemJson,
+  IVibrations,
+  IMolecularOrbitals,
+  IProperties,
+  IBasisSet,
+  IUnitCell
+};
 
 interface IAtoms {
   coords : {
@@ -50,6 +60,16 @@ interface IBasisSet {
   scfType: string;
 }
 
+interface IUnitCell {
+  cellVectors: number[];
+  a?: number;
+  b?: number;
+  c?: number;
+  alpha?: number;
+  beta?: number;
+  gamma?: number;
+}
+
 interface IChemJson {
   atoms : IAtoms;
   bonds? : IBonds;
@@ -58,5 +78,6 @@ interface IChemJson {
   molecularOrbitals?: IMolecularOrbitals;
   properties?: IProperties;
   basisSet?: IBasisSet;
+  unitCell?: IUnitCell;
   [propName: string]: any;
 }

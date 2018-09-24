@@ -120,7 +120,25 @@
           1
         ]
       },
-      "chemical json" : 0
+      "unitCell": {
+        "a": 8.02329158782959,
+        "alpha": 120.00000333930423,
+        "b": 8.02329158782959,
+        "beta": 90.00000250447816,
+        "c": 8.02329158782959,
+        "cellVectors": [
+          8.02329158782959,
+          0.0,
+          0.0,
+          -4.011646198878923,
+          6.948374103224246,
+          0.0,
+          -3.5070922769428114e-07,
+          -4.632250383985461,
+          6.550989565203373
+        ],
+        "gamma": 120.00000333930423
+      }
     };
 
     let el = document.querySelector("oc-molecule-vtkjs");
@@ -163,7 +181,7 @@
       }
     el.options = options;
     el.cjson = cjson;
-    el.rotate = true;
+    el.rotate = false;
 
     // setTimeout(()=>{
     //   options.visibility = {volume: false, isoSurfaces: true};

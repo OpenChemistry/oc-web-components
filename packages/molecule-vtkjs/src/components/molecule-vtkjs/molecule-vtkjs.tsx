@@ -2,7 +2,7 @@ import { Component, Prop, Element, Watch } from '@stencil/core';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
-import { isNil, throttle } from "lodash-es";
+import { isNil, throttle, has } from "lodash-es";
 
 import { IChemJson, IDisplayOptions, IAtoms, IBonds } from '@openchemistry/types';
 import { composeDisplayOptions } from '@openchemistry/utils';
@@ -59,6 +59,10 @@ export class MoleculeVtkjs {
   volumeMapper: any;
   volumeActor: any;
 
+  unitCellPlanes: any[];
+  unitCellMappers: any[];
+  unitCellActors: any[];
+
   ctFn: any;
   opacityFn: any;
 
@@ -94,6 +98,7 @@ export class MoleculeVtkjs {
     if (this.cjsonHasChanged) {
       this.updateMolecule();
       this.updateVolume();
+      this.updateUnitCell();
       this.renderer.resetCamera();
       this.renderer.getActiveCamera().zoom(0.75);
       this.renderWindow.render();
@@ -148,15 +153,42 @@ export class MoleculeVtkjs {
     this.volumeActor.getProperty().setRGBTransferFunction(0, this.ctFn);
     this.volumeActor.getProperty().setScalarOpacity(0, this.opacityFn);
 
+    // draw unit cell as a collection of planes
+    this.unitCellPlanes = [];
+    this.unitCellMappers = [];
+    this.unitCellActors = [];
+    for (let i = 0; i < 6; ++i) {
+      const source = vtk.Filters.Sources.vtkPlaneSource.newInstance();
+      const mapper = vtk.Rendering.Core.vtkMapper.newInstance();
+      const actor = vtk.Rendering.Core.vtkActor.newInstance();
+
+      source.setXResolution(1);
+      source.setYResolution(1);
+      mapper.setInputConnection(source.getOutputPort());
+      actor.setMapper(mapper);
+      actor.getProperty().setRepresentation(vtk.Rendering.Core.vtkProperty.Representation.SURFACE);
+      actor.getProperty().setOpacity(0.25);
+      actor.getProperty().setEdgeColor(0.0, 0.0, 0.0);
+      actor.getProperty().setEdgeVisibility(true);
+
+      this.unitCellPlanes.push(source);
+      this.unitCellMappers.push(mapper);
+      this.unitCellActors.push(actor);
+    }
+
     this.updateVolume();
     this.volumeMapper.setInputData(this.volume);
 
     this.updateIsoSurfaces();
     this.updateVolumeLook();
+    this.updateUnitCell();
 
     this.renderer.addActor(this.sphereActor);
     this.renderer.addActor(this.stickActor);
     this.renderer.addVolume(this.volumeActor);
+    for (let i = 0; i < 6; ++i) {
+      this.renderer.addActor(this.unitCellActors[i]);
+    }
 
     this.renderer.resetCamera();
     this.renderer.getActiveCamera().zoom(0.75);
@@ -176,6 +208,11 @@ export class MoleculeVtkjs {
       actor.delete();
       mapper.delete();
       marchingCubes.delete();
+    }
+    for (let i = 0; i < 6; ++i) {
+      this.unitCellActors[i].delete();
+      this.unitCellMappers[i].delete();
+      this.unitCellPlanes[i].delete();
     }
     this.volume.delete();
   }
@@ -313,6 +350,34 @@ export class MoleculeVtkjs {
     // Set visibility
     for (let i = 0; i < this.isoSurfaces.length; ++i) {
       this.isoSurfaces[i].actor.setVisibility(options.visibility.isoSurfaces);
+    }
+  }
+
+  updateUnitCell() {
+    const cjson = this.getCjson();
+    if (has(cjson, 'unitCell.cellVectors')) {
+      const zero = [0, 0, 0];
+      const a = cjson.unitCell.cellVectors.slice(0, 3);
+      const b = cjson.unitCell.cellVectors.slice(3, 6);
+      const c = cjson.unitCell.cellVectors.slice(6, 9);
+
+      const origins = [ zero, zero, zero, c, b, a ];
+      const points1 = [ a, a, b, a, a, b ];
+      const points2 = [ b, c, c, b, c, c ];
+
+      for (let i = 0; i < 6; ++i) {
+        const source = this.unitCellPlanes[i];
+        const actor = this.unitCellActors[i];
+        source.setOrigin(origins[i]);
+        source.setPoint1(points1[i].map((val, j) => val + origins[i][j]));
+        source.setPoint2(points2[i].map((val, j) => val + origins[i][j]));
+        actor.setVisibility(true);
+      }
+    } else {
+      for (let i = 0; i < 6; ++i) {
+        const actor = this.unitCellActors[i];
+        actor.setVisibility(false);
+      }
     }
   }
 

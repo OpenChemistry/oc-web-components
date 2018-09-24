@@ -1,4 +1,4 @@
-import { IChemJson, IAtoms, IBonds, ICube, IVibrations, IMolecularOrbitals } from '@openchemistry/types';
+import { IChemJson, IAtoms, IBonds, ICube, IVibrations, IMolecularOrbitals, IUnitCell } from '@openchemistry/types';
 import { isNil } from "lodash-es";
 
 export { validateChemJson, isChemJson, numberOfAtoms };
@@ -16,28 +16,35 @@ function validateChemJson(obj: IChemJson) : boolean {
     // If bonds are invalid, throw them out but still keep the atoms
     if (!validateBonds(obj.atoms, obj.bonds)) {
       console.warn('Invalid CJSON data, discarding bonds');
-      obj.bonds = undefined;
+      delete obj.bonds;
     }
   }
   if (!isNil(obj.cube)) {
     // If cube data is invalid, throw it out but still keep the rest
     if (!validateCube(obj.cube)) {
       console.warn('Invalid CJSON data, discarding cube');
-      obj.cube = undefined;
+      delete obj.cube;
     }
   }
   if (!isNil(obj.vibrations)) {
     // If vibration data is invalid, throw it out but still keep the rest
     if (!validateVibrations(obj.atoms, obj.vibrations)) {
       console.warn('Invalid CJSON data, discarding vibrations');
-      obj.vibrations = undefined;
+      delete obj.vibrations;
     }
   }
   if (!isNil(obj.molecularOrbitals)) {
     // If orbitals data is invalid, throw it out but still keep the rest
     if (!validateMolecularOrbitals(obj.molecularOrbitals)) {
       console.warn('Invalid CJSON data, discarding molecular orbitals');
-      obj.molecularOrbitals = undefined;
+      delete obj.molecularOrbitals;
+    }
+  }
+  if (!isNil(obj.unitCell)) {
+    // If unit cell data is invalid, throw it out but still keep the rest
+    if (!validateUnitCell(obj.unitCell)) {
+      console.warn('Invalid CJSON data, discarding unit cell');
+      delete obj.unitCell
     }
   }
   return true;
@@ -112,6 +119,13 @@ function validateMolecularOrbitals(mo: IMolecularOrbitals) : boolean {
     return false;
   }
   if (mo.energies.length === mo.numbers.length && mo.energies.length === mo.occupations.length) {
+    return true;
+  }
+  return false;
+}
+
+function validateUnitCell(unitCell: IUnitCell): boolean {
+  if (Array.isArray(unitCell.cellVectors) && unitCell.cellVectors.length === 9) {
     return true;
   }
   return false;
