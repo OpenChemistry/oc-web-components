@@ -356,30 +356,14 @@ export class MoleculeVtkjs {
   updateUnitCell() {
     const cjson = this.getCjson();
     if (has(cjson, 'unitCell.cellVectors')) {
-      const origins = [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-        cjson.unitCell.cellVectors.slice(6, 9),
-        cjson.unitCell.cellVectors.slice(3, 6),
-        cjson.unitCell.cellVectors.slice(0, 3)
-      ];
-      const points1 = [
-        cjson.unitCell.cellVectors.slice(0, 3),
-        cjson.unitCell.cellVectors.slice(0, 3),
-        cjson.unitCell.cellVectors.slice(3, 6),
-        cjson.unitCell.cellVectors.slice(0, 3),
-        cjson.unitCell.cellVectors.slice(0, 3),
-        cjson.unitCell.cellVectors.slice(3, 6)
-      ];
-      const points2 = [
-        cjson.unitCell.cellVectors.slice(3, 6),
-        cjson.unitCell.cellVectors.slice(6, 9),
-        cjson.unitCell.cellVectors.slice(6, 9),
-        cjson.unitCell.cellVectors.slice(3, 6),
-        cjson.unitCell.cellVectors.slice(6, 9),
-        cjson.unitCell.cellVectors.slice(6, 9)
-      ];
+      const zero = [0, 0, 0];
+      const a = cjson.unitCell.cellVectors.slice(0, 3);
+      const b = cjson.unitCell.cellVectors.slice(3, 6);
+      const c = cjson.unitCell.cellVectors.slice(6, 9);
+
+      const origins = [ zero, zero, zero, c, b, a ];
+      const points1 = [ a, a, b, a, a, b ];
+      const points2 = [ b, c, c, b, c, c ];
 
       for (let i = 0; i < 6; ++i) {
         const source = this.unitCellPlanes[i];
