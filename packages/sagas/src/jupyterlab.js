@@ -2,8 +2,11 @@ import { put, call, select, takeEvery } from 'redux-saga/effects'
 import { authenticate, logout, stopServer } from '@openchemistry/rest'
 import { selectors } from '@openchemistry/redux'
 import { jupyterlab } from '@openchemistry/redux'
+import parseUrl from 'url-parse'
 
 export function* redirect(action) {
+  const {notebookPath} = action.payload;
+
   try {
     const redirecting = yield select(selectors.jupyterlab.redirecting)
 
@@ -15,13 +18,18 @@ export function* redirect(action) {
     yield put(jupyterlab.redirectingToJupyterHub());
 
     const token = yield select(selectors.girder.getToken)
-    const redirectUrl = yield call(authenticate, token)
+    const baseUrl = yield call(authenticate, token)
+
+    var redirectUrl = parseUrl(baseUrl);
+    const currentPathName = redirectUrl.pathname;
+    // Update the pathname to point to the notebook we are redirecting to.
+    redirectUrl.set('pathname', `${currentPathName}/tree/${notebookPath}`)
+
     // Now do the redirect
-    window.location = redirectUrl;
+    window.location = redirectUrl.toString();
   }
   catch(error) {
     yield put(jupyterlab.redirectingToJupyterHub(error));
-    console.log(error)
   }
 }
 
