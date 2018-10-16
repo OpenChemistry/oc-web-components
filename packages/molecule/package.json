@@ -24,10 +24,10 @@
     "@openchemistry/vibrational-spectrum": "^0.1.14",
     "lodash-es": "^4.17.10",
     "memoize-one": "^4.0.2",
-    "split-me": "^0.3.1"
+    "split-me": "^1.1.2"
   },
   "devDependencies": {
-    "@stencil/core": "^0.12.4",
+    "@stencil/core": "^0.13.2",
     "@types/jest": "^23.3.1",
     "@types/lodash-es": "^4.17.1",
     "jest": "^23.5.0"

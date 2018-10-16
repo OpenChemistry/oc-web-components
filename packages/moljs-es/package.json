@@ -7,7 +7,7 @@
     "jquery": "^3.3.1"
   },
   "devDependencies": {
-    "rollup": "^0.63.5",
+    "rollup": "^0.66.6",
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.4.0"
   },

@@ -26,7 +26,7 @@
     "redux-actions": "^2.4.0",
     "redux-saga": "^0.16.0",
     "regenerator-runtime": "^0.12.1",
-    "universal-cookie": "^2.2.0"
+    "universal-cookie": "^3.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.54",
