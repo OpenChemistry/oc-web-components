@@ -31,7 +31,8 @@ const reducer = handleActions({
 }, initialState);
 
 
-export const redirectToJupyterHub = createAction(REDIRECT_TO_JUPYTERHUB)
+export const redirectToJupyterHub = createAction(REDIRECT_TO_JUPYTERHUB,
+                                                 (notebookPath) => ({notebookPath}))
 export const redirectingToJupyterHub = createAction(REDIRECTING_TO_JUPYTERHUB)
 export const invalidateSession = createAction(INVALIDATE_SESSION, (login) => ({login}))
 export const requestSessionInvalidation = createAction(REQUEST_SESSION_INVALIDATION)
