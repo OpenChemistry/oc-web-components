@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.8](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sample-data@0.3.7...@openchemistry/sample-data@0.3.8) (2018-10-17)
+
+
+### Bug Fixes
+
+* Update deps ([2d509bc](https://github.com/OpenChemistry/oc-web-components/commit/2d509bc))
+
+
+
+
+
 <a name="0.3.7"></a>
 ## [0.3.7](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sample-data@0.3.6...@openchemistry/sample-data@0.3.7) (2018-09-24)
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.13](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/energy-plot@0.1.12...@openchemistry/energy-plot@0.1.13) (2018-10-17)
+
+
+### Bug Fixes
+
+* Update deps ([2d509bc](https://github.com/OpenChemistry/oc-web-components/commit/2d509bc))
+
+
+
+
+
 <a name="0.1.12"></a>
 ## [0.1.12](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/energy-plot@0.1.11...@openchemistry/energy-plot@0.1.12) (2018-09-24)
 

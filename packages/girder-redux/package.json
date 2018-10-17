@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/girder-redux",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": " ",
   "module": "esm/index.js",
   "files": [

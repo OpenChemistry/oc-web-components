@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.4](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/girder-redux@0.0.3...@openchemistry/girder-redux@0.0.4) (2018-10-17)
+
+
+### Bug Fixes
+
+* Update deps ([2d509bc](https://github.com/OpenChemistry/oc-web-components/commit/2d509bc))
+
+
+
+
+
 <a name="0.0.3"></a>
 ## [0.0.3](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/girder-redux@0.0.2...@openchemistry/girder-redux@0.0.3) (2018-09-07)
 
