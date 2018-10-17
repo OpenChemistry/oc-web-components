@@ -24,7 +24,7 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.12.4",
+    "@stencil/core": "^0.13.2",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
     "@types/jest": "^23.3.1",
