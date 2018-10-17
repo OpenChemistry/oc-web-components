@@ -27,7 +27,8 @@
     "jsonpath": "^1.0.0",
     "lodash-es": "^4.17.10",
     "redux-saga": "^0.16.0",
-    "universal-cookie": "^3.0.4"
+    "universal-cookie": "^3.0.4",
+    "url-parse": "^1.4.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
