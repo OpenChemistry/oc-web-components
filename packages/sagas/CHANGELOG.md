@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.9](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sagas@0.3.8...@openchemistry/sagas@0.3.9) (2018-10-17)
+
+
+### Bug Fixes
+
+* **sagas:** Use notebook path to open selected notebook ([6512ac9](https://github.com/OpenChemistry/oc-web-components/commit/6512ac9))
+
+
+
+
+
 ## [0.3.8](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sagas@0.3.7...@openchemistry/sagas@0.3.8) (2018-10-17)
 
 
