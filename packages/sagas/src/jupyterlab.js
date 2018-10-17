@@ -20,7 +20,7 @@ export function* redirect(action) {
     const token = yield select(selectors.girder.getToken)
     const baseUrl = yield call(authenticate, token)
 
-    var redirectUrl = parseUrl(baseUrl);
+    const redirectUrl = parseUrl(baseUrl);
     const currentPathName = redirectUrl.pathname;
     // Update the pathname to point to the notebook we are redirecting to.
     redirectUrl.set('pathname', `${currentPathName}/tree/${notebookPath}`)
