@@ -1,5 +1,6 @@
 # oc-web-components
 [![CircleCI Status](https://circleci.com/gh/OpenChemistry/oc-web-components.svg?style=shield)](https://circleci.com/gh/OpenChemistry/oc-web-components)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 [Monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md) containing OpenChemistry npm packages.
 
