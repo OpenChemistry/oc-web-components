@@ -14,8 +14,8 @@ jobs:
         - npm-deps-{{ checksum "package.json" }}
         - npm-deps-
     - run:
-        name: Run npm install
-        command: npm install
+        name: Run npm ci
+        command: npm ci
     - run:
         name: Run Lerna bootstrap
         command: npm run bootstrap
