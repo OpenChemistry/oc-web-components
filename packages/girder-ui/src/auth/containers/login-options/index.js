@@ -22,6 +22,11 @@ class LoginOptionsContainer extends Component {
     this.props.dispatch(auth.actions.showGirderLogin(true));
   }
 
+  handleNersc = () => {
+    this.props.dispatch(auth.actions.showLoginOptions(false));
+    this.props.dispatch(auth.actions.showNerscLogin(true));
+  }
+
   render() {
     const { show } = this.props;
     
@@ -37,6 +42,7 @@ class LoginOptionsContainer extends Component {
         handleClose={this.handleClose}
         handleGoogle={this.handleGoogle}
         handleGirder={this.handleGirder}
+        handleNersc={this.handleNersc}
       />
     );
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { girderLogo } from './logos';
 import { googleLogo } from './logos';
+import { nerscLogo } from './logos';
 
 import {
   Button,
@@ -16,7 +17,7 @@ import {
 
 class LoginOptions extends Component {
   render = () => {
-    const {show, girder, oauth, handleClose, handleGoogle, handleGirder} = this.props;
+    const {show, girder, nersc, oauth, handleClose, handleGoogle, handleGirder, handleNersc} = this.props;
 
     const actions = [
       <Button key="cancel" color="primary" onClick={handleClose}>
@@ -45,6 +46,14 @@ class LoginOptions extends Component {
               <ListItemText primary="Sign in with Girder" />
               <ListItemIcon>
                 <img style={{height: "1.25rem"}} src={girderLogo} alt="girder" />
+              </ListItemIcon>
+            </ListItem>
+            }
+            { nersc &&
+            <ListItem button onClick={handleNersc}>
+              <ListItemText primary="Sign in with NERSC" />
+              <ListItemIcon>
+                <img style={{height: "1.25rem"}} src={nerscLogo} alt="nersc" />
               </ListItemIcon>
             </ListItem>
             }
