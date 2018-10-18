@@ -1,8 +1,8 @@
-import { get } from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 export function list(folderId) {
 
-  return get('item', {
+  return girderClient().get('item', {
     params: {
       folderId
     }
@@ -12,6 +12,6 @@ export function list(folderId) {
 
 export function files(itemId) {
 
-  return get(`item/${itemId}/files`)
+  return girderClient().get(`item/${itemId}/files`)
   .then(response => response.data )
 }

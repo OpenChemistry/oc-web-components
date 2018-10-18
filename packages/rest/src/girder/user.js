@@ -1,6 +1,6 @@
 import { isNil } from 'lodash-es'
 
-import { get } from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 
 export function fetchMe(token) {
@@ -14,7 +14,7 @@ export function fetchMe(token) {
     }
   }
 
-  return get('user/me', params)
+  return girderClient().get('user/me', params)
     .then(response => response.data)
 }
 
@@ -26,6 +26,6 @@ export function logIn(username, password) {
   params.headers = {
     'Girder-Authorization': `Basic ${authStr}`
   }
-  return get('user/authentication', params)
+  return girderClient().get('user/authentication', params)
     .then(response => response.data);
 }

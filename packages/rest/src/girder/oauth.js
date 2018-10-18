@@ -1,7 +1,7 @@
-import { get } from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 export function fetchProviders(redirect) {
-  return get('oauth/provider', {
+  return girderClient().get('oauth/provider', {
     params: {
       redirect
     }
