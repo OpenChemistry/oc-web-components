@@ -3,6 +3,7 @@ import { authenticate, logout, stopServer } from '@openchemistry/rest'
 import { selectors } from '@openchemistry/redux'
 import { jupyterlab } from '@openchemistry/redux'
 import parseUrl from 'url-parse'
+import { auth } from '@openchemistry/girder-redux';
 
 export function* redirect(action) {
   const {notebookPath} = action.payload;
@@ -17,7 +18,7 @@ export function* redirect(action) {
 
     yield put(jupyterlab.redirectingToJupyterHub());
 
-    const token = yield select(selectors.girder.getToken)
+    const token = yield select(auth.selectors.getToken);
     const baseUrl = yield call(authenticate, token)
 
     const redirectUrl = parseUrl(baseUrl);
@@ -39,7 +40,7 @@ export function* watchRedirectToJupyterHub() {
 
 export function* invalidateSession(action) {
   try {
-    const me = yield select(selectors.girder.getMe)
+    const me = yield select(auth.selectors.getMe);
     yield put( jupyterlab.requestSessionInvalidation() )
     yield call(stopServer, me.login)
     yield call(logout)

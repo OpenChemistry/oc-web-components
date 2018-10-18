@@ -10,15 +10,20 @@ import { users } from '@openchemistry/redux';
 import { girder } from '@openchemistry/redux';
 import { cumulus } from '@openchemistry/redux';
 import { selectors } from '@openchemistry/redux';
+import { auth } from '@openchemistry/girder-redux';
 
 import { watchNotifications } from './notifications'
+export { watchNotifications };
 import { watchAuthenticateNersc } from './nersc'
 import { watchLoadNotebooks, watchLoginGirder } from './app'
+export { watchLoadNotebooks };
 import { watchRedirectToJupyterHub, watchInvalidateSession } from './jupyterlab'
+export { watchRedirectToJupyterHub, watchInvalidateSession}
 import { user, token } from '@openchemistry/rest'
 import * as rest from '@openchemistry/rest'
-import { girderClient  } from '@openchemistry/rest'
+import { girderClient } from '@openchemistry/girder-redux';
 import { watchLoadCalculationNotebooks, watchLoadCalculations } from './calculations'
+export { watchLoadCalculationNotebooks, watchLoadCalculations }
 
 import jp from 'jsonpath';
 
@@ -331,7 +336,7 @@ export function fetchTaskFlowFromGirder(id) {
 
 export function* fetchTaskFlow(action) {
   try {
-    const authenticating = yield select(selectors.girder.isAuthenticating);
+    const authenticating = yield select(auth.selectors.isAuthenticating);
 
     // If we are authenticating then wait ...
     if (authenticating) {

@@ -5,7 +5,7 @@ import { file } from '@openchemistry/rest'
 import { calculations as calculationsRedux } from '@openchemistry/redux'
 import { selectors } from '@openchemistry/redux';
 
-import { girderClient } from '@openchemistry/rest';
+import { girderClient } from '@openchemistry/girder-redux';
 
 function fetchCalculations() {
   return girderClient().get('calculations')
