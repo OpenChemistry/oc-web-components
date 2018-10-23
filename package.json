@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "lerna run build --stream",
-    "build-serial": "lerna run build --concurrency 1 --stream",
+    "build-serial": "lerna run build --concurrency 2 --stream",
     "clean": "lerna clean",
     "publish": "lerna publish --yes -m 'Publish [ci skip]'",
     "bootstrap": "lerna bootstrap"
