@@ -7,7 +7,8 @@ import {
   watchInvalidateToken,
   watchNewToken,
   watchUsernameLogin,
-  watchNerscLogin
+  watchNerscLogin,
+  watchLoadTokenFromApiKey
 } from './auth';
 
 export const authSagas = {
@@ -18,5 +19,6 @@ export const authSagas = {
   watchInvalidateToken,
   watchNewToken,
   watchUsernameLogin,
-  watchNerscLogin
+  watchNerscLogin,
+  watchLoadTokenFromApiKey
 }

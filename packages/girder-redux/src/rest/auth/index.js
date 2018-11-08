@@ -56,3 +56,12 @@ export function authenticateWithNewt(sessionId) {
   return girderClient().put(`api/v1/newt/authenticate/${sessionId}`)
     .then(response => response.data)
 }
+
+export function fetchTokenFromApiKey(key) {
+  return girderClient().post('api_key/token', {}, {
+    params: {
+      key
+    }
+  })
+    .then(response => response.data);
+}
