@@ -9,6 +9,7 @@ import {
   LOAD_OAUTH_PROVIDERS,
   SET_TOKEN,
   USERNAME_LOGIN,
+  NERSC_LOGIN,
   TEST_OAUTH_ENABLED
 } from '../../ducks/auth';
 
@@ -29,7 +30,9 @@ import {
   fetchMe as fetchMeRest,
   fetchProviders,
   invalidateToken as invalidateTokenRest,
-  logIn as logInRest
+  logIn as logInRest,
+  nerscLogIn as nerscLogInRest,
+  authenticateWithNewt as authenticateWithNewtRest
 } from '../../rest/auth';
 
 import girderClient from '../../rest/girder-client';
@@ -171,4 +174,37 @@ function* usernameLogin(action) {
 
 export function* watchUsernameLogin() {
   yield takeEvery(USERNAME_LOGIN, usernameLogin);
+}
+
+function* nerscLogin(action) {
+  const { username, password, resolve, reject} = action.payload;
+
+  try {
+    const {auth, sessionId} = yield call(nerscLogInRest, username, password);
+
+    if (!auth) {
+      throw Error('Invalid username or password.');
+    }
+    const me = yield call(authenticateWithNewtRest, sessionId);
+    const cookies = new Cookies();
+    const token = cookies.get('girderToken');
+
+    yield put(setToken(token));
+    yield put(setMe(me));
+    yield put(setAuthenticating(false));
+    // yield put(showNerscLogin(false));
+
+    if (resolve) {
+      resolve();
+    }
+  }
+  catch(error) {
+    if (reject) {
+      reject('Unable to login with the provided credentials');
+    }
+  }
+}
+
+export function* watchNerscLogin() {
+  yield takeEvery(NERSC_LOGIN, nerscLogin);
 }

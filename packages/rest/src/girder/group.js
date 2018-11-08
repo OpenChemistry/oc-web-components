@@ -1,8 +1,8 @@
-import * as rest from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 export function get(name) {
 
-  return rest.get('group', {
+  return girderClient().get('group', {
     params: {
       text: name,
       exact: false,

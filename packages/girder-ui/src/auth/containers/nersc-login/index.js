@@ -19,10 +19,10 @@ const validate = values => {
   return errors;
 }
 
-class GirderLoginContainer extends Component {
+class NerscLoginContainer extends Component {
 
   handleClose = () => {
-    this.props.dispatch(auth.actions.showGirderLogin(false));
+    this.props.dispatch(auth.actions.showNerscLogin(false));
   };
 
   handleLogin = (values, dispatch) => {
@@ -30,10 +30,10 @@ class GirderLoginContainer extends Component {
     const { username, password } = values;
   
     let onSubmitPromise = new Promise((resolve, reject) => {
-      dispatch(auth.actions.usernameLogin({username, password, resolve, reject}));
+      dispatch(auth.actions.nerscLogin({username, password, resolve, reject}));
     })
     .then(val => {
-      dispatch(auth.actions.showGirderLogin(false));
+      dispatch(auth.actions.showNerscLogin(false));
     })
     .catch(_error => {
       throw new SubmissionError({ _error });
@@ -53,24 +53,24 @@ class GirderLoginContainer extends Component {
       <UsernameLogin
         handleClose={this.handleClose}
         loginFn={this.handleLogin}
-        title='Sign in using Girder credentials'
+        title='Sign in using NERSC credentials'
         {...this.props}
       />
     );
   }
 }
 
-function girderLoginMapStateToProps(state, ownProps) {
-  const show = auth.selectors.getShowGirderLogin(state);
+function mapStateToProps(state, ownProps) {
+  const show = auth.selectors.getShowNerscLogin(state);
   return {
     show
   }
 }
 
-GirderLoginContainer = connect(girderLoginMapStateToProps)(GirderLoginContainer)
-GirderLoginContainer = reduxForm({
-  form: 'girderLogin',
+NerscLoginContainer = connect(mapStateToProps)(NerscLoginContainer)
+NerscLoginContainer = reduxForm({
+  form: 'nerscLogin',
   validate
-})(GirderLoginContainer);
+})(NerscLoginContainer);
 
-export default GirderLoginContainer;
+export default NerscLoginContainer;

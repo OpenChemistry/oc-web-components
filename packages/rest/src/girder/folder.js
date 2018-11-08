@@ -1,8 +1,8 @@
-import { get, post } from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 export function fetch(parentId, parentType, name) {
 
-  return get('folder', {
+  return girderClient().get('folder', {
     params: {
       parentId,
       parentType,
@@ -13,7 +13,7 @@ export function fetch(parentId, parentType, name) {
 }
 
 export function create(parentId, parentType, name, reuseExisting=true) {
-  return post('folder', {}, {
+  return girderClient().post('folder', {}, {
     params: {
       parentId,
       parentType,

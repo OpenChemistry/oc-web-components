@@ -1,4 +1,4 @@
-import { girderClient } from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 export function invalidate() {
   return girderClient().delete(`token/session`)

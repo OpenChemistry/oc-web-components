@@ -40,6 +40,7 @@ class GirderLogin extends Component {
       invalid,
       // other props
       show,
+      title,
       handleClose,
       loginFn
     } = this.props;
@@ -50,7 +51,7 @@ class GirderLogin extends Component {
         open={show}
         onClose={handleClose}
       >
-        <DialogTitle id="girder-dialog-title">Sign in using Girder credentials</DialogTitle>
+        <DialogTitle id="girder-dialog-title">{title}</DialogTitle>
         <form onSubmit={handleSubmit(loginFn)} >
           <DialogContent>
             <div>

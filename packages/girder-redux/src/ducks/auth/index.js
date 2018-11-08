@@ -16,9 +16,9 @@ const initialState = {
     girder: {
       show: false
     },
-    // nersc: {
-    //   show: false
-    // }
+    nersc: {
+      show: false
+    }
   }
 };
 
@@ -33,6 +33,7 @@ export const isAuthenticated = (state) => getRoot(state).token && !getRoot(state
 export const isOauthEnabled = (state) => getRoot(state).oauth.enabled;
 export const getShowLoginOptions = (state) => getRoot(state).ui.showLoginOptions;
 export const getShowGirderLogin = (state) => getRoot(state).ui.girder.show;
+export const getShowNerscLogin = (state) => getRoot(state).ui.nersc.show;
 
 // Actions
 
@@ -46,6 +47,7 @@ export const INVALIDATE_TOKEN = PREFIX + 'INVALIDATE_TOKEN';
 export const REQUEST_INVALIDATE_TOKEN = PREFIX + 'REQUEST_INVALIDATE_TOKEN';
 
 export const USERNAME_LOGIN = PREFIX + 'USERNAME_LOGIN';
+export const NERSC_LOGIN = PREFIX + 'NERSC_LOGIN';
 
 export const LOAD_ME = PREFIX + 'LOAD_ME';
 export const REQUEST_ME = PREFIX + 'REQUEST_ME';
@@ -54,12 +56,12 @@ export const LOAD_OAUTH_PROVIDERS = PREFIX + 'LOAD_OAUTH_PROVIDERS';
 export const REQUEST_OAUTH_PROVIDERS = PREFIX + 'REQUEST_OAUTH_PROVIDERS';
 export const RECEIVE_OAUTH_PROVIDERS = PREFIX + 'RECEIVE_OAUTH_PROVIDERS';
 
-export const TEST_OAUTH_ENABLED = 'TEST_OAUTH_ENABLED';
-export const SET_OAUTH_ENABLED = 'SET_OAUTH_ENABLED';
+export const TEST_OAUTH_ENABLED = PREFIX + 'TEST_OAUTH_ENABLED';
+export const SET_OAUTH_ENABLED = PREFIX + 'SET_OAUTH_ENABLED';
 
 export const SHOW_LOGIN_OPTIONS = PREFIX + 'SHOW_LOGIN_OPTIONS';
 export const SHOW_GIRDER_LOGIN = PREFIX + 'SHOW_GIRDER_LOGIN';
-// export const SHOW_NERSC_LOGIN = PREFIX + 'SHOW_NERSC_LOGIN';
+export const SHOW_NERSC_LOGIN = PREFIX + 'SHOW_NERSC_LOGIN';
 
 // Action creators
 export const authenticate = createAction(AUTHENTICATE);
@@ -79,14 +81,14 @@ export const requestMe = createAction(REQUEST_ME);
 export const receiveMe = createAction(SET_ME);
 
 export const usernameLogin = createAction(USERNAME_LOGIN);
+export const nerscLogin = createAction(NERSC_LOGIN);
 
 export const setToken = createAction(SET_TOKEN);
 export const setMe = createAction(SET_ME);
 
 export const showLoginOptions = createAction(SHOW_LOGIN_OPTIONS);
 export const showGirderLogin = createAction(SHOW_GIRDER_LOGIN);
-// export const showNerscLogin = createAction(SHOW_NERSC_LOGIN);
-
+export const showNerscLogin = createAction(SHOW_NERSC_LOGIN);
 
 
 // Reducer
@@ -109,12 +111,12 @@ function reducer(state = initialState, action) {
       const authenticating = action.payload;
       return {...state, authenticating};
     }
-    
+
     case SET_ME: {
       const me = action.payload
       return {...state, me};
     }
-    
+
     case REQUEST_INVALIDATE_TOKEN: {
       if (action.error) {
         return {...state, error: action.payload.error};
@@ -123,7 +125,7 @@ function reducer(state = initialState, action) {
         return {...state,  error:null };
       }
     }
-      
+
     case REQUEST_OAUTH_PROVIDERS: {
       if (action.error) {
         return {...state, error: action.payload.error};
@@ -164,7 +166,14 @@ function reducer(state = initialState, action) {
       ui.girder = {show};
       return {...state, ui}
     }
-      
+
+    case SHOW_NERSC_LOGIN: {
+      const show = action.payload;
+      const ui = {...state.ui};
+      ui.nersc = {show};
+      return {...state, ui}
+    }
+
     default:  {
       return state;
     }
@@ -172,4 +181,3 @@ function reducer(state = initialState, action) {
 }
 
 export default reducer;
-

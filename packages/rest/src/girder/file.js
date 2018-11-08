@@ -1,7 +1,7 @@
-import { post, put } from '../'
+import { girderClient } from '@openchemistry/girder-redux';
 
 export function create(parentId, parentType, name, size, mimeType='application/octet-stream') {
-  return post('file', null, {
+  return girderClient().post('file', null, {
     params: {
       parentId,
       parentType,
@@ -14,7 +14,7 @@ export function create(parentId, parentType, name, size, mimeType='application/o
 }
 
 export function update(id, size) {
-  return put(`file/${id}/content`, {},  {
+  return girderClient().put(`file/${id}/content`, {},  {
     params: {
       size,
     }
@@ -24,7 +24,7 @@ export function update(id, size) {
 
 export function content(id, size) {
 
-  return put(`file/${id}/content`, null,  {
+  return girderClient().put(`file/${id}/content`, null,  {
     params: {
       size,
     }
@@ -33,7 +33,7 @@ export function content(id, size) {
 }
 
 export function chunk(uploadId, offset, data, config) {
-  return post('file/chunk', data,  {
+  return girderClient().post('file/chunk', data,  {
     ...config,
     headers: {
       'Content-Type': 'application/octet-stream'
@@ -47,6 +47,6 @@ export function chunk(uploadId, offset, data, config) {
 }
 
 export function get(id) {
-  return put(`file/${id}`)
+  return girderClient().put(`file/${id}`)
   .then(response => response.data )
 }

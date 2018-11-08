@@ -10,7 +10,9 @@ import {
   usernameLogin,
   showLoginOptions,
   showGirderLogin,
-  testOauthEnabled
+  testOauthEnabled,
+  showNerscLogin,
+  nerscLogin
 } from './auth';
 
 // Import selectors
@@ -23,7 +25,8 @@ import {
   isAuthenticated,
   isAuthenticating,
   getShowLoginOptions,
-  getShowGirderLogin
+  getShowGirderLogin,
+  getShowNerscLogin
 } from './auth';
 
 // Import reducer
@@ -38,7 +41,9 @@ export const authActions = {
   showLoginOptions,
   showGirderLogin,
   testOauthEnabled,
-  setAuthenticating
+  setAuthenticating,
+  showNerscLogin,
+  nerscLogin
 }
 
 export const authSelectors = {
@@ -50,5 +55,6 @@ export const authSelectors = {
   isAuthenticated,
   isAuthenticating,
   getShowLoginOptions,
-  getShowGirderLogin
+  getShowGirderLogin,
+  getShowNerscLogin
 }

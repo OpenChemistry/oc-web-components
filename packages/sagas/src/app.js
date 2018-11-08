@@ -6,11 +6,12 @@ import { girder as girder_redux } from '@openchemistry/redux'
 import { listFiles } from './girder'
 import {  girder } from '@openchemistry/rest'
 import { selectors } from '@openchemistry/redux'
+import { auth } from '@openchemistry/girder-redux';
 
 export function* fetchOcFolder() {
 
   yield put( app.requestOcFolder() )
-  const me = yield select(selectors.girder.getMe);
+  const me = yield select(auth.selectors.getMe);
   let privateFolder = yield call(girder.folder.fetch, me['_id'], 'user', 'Private');
   if (isEmpty(privateFolder)) {
     throw new Error('User doesn\'t have a Private folder.');
