@@ -1,4 +1,4 @@
-import { take, put, call, fork } from 'redux-saga/effects'
+import { take, put, call, fork, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import {has, isNil} from 'lodash-es'
 
