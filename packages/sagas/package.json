@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
+    "@openchemistry/girder-client": "^0.0.1",
     "@openchemistry/girder-redux": "^0.0.7",
     "@openchemistry/redux": "^0.3.7",
     "@openchemistry/rest": "^0.3.3",

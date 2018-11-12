@@ -38,7 +38,7 @@ import {
   fetchTokenFromApiKey as fetchTokenFromApiKeyRest
 } from '../../rest/auth';
 
-import girderClient from '../../rest/girder-client';
+import girderClient from '@openchemistry/girder-client';
 
 function* fetchOauthProviders(action) {
   try {
