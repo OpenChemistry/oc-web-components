@@ -1,0 +1,34 @@
+{
+  "name": "@openchemistry/girder-client",
+  "version": "0.0.1",
+  "description": " ",
+  "module": "esm/index.js",
+  "files": [
+    "esm/"
+  ],
+  "scripts": {
+    "build": "babel src --out-dir esm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenChemistry/oc-web-components.git"
+  },
+  "author": "Kitware, Inc.",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/OpenChemistry/oc-web-components/issues"
+  },
+  "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "redux-saga": "^0.16.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
+    "@babel/preset-env": "^7.1.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
