@@ -180,10 +180,10 @@ export function* watchUsernameLogin() {
 }
 
 function* nerscLogin(action) {
-  const { username, password, resolve, reject} = action.payload;
+  const { username, password, mfa, resolve, reject} = action.payload;
 
   try {
-    const {auth, sessionId} = yield call(nerscLogInRest, username, password);
+    const {auth, sessionId} = yield call(nerscLogInRest, username, password, mfa);
 
     if (!auth) {
       throw Error('Invalid username or password.');

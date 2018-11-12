@@ -42,7 +42,8 @@ class GirderLogin extends Component {
       show,
       title,
       handleClose,
-      loginFn
+      loginFn,
+      showMfa
     } = this.props;
 
     return (
@@ -73,6 +74,18 @@ class GirderLogin extends Component {
                 type="password"
               />
             </div>
+            { showMfa &&
+            <div>
+              <Field
+                fullWidth
+                name="mfa"
+                component={TextField}
+                placeholder="Multi-factor (if enabled)"
+                label="Multi-factor (if enabled)"
+                type="password"
+              />
+            </div>
+            }
             {error && <div style={style.error}>{has(error, 'message') ? error.message : error}</div>}
           </DialogContent>
           <DialogActions>

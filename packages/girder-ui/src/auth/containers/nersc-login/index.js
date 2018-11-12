@@ -27,10 +27,10 @@ class NerscLoginContainer extends Component {
 
   handleLogin = (values, dispatch) => {
 
-    const { username, password } = values;
+    const { username, password, mfa } = values;
   
     let onSubmitPromise = new Promise((resolve, reject) => {
-      dispatch(auth.actions.nerscLogin({username, password, resolve, reject}));
+      dispatch(auth.actions.nerscLogin({username, password, mfa, resolve, reject}));
     })
     .then(val => {
       dispatch(auth.actions.showNerscLogin(false));
@@ -54,6 +54,7 @@ class NerscLoginContainer extends Component {
         handleClose={this.handleClose}
         loginFn={this.handleLogin}
         title='Sign in using NERSC credentials'
+        showMfa
         {...this.props}
       />
     );
