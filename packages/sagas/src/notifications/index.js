@@ -1,8 +1,9 @@
-import { take, put, call, fork } from 'redux-saga/effects'
+import { take, put, call, fork, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import {has, isNil} from 'lodash-es'
 
 import { girder } from '@openchemistry/redux';
+import { auth } from '@openchemistry/girder-redux';
 
 function createEventSource() {
   return eventChannel(emit => {
@@ -54,4 +55,13 @@ export function* watchNotifications() {
 
     yield fork(receiveEvents, eventSourceChannel);
   }
+}
+
+function* onNewToken() {
+  yield put(girder.connectToNotifications());
+}
+
+export function* watchNewToken() {
+  // Connect to notification stream when a new token is set
+  yield takeEvery(auth.actions.setToken.toString(), onNewToken);
 }

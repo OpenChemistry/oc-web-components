@@ -49,34 +49,3 @@ export function* loadNotebooks(action) {
 export function* watchLoadNotebooks() {
   yield takeEvery(app.LOAD_NOTEBOOKS, loadNotebooks);
 }
-
-export function* loginGirder(action) {
-  const { username, password, resolve, reject} = action.payload;
-
-  try {
-    const res = yield call(girder.user.logIn, username, password);
-
-    const token = res.authToken.token;
-    yield put(girder_redux.newToken(token));
-
-    const me = res.user;
-    yield put(girder_redux.setMe(me));
-
-    yield put(girder_redux.setAuthenticating(false));
-    yield put(girder_redux.authenticated());
-    yield put(app.showGirderLogin(false));
-
-    if (resolve) {
-      resolve();
-    }
-  }
-  catch(error) {
-    if (reject) {
-      reject('Unable to login with the provided credentials');
-    }
-  }
-}
-
-export function* watchLoginGirder() {
-  yield takeEvery(girder_redux.LOGIN_GIRDER, loginGirder);
-}

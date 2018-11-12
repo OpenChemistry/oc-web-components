@@ -3,7 +3,6 @@ import { getMoleculesById } from './molecules';
 
 export const getSelectedMoleculeId = (state) => state.app.selectedMoleculeId;
 
-
 export const getSelectedMolecule = createSelector(
     getSelectedMoleculeId, getMoleculesById,
     (id, molecules) => {
@@ -17,7 +16,4 @@ export const getSelectedMolecule = createSelector(
     }
   )
 
-export const selectAuthProvider = (state) => state.app.selectAuthProvider;
-export const showNerscLogin = state => state.app.nersc.login.show;
-export const showGirderLogin = state => state.app.girder.login.show;
 export const getNotebooks = state => state.app.notebooks;

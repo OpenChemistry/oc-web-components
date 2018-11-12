@@ -12,7 +12,9 @@ import {
   showGirderLogin,
   testOauthEnabled,
   showNerscLogin,
-  nerscLogin
+  nerscLogin,
+  setMe,
+  setToken
 } from './auth';
 
 // Import selectors
@@ -43,7 +45,9 @@ export const authActions = {
   testOauthEnabled,
   setAuthenticating,
   showNerscLogin,
-  nerscLogin
+  nerscLogin,
+  setMe,
+  setToken
 }
 
 export const authSelectors = {

@@ -10,7 +10,8 @@ import {
   SET_TOKEN,
   USERNAME_LOGIN,
   NERSC_LOGIN,
-  TEST_OAUTH_ENABLED
+  TEST_OAUTH_ENABLED,
+  LOAD_TOKEN_FROM_API_KEY
 } from '../../ducks/auth';
 
 import {
@@ -23,7 +24,8 @@ import {
   setAuthenticating,
   setMe,
   setOauthEnabled,
-  loadOauthProviders
+  loadOauthProviders,
+  requestTokenFromApiKey
 } from '../../ducks/auth';
 
 import {
@@ -32,7 +34,8 @@ import {
   invalidateToken as invalidateTokenRest,
   logIn as logInRest,
   nerscLogIn as nerscLogInRest,
-  authenticateWithNewt as authenticateWithNewtRest
+  authenticateWithNewt as authenticateWithNewtRest,
+  fetchTokenFromApiKey as fetchTokenFromApiKeyRest
 } from '../../rest/auth';
 
 import girderClient from '../../rest/girder-client';
@@ -207,4 +210,19 @@ function* nerscLogin(action) {
 
 export function* watchNerscLogin() {
   yield takeEvery(NERSC_LOGIN, nerscLogin);
+}
+
+function* loadTokenFromApiKey(action) {
+  try {
+    const key = action.payload;
+    const tokenResponse = yield call(fetchTokenFromApiKeyRest, key);
+    yield put(setToken(tokenResponse.token));
+  }
+  catch(error) {
+    yield put( requestTokenFromApiKey(error) );
+  }
+}
+
+export function* watchLoadTokenFromApiKey() {
+  yield takeEvery(LOAD_TOKEN_FROM_API_KEY, loadTokenFromApiKey);
 }

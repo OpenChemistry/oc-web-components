@@ -63,12 +63,18 @@ export const SHOW_LOGIN_OPTIONS = PREFIX + 'SHOW_LOGIN_OPTIONS';
 export const SHOW_GIRDER_LOGIN = PREFIX + 'SHOW_GIRDER_LOGIN';
 export const SHOW_NERSC_LOGIN = PREFIX + 'SHOW_NERSC_LOGIN';
 
+export const LOAD_TOKEN_FROM_API_KEY = "LOAD_TOKEN_FROM_API_KEY"
+export const REQUEST_TOKEN_FROM_API_KEY = "REQUEST_TOKEN_FROM_API_KEY"
+
 // Action creators
 export const authenticate = createAction(AUTHENTICATE);
 export const setAuthenticating = createAction(SET_AUTHENTICATING);
 
 export const invalidateToken = createAction(INVALIDATE_TOKEN);
 export const requestInvalidateToken = createAction(REQUEST_INVALIDATE_TOKEN);
+
+export const loadTokenFromApiKey = createAction(LOAD_TOKEN_FROM_API_KEY);
+export const requestTokenFromApiKey = createAction(REQUEST_TOKEN_FROM_API_KEY);
 
 export const loadOauthProviders = createAction(LOAD_OAUTH_PROVIDERS);
 export const requestOauthProviders = createAction(REQUEST_OAUTH_PROVIDERS);
