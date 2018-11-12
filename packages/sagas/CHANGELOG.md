@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.12](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sagas@0.3.11...@openchemistry/sagas@0.3.12) (2018-11-12)
+
+**Note:** Version bump only for package @openchemistry/sagas
+
+
+
+
+
 ## [0.3.11](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/sagas@0.3.10...@openchemistry/sagas@0.3.11) (2018-11-12)
 
 **Note:** Version bump only for package @openchemistry/sagas
