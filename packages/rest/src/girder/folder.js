@@ -1,4 +1,4 @@
-import { girderClient } from '@openchemistry/girder-redux';
+import girderClient from '@openchemistry/girder-client';
 
 export function fetch(parentId, parentType, name) {
 

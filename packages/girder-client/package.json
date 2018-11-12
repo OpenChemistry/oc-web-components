@@ -1,6 +1,6 @@
 {
-  "name": "@openchemistry/sagas",
-  "version": "0.3.11",
+  "name": "@openchemistry/girder-client",
+  "version": "0.0.1",
   "description": " ",
   "module": "esm/index.js",
   "files": [
@@ -20,22 +20,13 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "@openchemistry/girder-client": "^0.0.1",
-    "@openchemistry/girder-redux": "^0.0.7",
-    "@openchemistry/redux": "^0.3.7",
-    "@openchemistry/rest": "^0.3.3",
     "axios": "^0.18.0",
-    "core-js": "^2.5.7",
-    "jsonpath": "^1.0.0",
-    "lodash-es": "^4.17.10",
-    "redux-saga": "^0.16.0",
-    "universal-cookie": "^3.0.4",
-    "url-parse": "^1.4.3"
+    "redux-saga": "^0.16.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
+    "@babel/preset-env": "^7.1.5"
   },
   "publishConfig": {
     "access": "public"

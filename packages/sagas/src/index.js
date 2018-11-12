@@ -15,7 +15,7 @@ export { watchLoadNotebooks };
 import { watchRedirectToJupyterHub, watchInvalidateSession } from './jupyterlab'
 export { watchRedirectToJupyterHub, watchInvalidateSession}
 
-import { girderClient } from '@openchemistry/girder-redux';
+import girderClient from '@openchemistry/girder-client';
 import { watchLoadCalculationNotebooks, watchLoadCalculations } from './calculations'
 export { watchLoadCalculationNotebooks, watchLoadCalculations }
 

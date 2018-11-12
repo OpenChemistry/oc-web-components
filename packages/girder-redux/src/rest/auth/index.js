@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es';
-import girderClient from '../girder-client';
+import girderClient from '@openchemistry/girder-client';
 import axios from 'axios';
 
 export function fetchProviders(redirect) {

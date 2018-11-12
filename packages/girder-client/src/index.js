@@ -1,5 +1,5 @@
 import axios, { CancelToken } from 'axios';
-import { CANCEL } from 'redux-saga'
+import { CANCEL } from 'redux-saga';
 
 let _girderClient = axios.create({
   baseURL: `${window.location.origin}/api/v1`

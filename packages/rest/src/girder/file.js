@@ -1,4 +1,4 @@
-import { girderClient } from '@openchemistry/girder-redux';
+import girderClient from '@openchemistry/girder-client';
 
 export function create(parentId, parentType, name, size, mimeType='application/octet-stream') {
   return girderClient().post('file', null, {
