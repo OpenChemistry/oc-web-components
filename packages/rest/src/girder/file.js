@@ -47,6 +47,6 @@ export function chunk(uploadId, offset, data, config) {
 }
 
 export function get(id) {
-  return girderClient().put(`file/${id}`)
+  return girderClient().get(`file/${id}`)
   .then(response => response.data )
 }
