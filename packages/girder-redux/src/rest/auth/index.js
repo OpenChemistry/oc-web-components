@@ -43,17 +43,17 @@ export function logIn(username, password) {
     .then(response => response.data);
 }
 
-export function nerscLogIn(username, password) {
+export function nerscLogIn(username, password, mfa='') {
   const data = new FormData()
   data.set('username', username)
-  data.set('password', password)
+  data.set('password', password + mfa)
 
   return axios.post('https://newt.nersc.gov/newt/auth/', data)
     .then(response => response.data)
 }
 
 export function authenticateWithNewt(sessionId) {
-  return girderClient().put(`api/v1/newt/authenticate/${sessionId}`)
+  return girderClient().put(`newt/authenticate/${sessionId}`)
     .then(response => response.data)
 }
 
