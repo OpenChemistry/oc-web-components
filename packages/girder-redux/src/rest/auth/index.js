@@ -53,7 +53,7 @@ export function nerscLogIn(username, password, mfa='') {
 }
 
 export function authenticateWithNewt(sessionId) {
-  return girderClient().put(`api/v1/newt/authenticate/${sessionId}`)
+  return girderClient().put(`newt/authenticate/${sessionId}`)
     .then(response => response.data)
 }
 

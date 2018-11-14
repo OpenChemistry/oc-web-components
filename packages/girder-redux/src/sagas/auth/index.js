@@ -183,12 +183,12 @@ function* nerscLogin(action) {
   const { username, password, mfa, resolve, reject} = action.payload;
 
   try {
-    const {auth, sessionId} = yield call(nerscLogInRest, username, password, mfa);
+    const {auth, newt_sessionid} = yield call(nerscLogInRest, username, password, mfa);
 
     if (!auth) {
       throw Error('Invalid username or password.');
     }
-    const me = yield call(authenticateWithNewtRest, sessionId);
+    const me = yield call(authenticateWithNewtRest, newt_sessionid);
     const cookies = new Cookies();
     const token = cookies.get('girderToken');
 
