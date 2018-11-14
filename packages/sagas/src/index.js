@@ -107,8 +107,6 @@ export function* fetchMoleculeById(action) {
   }
 }
 
-console.log(molecules);
-
 export function* watchFetchMolecules() {
   yield takeEvery(molecules.LOAD_MOLECULES, fetchMolecules)
 }
@@ -344,13 +342,11 @@ export function* fetchTaskFlow(action) {
     // See if we have any jobs associated with the taskflow and if so load
     // them.
     let jobs = jp.query(taskflow, '$.meta.jobs');
-    console.log(jobs);
     if (jobs.length === 1) {
       jobs = jobs[0];
 
       for( let job of jobs) {
         const id = job._id;
-        console.log(id);
         yield put( cumulus.loadJob({id}));
       }
     }
