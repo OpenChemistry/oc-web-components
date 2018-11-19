@@ -23,18 +23,18 @@
     "@openchemistry/girder-client": "^0.0.2",
     "axios": "^0.18.0",
     "core-js": "^2.5.7",
-    "lodash-es": "^4.17.10",
-    "redux": "^4.0.0",
-    "redux-actions": "^2.4.0",
-    "redux-saga": "^0.16.0",
-    "regenerator-runtime": "^0.12.1",
+    "lodash-es": "^4.17.11",
+    "redux": "^4.0.1",
+    "redux-actions": "^2.6.4",
+    "redux-saga": "^0.16.2",
+    "regenerator-runtime": "^0.13.1",
     "reselect": "^4.0.0",
     "universal-cookie": "^3.0.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.54",
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
     "@types/core-js": "^2.5.0"
   },
   "publishConfig": {

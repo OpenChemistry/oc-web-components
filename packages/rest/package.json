@@ -23,13 +23,13 @@
     "@openchemistry/girder-client": "^0.0.2",
     "@openchemistry/girder-redux": "^0.0.9",
     "axios": "^0.18.0",
-    "lodash-es": "^4.17.10",
-    "redux-saga": "^0.16.0"
+    "lodash-es": "^4.17.11",
+    "redux-saga": "^0.16.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.54",
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6"
   },
   "publishConfig": {
     "access": "public"

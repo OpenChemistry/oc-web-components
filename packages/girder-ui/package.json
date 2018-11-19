@@ -20,23 +20,23 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "@material-ui/core": "^3.4.0",
+    "@material-ui/core": "^3.5.1",
     "@material-ui/icons": "^3.0.1",
     "@openchemistry/girder-redux": "^0.0.9",
-    "lodash-es": "^4.17.10",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
-    "react-redux": "^5.1.0",
-    "redux": "^4.0.0",
-    "redux-form": "^7.1.2",
+    "lodash-es": "^4.17.11",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-redux": "^5.1.1",
+    "redux": "^4.0.1",
+    "redux-form": "^7.4.2",
     "redux-form-material-ui": "^5.0.0-beta.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.54",
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-rc.2",
-    "@babel/preset-env": "^7.0.0-beta.54",
-    "@babel/preset-react": "^7.0.0-rc.2"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0"
   },
   "publishConfig": {
     "access": "public"

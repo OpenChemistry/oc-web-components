@@ -20,15 +20,15 @@
     "@openchemistry/types": "^0.8.2",
     "@openchemistry/utils": "^0.6.2",
     "@types/lodash-es": "^4.17.1",
-    "lodash-es": "^4.17.10",
+    "lodash-es": "^4.17.11",
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.13.2",
+    "@stencil/core": "^0.15.2",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
-    "@types/jest": "^23.3.1",
-    "jest": "^23.5.0"
+    "@types/jest": "^23.3.9",
+    "jest": "^23.6.0"
   },
   "repository": {
     "type": "git",

@@ -22,15 +22,15 @@
     "@openchemistry/types": "^0.8.2",
     "@openchemistry/utils": "^0.6.2",
     "@openchemistry/vibrational-spectrum": "^0.1.18",
-    "lodash-es": "^4.17.10",
-    "memoize-one": "^4.0.2",
-    "split-me": "^1.1.2"
+    "lodash-es": "^4.17.11",
+    "memoize-one": "^4.0.3",
+    "split-me": "^1.1.5"
   },
   "devDependencies": {
-    "@stencil/core": "^0.13.2",
-    "@types/jest": "^23.3.1",
+    "@stencil/core": "^0.15.2",
+    "@types/jest": "^23.3.9",
     "@types/lodash-es": "^4.17.1",
-    "jest": "^23.5.0"
+    "jest": "^23.6.0"
   },
   "repository": {
     "type": "git",
