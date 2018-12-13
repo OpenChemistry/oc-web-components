@@ -40,6 +40,8 @@ export class Molecule {
   // Visibility options
   @Prop({ mutable: true }) showVolume: boolean = false;
   @Prop({ mutable: true }) showIsoSurface: boolean = true;
+  @Prop({ mutable: true }) showSpectrum: boolean = true;
+  @Prop({ mutable: true }) showMenu: boolean = true;
   // Volume options
   @Prop({ mutable: true }) colorsX: number[];
   @Prop({ mutable: true }) opacities: number[];
@@ -181,7 +183,7 @@ export class Molecule {
 
     const nModes = hasSpectrum ? cjson.vibrations.frequencies.length : -1;
     
-    const splitN = hasSpectrum ? 2 : 1;
+    const splitN = hasSpectrum  && this.showSpectrum ? 2 : 1;
     const splitSizes = hasSpectrum ? "0.4, 0.6" : "1";
 
     const moleculeOptions = {
@@ -239,7 +241,7 @@ export class Molecule {
             />
             }
             </div>
-            {hasSpectrum &&
+            {(hasSpectrum  && this.showSpectrum) &&
             <oc-vibrational-spectrum
               slot='1'
               vibrations={cjson.vibrations}
@@ -252,6 +254,7 @@ export class Molecule {
             }
           </split-me>
         </div>
+        { this.showMenu &&
         <div class='menu-container'>
           <oc-molecule-menu-popup>
             <oc-molecule-menu
@@ -296,6 +299,7 @@ export class Molecule {
               ></oc-molecule-menu>
           </oc-molecule-menu-popup>
         </div>
+        }
       </div>
     )
   }
