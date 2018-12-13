@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.20](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.19...@openchemistry/vibrational-spectrum@0.1.20) (2018-12-13)
+
+**Note:** Version bump only for package @openchemistry/vibrational-spectrum
+
+
+
+
+
 ## [0.1.19](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/vibrational-spectrum@0.1.18...@openchemistry/vibrational-spectrum@0.1.19) (2018-11-26)
 
 **Note:** Version bump only for package @openchemistry/vibrational-spectrum
