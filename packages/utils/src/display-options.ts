@@ -3,7 +3,7 @@ import { IDisplayOptions, IIsoSurfaceOptions, IStyleOptions, INormalModeOptions,
 export { defaultDisplayOptions, defaultStyleOptions, defaultIsoSurfaces, defaultNormalModeOptions };
 export { composeDisplayOptions, composeStyleOptions, composeNormalModeOptions, composeIsoSurfaces, composeVolumeOptions, composeVisibilityOptions};
 
-import { isUndefined } from "lodash-es";
+import { isUndefined, merge } from "lodash-es";
 
 const defaultIsoSurfaces : IIsoSurfaceOptions[] = [
   {
@@ -74,28 +74,28 @@ function composeNormalModeOptions(normalModeOptions: INormalModeOptions | undefi
   if (isUndefined(normalModeOptions)) {
     return defaultNormalModeOptions;
   }
-  return { ...defaultNormalModeOptions, ...normalModeOptions };
+  return merge({...defaultNormalModeOptions}, normalModeOptions);
 }
 
 function composeStyleOptions(styleOptions: IStyleOptions | undefined) : IStyleOptions {
   if (isUndefined(styleOptions)) {
     return defaultStyleOptions;
   }
-  return { ...defaultStyleOptions, ...styleOptions };
+  return merge({...defaultStyleOptions}, styleOptions);
 }
 
 function composeVolumeOptions(volumeOptions: IVolumeOptions | undefined) : IVolumeOptions {
   if (isUndefined(volumeOptions)) {
     return defaultVolumeOptions;
   }
-  return { ...defaultVolumeOptions, ...volumeOptions };
+  return merge({...defaultVolumeOptions}, volumeOptions);
 }
 
 function composeVisibilityOptions(visibilityOptions: IVisibilityOptions | undefined) {
   if (isUndefined(visibilityOptions)) {
     return defaultVisibilityOptions;
   } else {
-    return { ...defaultVisibilityOptions, ...visibilityOptions};
+    return merge({...defaultVisibilityOptions}, visibilityOptions);
   }
 }
 
