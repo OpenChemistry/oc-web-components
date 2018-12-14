@@ -43,12 +43,13 @@ export class Molecule {
   @Prop({ mutable: true }) showSpectrum: boolean = true;
   @Prop({ mutable: true }) showMenu: boolean = true;
   // Volume options
+  @Prop() colors: [number, number, number][];
   @Prop({ mutable: true }) colorsX: number[];
   @Prop({ mutable: true }) opacities: number[];
   @Prop({ mutable: true }) opacitiesX: number[];
   @Prop({ mutable: true }) range: [number, number];
   @Prop({ mutable: true }) histograms: number[];
-  @Prop({ mutable: true }) activeMapName: string;
+  @Prop({ mutable: true }) activeMapName: string = 'Red Yellow Blue';
   // Orbital options
   @Prop({ mutable: true }) iOrbital: number | string = -1;
   // Other options
@@ -80,6 +81,15 @@ export class Molecule {
     this.updateVolumeOptions();
   }
 
+  @Watch('activeMapName')
+  @Watch('opacitiesX')
+  @Watch('opacities')
+  @Watch('colorsX')
+  @Watch('colors')
+  transferFunctionHandler() {
+    this.updateVolumeOptions();
+  }
+
   componentWillLoad() {
     console.log('Molecule is about to be rendered');
     // Map props names to event emitters
@@ -89,8 +99,6 @@ export class Molecule {
     this.getRange = memoizeOne(this.getRange);
     this.makeBins = memoizeOne(makeBins);
     this.cjsonData = this.getCjson();
-    this.activeMapName = 'Red Yellow Blue';
-    this.opacities = [1, 0, 1];
     this.updateVolumeOptions();
   }
 
@@ -100,8 +108,20 @@ export class Molecule {
       this.range = this.getRange(this.cjsonData.cube.scalars);
       this.histograms = this.makeBins(this.cjsonData.cube.scalars, 200, this.range);
     }
-    this.colorsX = linearSpace(this.range[0], this.range[1], this.colorMaps[this.activeMapName].length);
-    this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
+    if (!isNil(this.colors) && Array.isArray(this.colors)) {
+      this.colorMaps['Custom'] = this.colors;
+    } else {
+      delete this.colorMaps['Custom'];
+    }
+    if (isNil(this.colorsX)) {
+      this.colorsX = linearSpace(this.range[0], this.range[1], this.colorMaps[this.activeMapName].length);
+    }
+    if (isNil(this.opacities)) {
+      this.opacities = [1, 0, 1];
+    }
+    if (isNil(this.opacitiesX)) {
+      this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
+    }
   }
 
   makeIsoSurfaces = (iso: number) => {
