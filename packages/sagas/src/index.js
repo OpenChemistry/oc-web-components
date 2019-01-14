@@ -145,7 +145,7 @@ export function* receiveNotification(action) {
       yield put(cumulus.receiveJobStatus(data))
     }
     // This is a new job
-    else if (data.status === 'created') {
+    else {
       yield put(cumulus.loadJob({id}));
     }
   }

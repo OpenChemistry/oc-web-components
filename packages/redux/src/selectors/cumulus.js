@@ -29,7 +29,6 @@ class CalculationState extends Enum {}
 CalculationState.initEnum(['initializing', 'queued', 'running', 'terminated',
                   'terminating', 'unexpectederror', 'error', 'complete',
                   'uploading']);
-                   
 
 export const getCalculationStatus = (state, taskFlowId) => {
 
@@ -48,7 +47,9 @@ export const getCalculationStatus = (state, taskFlowId) => {
       // For now we should only have one.
       const jobId = jobIds[0];
       const job = getJob(state, jobId);
-      if (job.status === JobState.created.name) {
+      if (!job) {
+        return CalculationState.initializing.name;
+      } else if (job.status === JobState.created.name) {
         return CalculationState.initializing.name;
       }
       else if (job.status !== JobState.complete.name) {

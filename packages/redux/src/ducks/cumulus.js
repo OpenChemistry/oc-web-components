@@ -38,9 +38,17 @@ const reducer = handleActions({
   RECIEVE_TASKFLOW: (state, action) => {
     const payload = action.payload;
     const taskflow = payload.taskflow;
+    let jobs = jp.query(taskflow, '$.meta.jobs');
+    let taskFlowJobs = [];
+    if (jobs.length === 1) {
+      for (let job of jobs[0]) {
+        taskFlowJobs.push(job['_id']);
+      }
+    }
     let taskflows = state.taskflows;
     const byId = {...taskflows.byId, [taskflow._id]: taskflow };
-    taskflows = {...taskflows, byId};
+    const idToJobIds = {...taskflows.idToJobIds, [taskflow._id]: taskFlowJobs };
+    taskflows = {...taskflows, byId, idToJobIds};
 
     return {...state, taskflows}
   },
