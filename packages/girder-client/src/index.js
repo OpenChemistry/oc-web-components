@@ -40,6 +40,24 @@ function delete_(url, config) {
   return request
 }
 
+function updateToken(token) {
+  _girderClient.defaults.headers = {
+     'Girder-Token': token
+  }
+}
+
+function setPrefix(prefix) {
+  prefix = prefix.trim();
+  // Ensure leading slash
+  if (prefix.length != 0 && prefix[0] !== '/') {
+    prefix = `/${prefix}`;
+  }
+
+  // Remove any trailing slash
+  prefix = prefix.replace(/\/+$/, "");
+  _girderClient.defaults.baseURL = `${window.location.origin}${prefix}/api/v1`
+}
+
 function girderClient() {
   return {
   get,
@@ -47,19 +65,9 @@ function girderClient() {
   put,
   patch,
   delete: delete_,
-  updateToken
+  updateToken,
+  setPrefix
   };
-}
-
-function updateToken(token) {
-  const headers = {
-    'Girder-Token': token
-  }
-
-  _girderClient = axios.create({
-    headers,
-    baseURL: `${window.location.origin}/api/v1`
-  });
 }
 
 export default girderClient;
