@@ -5,7 +5,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { isNil, throttle, has } from "lodash-es";
 
 import { IChemJson, IDisplayOptions, IAtoms, IBonds } from '@openchemistry/types';
-import { composeDisplayOptions } from '@openchemistry/utils';
+import { composeDisplayOptions, evaluateMO } from '@openchemistry/utils';
 import { color2rgb, rowMaj2colMaj3d } from '@openchemistry/utils';
 import { validateChemJson, isChemJson } from '@openchemistry/utils';
 
@@ -516,6 +516,22 @@ export class MoleculeVtkjs {
     if (!validateChemJson(this.cjsonData)) {
       this.cjsonData = null;
     }
+
+    evaluateMO;
+    if (isNil(this.cjsonData.cube) && !isNil(this.cjsonData.basisSet)) {
+
+      console.time('evaluateMO_JS');
+      let cube = evaluateMO(this.cjsonData, 1, 0.05);
+      console.timeEnd('evaluateMO_JS');
+      this.cjsonData.cube = {
+        dimensions: cube.dimensions,
+        origin: cube.origin,
+        spacing: cube.spacing,
+        scalars: cube.scalars
+      }
+      console.log("CUBEEEEEEE", this.cjsonData.cube);
+    }
+
   }
 
   setOptions() {
