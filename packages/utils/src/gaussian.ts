@@ -39,17 +39,20 @@ export interface BasisFunction {
 export class GaussianFunction implements BasisFunction {
 
   constructor(
+    private nPrimitives: number,
     private center: number[],
-    private coefficient: number,
-    private exponent: number
+    private coefficients: number[],
+    private exponents: number[]
   ) {
   }
 
   evaluate(point: number[]) : number {
+    const ANG_TO_BOHR = 1.8897259886;
+
     let delta: number[] = [
-      point[0] - this.center[0],
-      point[1] - this.center[1],
-      point[2] - this.center[2]
+      (point[0] - this.center[0]) * ANG_TO_BOHR,
+      (point[1] - this.center[1]) * ANG_TO_BOHR,
+      (point[2] - this.center[2]) * ANG_TO_BOHR
     ]
 
     let dr2: number = (
@@ -58,22 +61,26 @@ export class GaussianFunction implements BasisFunction {
       delta[2] * delta[2]
     )
 
-    return this.coefficient * this.evaluateBase(point, delta, dr2, this.exponent);
+    let value = 0;
+    for (let i = 0; i < this.nPrimitives; ++i) {
+      value += this.coefficients[i] * this.evaluateBase(delta, dr2, this.exponents[i]);
+    }
+    return value;
   }
 
-  evaluateBase(point: number[], delta: number[], dr2: number, exponent: number) : number {
+  evaluateBase(delta: number[], dr2: number, exponent: number) : number {
     throw new Error("Not implemented");
   }
 }
 
 export class GaussianFunctionS extends GaussianFunction {
-  evaluateBase(point: number[], delta: number[], dr2: number, exponent: number) : number {
+  evaluateBase(delta: number[], dr2: number, exponent: number) : number {
     return Math.exp(- exponent * dr2);
   }
 }
 
 export class GaussianFunctionUU extends GaussianFunction {
-  evaluateBase(point: number[], delta: number[], dr2: number, exponent: number) : number {
+  evaluateBase(delta: number[], dr2: number, exponent: number) : number {
     return 0;
   }
 }
@@ -111,16 +118,24 @@ export class BasisSet {
       let iAtom = shellToAtomMap[iShell];
       let shellType = shellTypes[iShell];
       let center = atoms.coords['3d'].slice(3 * iAtom, 3 * iAtom + 3);
-      for (let i = 0; i < n; ++i) {
-        let coefficient = coefficients[iPrimitive];
-        let exponent = exponents[iPrimitive];
-        if (shellType == 0) {
-          this.functions.push(new GaussianFunctionS(center, coefficient, exponent));
-        } else {
-          this.functions.push(new GaussianFunctionUU(center, coefficient, exponent));
-        }
-        iPrimitive += 1;
+
+      let _coefficients = coefficients.slice(iPrimitive, iPrimitive + n);
+      let _exponents = exponents.slice(iPrimitive, iPrimitive + n);
+
+      let basisClasses = [];
+      if (shellType == 0) {
+        basisClasses = [GaussianFunctionS];
+      } else if (shellType == 1) {
+        basisClasses = [GaussianFunctionUU, GaussianFunctionUU, GaussianFunctionUU];
+      } else {
+        throw new Error(`Unknown shell type: ${shellType}`);
       }
+
+      for (let basisClass of basisClasses) {
+        this.functions.push(new basisClass(n, center, _coefficients, _exponents));
+      }
+
+      iPrimitive += n;
     }
   }
 }

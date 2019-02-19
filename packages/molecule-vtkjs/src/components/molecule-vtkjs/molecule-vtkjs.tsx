@@ -521,7 +521,7 @@ export class MoleculeVtkjs {
     if (isNil(this.cjsonData.cube) && !isNil(this.cjsonData.basisSet)) {
 
       console.time('evaluateMO_JS');
-      let cube = evaluateMO(this.cjsonData, 1, 0.05);
+      let cube = evaluateMO(this.cjsonData, 0, 0.05);
       console.timeEnd('evaluateMO_JS');
       this.cjsonData.cube = {
         dimensions: cube.dimensions,
