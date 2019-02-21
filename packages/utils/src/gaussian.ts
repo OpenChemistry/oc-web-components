@@ -3,8 +3,8 @@ import { Cube } from './cube';
 import { cjsonToCube } from './cjsonToCube';
 import { sum } from 'lodash-es';
 
-export function evaluateMO(cjson: IChemJson, mo: number, dx: number = 0.05): Cube {
-  let cube = cjsonToCube(cjson, dx);
+export function evaluateMO(cjson: IChemJson, mo: number, dx: number = 0.05, padding: number = 2): Cube {
+  let cube = cjsonToCube(cjson, dx, padding);
 
   let basis = new BasisSet(cjson);
 
@@ -19,12 +19,16 @@ export function evaluateMO(cjson: IChemJson, mo: number, dx: number = 0.05): Cub
   console.log('BASIS ', basis.functions);
   let scalars = [];
 
-  for (let point of cube.getPoints()) {
+  const points = cube.pointsIterator()() as any;
+  let next = points.next();
+  while (!next.done) {
+    let {value: point} = next;
     let value = 0;
     for (let i = 0; i < n; ++i) {
       value += coefficients[i] * basis.functions[i].evaluate(point);
     }
     scalars.push(value);
+    next = points.next();
   }
 
   cube.setScalars(scalars);
@@ -81,7 +85,7 @@ export class GaussianFunctionS extends GaussianFunction {
 
 export class GaussianFunctionUU extends GaussianFunction {
   evaluateBase(delta: number[], dr2: number, exponent: number) : number {
-    return 0;
+    return 0 * Math.exp(- exponent * dr2);;
   }
 }
 

@@ -2,7 +2,6 @@ import { ICube } from '@openchemistry/types';
 
 export class Cube implements ICube {
   public scalars: number[];
-  private points: [number, number, number][];
 
   constructor(
     public dimensions: [number, number, number],
@@ -10,30 +9,28 @@ export class Cube implements ICube {
     public spacing: [number, number, number]
   ) {
     this.scalars = [];
-    this.points = [];
   }
 
-  getPoints(): [number, number, number][] {
-    if (this.points.length > 0) {
-      return this.points;
-    }
+  pointsIterator() {
+    const {dimensions, origin, spacing} = this;
 
-    let points: [number, number, number][] = [];
-    for (let i = 0; i < this.dimensions[0]; ++i) {
-      for (let j = 0; j < this.dimensions[1]; ++j) {
-        for (let k = 0; k < this.dimensions[2]; ++k) {
-          let point: [number, number, number] = [
-            this.origin[0] + i * this.spacing[0],
-            this.origin[1] + j * this.spacing[1],
-            this.origin[2] + k * this.spacing[2]
-          ]
-          points.push(point);
+    function* iter() {
+      for (let i = 0; i < dimensions[0]; ++i) {
+        for (let j = 0; j < dimensions[1]; ++j) {
+          for (let k = 0; k < dimensions[2]; ++k) {
+            let point: [number, number, number] = [
+              origin[0] + i * spacing[0],
+              origin[1] + j * spacing[1],
+              origin[2] + k * spacing[2]
+            ]
+            yield point;
+          }
         }
       }
+      return;
     }
 
-    this.points = points;
-    return points;
+    return iter;
   }
 
   setScalars(scalars: number[]) {

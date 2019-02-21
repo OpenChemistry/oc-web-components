@@ -4,8 +4,8 @@ import { Cube } from './cube';
 type Vec3 = [number, number, number];
 type Vec6 = [number, number, number, number, number, number];
 
-export function cjsonToCube(cjson: IChemJson, dx: number = 0.05): Cube {
-  let bounds = calcBoxBounds(cjson.atoms, 2);
+export function cjsonToCube(cjson: IChemJson, dx: number = 0.05, padding: number = 2): Cube {
+  let bounds = calcBoxBounds(cjson.atoms, padding);
 
   let spacing: Vec3 = [dx, dx, dx];
   let origin: Vec3 = [bounds[0], bounds[2], bounds[4]];
