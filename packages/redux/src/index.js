@@ -4,7 +4,7 @@ import girderReducer, * as girder  from './ducks/girder';
 import appReducer, * as app  from './ducks/app';
 import cumulusReducer, * as cumulus  from './ducks/cumulus';
 import jupyterlabReducer, * as jupyterlab from './ducks/jupyterlab';
-
+import configurationReducer, * as configuration from './ducks/configuration';
 
 export const reducers = {
     molecules: moleculesReducer,
@@ -12,7 +12,8 @@ export const reducers = {
     girder: girderReducer,
     app: appReducer,
     cumulus: cumulusReducer,
-    jupyterlab: jupyterlabReducer
+    jupyterlab: jupyterlabReducer,
+    configuration: configurationReducer,
 };
 
 export { default as selectors } from './selectors';
@@ -23,3 +24,4 @@ export {girder};
 export {cumulus};
 export {jupyterlab};
 export {app};
+export {configuration};
