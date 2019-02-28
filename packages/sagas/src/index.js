@@ -18,6 +18,8 @@ export { watchRedirectToJupyterHub, watchInvalidateSession}
 import girderClient from '@openchemistry/girder-client';
 import { watchLoadCalculationNotebooks, watchLoadCalculations } from './calculations'
 export { watchLoadCalculationNotebooks, watchLoadCalculations }
+import { watchLoadConfiguration } from './configuration'
+export { watchLoadConfiguration }
 
 import jp from 'jsonpath';
 
