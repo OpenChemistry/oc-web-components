@@ -19,16 +19,16 @@
     "@openchemistry/moljs-es": "^0.1.9",
     "@openchemistry/types": "^0.8.5",
     "@openchemistry/utils": "^0.6.5",
-    "@types/lodash-es": "^4.17.1",
+    "@types/lodash-es": "^4.17.2",
     "lodash-es": "^4.17.11",
-    "resize-observer-polyfill": "^1.5.0"
+    "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
-    "@stencil/core": "^0.15.2",
+    "@stencil/core": "^0.18.0",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
-    "@types/jest": "^23.3.9",
-    "jest": "^23.6.0"
+    "@types/jest": "^24.0.9",
+    "jest": "^24.1.0"
   },
   "repository": {
     "type": "git",
