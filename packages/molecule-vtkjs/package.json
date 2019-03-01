@@ -18,15 +18,15 @@
   "dependencies": {
     "@openchemistry/utils": "^0.6.5",
     "lodash-es": "^4.17.11",
-    "resize-observer-polyfill": "^1.5.1",
-    "vtk.js": "^8.3.13"
+    "resize-observer-polyfill": "^1.5.0",
+    "vtk.js": "^8.2.0"
   },
   "devDependencies": {
     "@openchemistry/types": "^0.8.5",
-    "@stencil/core": "^0.18.0",
-    "@types/jest": "^24.0.9",
-    "@types/lodash-es": "^4.17.2",
-    "jest": "^24.1.0"
+    "@stencil/core": "^0.15.2",
+    "@types/jest": "^23.3.9",
+    "@types/lodash-es": "^4.17.1",
+    "jest": "^23.6.0"
   },
   "repository": {
     "type": "git",

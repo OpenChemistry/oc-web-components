@@ -17,14 +17,14 @@
   },
   "dependencies": {
     "@openchemistry/utils": "^0.6.5",
-    "d3": "^5.9.1",
-    "resize-observer-polyfill": "^1.5.1"
+    "d3": "^5.7.0",
+    "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.18.0",
-    "@types/d3": "^5.7.1",
-    "@types/jest": "^24.0.9",
-    "jest": "^24.1.0"
+    "@stencil/core": "^0.15.2",
+    "@types/d3": "^5.0.1",
+    "@types/jest": "^23.3.9",
+    "jest": "^23.6.0"
   },
   "repository": {
     "type": "git",

@@ -17,15 +17,15 @@
   },
   "dependencies": {
     "@openchemistry/types": "^0.8.5",
-    "d3": "^5.9.1",
+    "d3": "^5.7.0",
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
-    "@stencil/core": "^0.18.0",
-    "@types/d3": "^5.7.1",
-    "@types/jest": "^24.0.9",
-    "@types/lodash-es": "^4.17.2",
-    "jest": "^24.1.0"
+    "@stencil/core": "^0.15.2",
+    "@types/d3": "^5.0.1",
+    "@types/jest": "^23.3.9",
+    "@types/lodash-es": "^4.17.1",
+    "jest": "^23.6.0"
   },
   "repository": {
     "type": "git",
