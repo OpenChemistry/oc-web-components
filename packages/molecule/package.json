@@ -11,9 +11,7 @@
   ],
   "scripts": {
     "build": "stencil build",
-    "start": "stencil build --dev --watch --serve",
-    "test": "jest",
-    "test.watch": "jest --watch"
+    "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
     "@openchemistry/molecule-menu": "^0.6.12",
@@ -23,14 +21,12 @@
     "@openchemistry/utils": "^0.6.5",
     "@openchemistry/vibrational-spectrum": "^0.1.22",
     "lodash-es": "^4.17.11",
-    "memoize-one": "^4.0.3",
-    "split-me": "^1.1.5"
+    "memoize-one": "^5.0.0",
+    "split-me": "^1.1.6"
   },
   "devDependencies": {
-    "@stencil/core": "^0.15.2",
-    "@types/jest": "^23.3.9",
-    "@types/lodash-es": "^4.17.1",
-    "jest": "^23.6.0"
+    "@stencil/core": "^0.12.4",
+    "@types/lodash-es": "^4.17.2"
   },
   "repository": {
     "type": "git",
@@ -42,19 +38,6 @@
     "url": "https://github.com/OpenChemistry/oc-web-components"
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components",
-  "jest": {
-    "transform": {
-      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "jsx"
-    ]
-  },
   "publishConfig": {
     "access": "public"
   }

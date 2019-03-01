@@ -18,9 +18,9 @@ export class MoleculeMenuPopup {
     return (
       <div class='main-container'>
         <div class='menu-button-container'>
-          <ion-button fill='clear' onClick={() => {this.open = !this.open}}>
+          <div class='open-menu-button' onClick={() => {this.open = !this.open}}>
             <ion-icon color='dark' src={MoreIcon}></ion-icon>
-          </ion-button>
+          </div>
         </div>
         <div hidden={!this.open} class='menu-container'>
           <ion-card class='menu-card'>
