@@ -4,6 +4,7 @@ const PREFIX = '@@girder-redux/auth/';
 
 const initialState = {
   token: null,
+  apiKey: null,
   oauth: {
     providers: {},
     enabled: false,
@@ -27,6 +28,7 @@ let getRoot = (state) => state;
 export const setRoot = (getRootFn) => {getRoot = getRootFn;};
 export const getMe = (state) => getRoot(state).me;
 export const getToken = (state) => getRoot(state).token;
+export const getApiKey = (state) => getRoot(state).apiKey;
 export const getOauthProviders = (state) => getRoot(state).oauth.providers;
 export const isAuthenticating = (state) => getRoot(state).authenticating;
 export const isAuthenticated = (state) => getRoot(state).token && !getRoot(state).authenticating;
@@ -66,6 +68,10 @@ export const SHOW_NERSC_LOGIN = PREFIX + 'SHOW_NERSC_LOGIN';
 export const LOAD_TOKEN_FROM_API_KEY = "LOAD_TOKEN_FROM_API_KEY"
 export const REQUEST_TOKEN_FROM_API_KEY = "REQUEST_TOKEN_FROM_API_KEY"
 
+export const LOAD_API_KEY = "LOAD_API_KEY";
+export const REQUEST_API_KEY = "REQUEST_API_KEY";
+export const RECEIVE_API_KEY = "RECEIVE_API_KEY";
+
 // Action creators
 export const authenticate = createAction(AUTHENTICATE);
 export const setAuthenticating = createAction(SET_AUTHENTICATING);
@@ -91,6 +97,10 @@ export const nerscLogin = createAction(NERSC_LOGIN);
 
 export const setToken = createAction(SET_TOKEN);
 export const setMe = createAction(SET_ME);
+
+export const loadApiKey = createAction(LOAD_API_KEY);
+export const requestApiKey = createAction(REQUEST_API_KEY);
+export const receiveApiKey = createAction(RECEIVE_API_KEY);
 
 export const showLoginOptions = createAction(SHOW_LOGIN_OPTIONS);
 export const showGirderLogin = createAction(SHOW_GIRDER_LOGIN);
@@ -157,6 +167,11 @@ function reducer(state = initialState, action) {
           providers
       }
       return {...state, oauth};
+    }
+
+    case RECEIVE_API_KEY: {
+      const apiKey = action.payload;
+      return {...state, apiKey};
     }
 
     case SHOW_LOGIN_OPTIONS: {

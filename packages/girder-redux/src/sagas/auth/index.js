@@ -1,4 +1,4 @@
-import { put, call, takeEvery} from 'redux-saga/effects'
+import { put, call, takeEvery, takeLatest} from 'redux-saga/effects'
 import Cookies from 'universal-cookie'
 import { isNil } from 'lodash-es';
 
@@ -25,7 +25,10 @@ import {
   setMe,
   setOauthEnabled,
   loadOauthProviders,
-  requestTokenFromApiKey
+  requestTokenFromApiKey,
+  loadApiKey,
+  requestApiKey,
+  receiveApiKey
 } from '../../ducks/auth';
 
 import {
@@ -35,7 +38,9 @@ import {
   logIn as logInRest,
   nerscLogIn as nerscLogInRest,
   authenticateWithNewt as authenticateWithNewtRest,
-  fetchTokenFromApiKey as fetchTokenFromApiKeyRest
+  fetchTokenFromApiKey as fetchTokenFromApiKeyRest,
+  getApiKeys as getApiKeysRest,
+  createApiKey as createApiKeyRest
 } from '../../rest/auth';
 
 import girderClient from '@openchemistry/girder-client';
@@ -225,4 +230,25 @@ function* loadTokenFromApiKey(action) {
 
 export function* watchLoadTokenFromApiKey() {
   yield takeEvery(LOAD_TOKEN_FROM_API_KEY, loadTokenFromApiKey);
+}
+
+function* onFetchApiKey(action) {
+  try {
+    const {name} = action.payload;
+    let apiKeys = yield call(getApiKeysRest);
+    apiKeys = apiKeys.filter(val => val.name === name);
+    let apiKey;
+    if (apiKeys.length > 0) {
+      apiKey = apiKeys[0];
+    } else {
+      apiKey = yield call(createApiKeyRest, name);
+    }
+    yield put(receiveApiKey(apiKey.key));
+  } catch (e) {
+    yield put(requestApiKey({error: e}));
+  }
+}
+
+export function* watchFetchApiKey() {
+  yield takeLatest(loadApiKey.toString(), onFetchApiKey);
 }
