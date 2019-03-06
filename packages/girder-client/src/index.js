@@ -58,6 +58,10 @@ function setPrefix(prefix) {
   _girderClient.defaults.baseURL = `${window.location.origin}${prefix}/api/v1`
 }
 
+function setBaseURL(url) {
+  _girderClient.defaults.baseURL = url;
+}
+
 function getBaseURL() {
   return _girderClient.defaults.baseURL;
 }
@@ -71,7 +75,8 @@ function girderClient() {
   delete: delete_,
   updateToken,
   setPrefix,
-  getBaseURL
+  getBaseURL,
+  setBaseURL
   };
 }
 
