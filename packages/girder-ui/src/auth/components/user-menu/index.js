@@ -32,7 +32,7 @@ class UserMenu extends Component {
   };
 
   render() {
-    const {me} = this.props;
+    const {me, children} = this.props;
     return (
       <div>
         <Button onClick={this.handleOpen}>
@@ -47,6 +47,7 @@ class UserMenu extends Component {
           animation={PopoverAnimationVertical}
         >
           <MenuList>
+            {children}
             <MenuItem onClick={this.props.handleSignOut} >
               <ExitToAppIcon/>
               Sign out

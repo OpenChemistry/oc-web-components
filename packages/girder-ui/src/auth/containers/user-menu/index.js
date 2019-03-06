@@ -17,6 +17,7 @@ class UserMenuContainer extends Component {
       <UserMenu
         me={this.props.me}
         handleSignOut={this.onSignOutClick}
+        {...this.props}
       />
     );
   }
