@@ -9,7 +9,7 @@ import DropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 class UserMenu extends Component {
-  
+
   constructor(props) {
     super(props);
 
@@ -45,6 +45,7 @@ class UserMenu extends Component {
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           onClose={this.handleClose}
           animation={PopoverAnimationVertical}
+          disableEnforceFocus={true}
         >
           <MenuList>
             {children}
