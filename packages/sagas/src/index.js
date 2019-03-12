@@ -148,7 +148,18 @@ export function* receiveNotification(action) {
     }
     // This is a new job
     else {
-      yield put(cumulus.loadJob({id}));
+      let job = yield call(fetchJobFromGirder, id);
+      yield put( cumulus.receiveJob({job}));
+      
+      // if this job belongs to a taskflow that we're tracking, fetch a fresh copy of the taskflow as well
+      let taskFlowId = jp.query(job, '$.params.taskFlowId');
+      if (taskFlowId.length === 1) {
+        taskFlowId = taskFlowId[0];
+        const taskflow = yield select(selectors.cumulus.getTaskFlow, taskFlowId);
+        if (taskflow) {
+          yield put(cumulus.loadTaskFlow({id: taskFlowId}));
+        }
+      }
     }
   }
 }

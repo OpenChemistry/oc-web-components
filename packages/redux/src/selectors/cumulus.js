@@ -72,8 +72,21 @@ export const getCalculationCode = (state, taskFlowId) => {
     return null;
   }
 
+  // Code name and version are only known after
+  // the container description has been obtained
   if (hasIn(taskFlow, 'meta.code')) {
-    return taskFlow['meta']['code']
+    return {
+      name: taskFlow['meta']['code']['name'],
+      version: taskFlow['meta']['code']['version']
+    }
+  }
+
+  // Before that, just return the repository name of the container
+  if (hasIn(taskFlow, 'meta.image.repository')) {
+    return {
+      name: taskFlow['meta']['image']['repository'],
+      version: null
+    }
   }
 
   return null;

@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-var jp = require('jsonpath');
+import jp from 'jsonpath';
 
 // Actions
 export const LOAD_TASKFLOW = 'LOAD_TASKFLOW';
@@ -41,7 +41,8 @@ const reducer = handleActions({
     let jobs = jp.query(taskflow, '$.meta.jobs');
     let taskFlowJobs = [];
     if (jobs.length === 1) {
-      for (let job of jobs[0]) {
+      jobs = jobs[0];
+      for (let job of jobs) {
         taskFlowJobs.push(job['_id']);
       }
     }
