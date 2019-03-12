@@ -14,7 +14,8 @@ import {
   showNerscLogin,
   nerscLogin,
   setMe,
-  setToken
+  setToken,
+  loadApiKey
 } from './auth';
 
 // Import selectors
@@ -28,7 +29,8 @@ import {
   isAuthenticating,
   getShowLoginOptions,
   getShowGirderLogin,
-  getShowNerscLogin
+  getShowNerscLogin,
+  getApiKey
 } from './auth';
 
 // Import reducer
@@ -47,7 +49,8 @@ export const authActions = {
   showNerscLogin,
   nerscLogin,
   setMe,
-  setToken
+  setToken,
+  loadApiKey
 }
 
 export const authSelectors = {
@@ -60,5 +63,6 @@ export const authSelectors = {
   isAuthenticating,
   getShowLoginOptions,
   getShowGirderLogin,
-  getShowNerscLogin
+  getShowNerscLogin,
+  getApiKey
 }

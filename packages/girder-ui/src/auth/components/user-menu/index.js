@@ -9,7 +9,7 @@ import DropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 class UserMenu extends Component {
-  
+
   constructor(props) {
     super(props);
 
@@ -32,7 +32,7 @@ class UserMenu extends Component {
   };
 
   render() {
-    const {me} = this.props;
+    const {me, children} = this.props;
     return (
       <div>
         <Button onClick={this.handleOpen}>
@@ -45,8 +45,10 @@ class UserMenu extends Component {
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           onClose={this.handleClose}
           animation={PopoverAnimationVertical}
+          disableEnforceFocus={true}
         >
           <MenuList>
+            {children}
             <MenuItem onClick={this.props.handleSignOut} >
               <ExitToAppIcon/>
               Sign out
