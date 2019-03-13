@@ -12,12 +12,14 @@ export const REQUEST_JOB = 'REQUEST_JOB';
 export const RECIEVE_JOB = 'RECIEVE_JOB';
 export const RECIEVE_JOB_STATUS = 'RECIEVE_JOB_STATUS';
 
+export const OBSERVE_TASKFLOW = 'OBSERVE_TASKFLOW';
 
 const initialState = {
   taskflows: {
     byId: {},
     // maps taskflow ids to job ids
     idToJobIds: {},
+    observed: new Set()
   },
   jobs: {
     byId: {},
@@ -114,6 +116,22 @@ const reducer = handleActions({
 
     return {...state, jobs}
   },
+  OBSERVE_TASKFLOW: (state, action) => {
+    const { taskFlowId, observe } = action.payload;
+    let observed = state.taskflows.observed;
+    if (observe) {
+      observed.add(taskFlowId);
+    } else {
+      observed.delete(taskFlowId);
+    }
+    return {
+      ...state,
+      taskflows: {
+        ...state.taskflows,
+        observed
+      }
+    }
+  },
   throw: (state, action) => state
 }, initialState);
 
@@ -128,5 +146,6 @@ export const loadJob = createAction(LOAD_JOB);
 export const requestJob = createAction(REQUEST_JOB);
 export const receiveJob = createAction(RECIEVE_JOB);
 export const receiveJobStatus = createAction(RECIEVE_JOB_STATUS);
+export const observeTaskFlow = createAction(OBSERVE_TASKFLOW, (taskFlowId, observe) => ({taskFlowId, observe}));
 
 export default reducer;

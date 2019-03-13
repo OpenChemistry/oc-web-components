@@ -142,24 +142,41 @@ export function* receiveNotification(action) {
     const id = data._id;
     const job = yield select(selectors.cumulus.getJob, id)
 
+    // If we are monitoring the logs of of the taskflow associated with the job, we may want to refresh the taskflow as well
+    let refreshTaskFlow = false;
+    let taskFlowId = '';
+
+    const getTaskFlowId = (job) => {
+      let taskFlowId = jp.query(job, '$.params.taskFlowId');
+      if (taskFlowId.length === 1) {
+        return taskFlowId[0];
+      }
+      return '';
+    }
+
     if (job) {
       // If we have a status then we are keep track of this taskflow
-      yield put(cumulus.receiveJobStatus(data))
+      yield put(cumulus.receiveJobStatus(data));
+      taskFlowId = getTaskFlowId(job);
+      if (taskFlowId) {
+        refreshTaskFlow = yield select(selectors.cumulus.isTaskFlowObserved, taskFlowId);
+      }
     }
     // This is a new job
     else {
       let job = yield call(fetchJobFromGirder, id);
-      yield put( cumulus.receiveJob({job}));
-      
-      // if this job belongs to a taskflow that we're tracking, fetch a fresh copy of the taskflow as well
-      let taskFlowId = jp.query(job, '$.params.taskFlowId');
-      if (taskFlowId.length === 1) {
-        taskFlowId = taskFlowId[0];
+      yield put(cumulus.receiveJob({job}));
+      taskFlowId = getTaskFlowId(job);
+      if (taskFlowId) {
         const taskflow = yield select(selectors.cumulus.getTaskFlow, taskFlowId);
         if (taskflow) {
-          yield put(cumulus.loadTaskFlow({id: taskFlowId}));
+          refreshTaskFlow = true;
         }
       }
+    }
+
+    if (refreshTaskFlow) {
+      yield put(cumulus.loadTaskFlow({id: taskFlowId}));
     }
   }
 }

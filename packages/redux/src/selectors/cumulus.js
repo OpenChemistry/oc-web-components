@@ -2,6 +2,7 @@ import { Enum } from 'enumify';
 import { hasIn } from 'lodash-es'
 
 export const getTaskFlow = (state, _id) => _id in state.cumulus.taskflows.byId ?  state.cumulus.taskflows.byId[_id] : null;
+export const isTaskFlowObserved = (state, _id) => state.cumulus.taskflows.observed.has(_id);
 
 export const getTaskFlowStatus = (state, _id) => {
   const taskflow = getTaskFlow(state, _id);
