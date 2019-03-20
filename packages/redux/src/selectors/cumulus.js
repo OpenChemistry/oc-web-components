@@ -2,6 +2,7 @@ import { Enum } from 'enumify';
 import { hasIn } from 'lodash-es'
 
 export const getTaskFlow = (state, _id) => _id in state.cumulus.taskflows.byId ?  state.cumulus.taskflows.byId[_id] : null;
+export const isTaskFlowObserved = (state, _id) => state.cumulus.taskflows.observed.has(_id);
 
 export const getTaskFlowStatus = (state, _id) => {
   const taskflow = getTaskFlow(state, _id);
@@ -72,8 +73,21 @@ export const getCalculationCode = (state, taskFlowId) => {
     return null;
   }
 
+  // Code name and version are only known after
+  // the container description has been obtained
   if (hasIn(taskFlow, 'meta.code')) {
-    return taskFlow['meta']['code']
+    return {
+      name: taskFlow['meta']['code']['name'],
+      version: taskFlow['meta']['code']['version']
+    }
+  }
+
+  // Before that, just return the repository name of the container
+  if (hasIn(taskFlow, 'meta.image.repository')) {
+    return {
+      name: taskFlow['meta']['image']['repository'],
+      version: null
+    }
   }
 
   return null;
