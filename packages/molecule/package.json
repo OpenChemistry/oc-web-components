@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/molecule",
-  "version": "0.4.13",
+  "version": "0.4.14",
   "description": "Stencil component to display chemical json data",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@openchemistry/molecule-menu": "^0.6.13",
-    "@openchemistry/molecule-moljs": "^0.4.16",
+    "@openchemistry/molecule-moljs": "^0.4.17",
     "@openchemistry/molecule-vtkjs": "^0.3.8",
     "@openchemistry/types": "^0.8.5",
     "@openchemistry/utils": "^0.6.5",
