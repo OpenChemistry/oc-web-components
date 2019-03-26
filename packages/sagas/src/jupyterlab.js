@@ -51,6 +51,12 @@ export function* invalidateSession(action) {
   }
 }
 
+// Explicitly watch for a request to invalidate the jupyterhub session
 export function* watchInvalidateSession() {
   yield takeEvery(jupyterlab.INVALIDATE_SESSION, invalidateSession)
+}
+
+// Automatically invalidate the jupyterhub session if a user logs out of the single page app
+export function* watchInvalidateToken() {
+  yield takeEvery(auth.actions.invalidateToken.toString(), invalidateSession)
 }

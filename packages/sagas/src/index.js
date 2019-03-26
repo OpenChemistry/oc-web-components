@@ -12,8 +12,8 @@ import { watchNotifications, watchNewToken } from './notifications'
 export { watchNotifications, watchNewToken };
 import { watchLoadNotebooks } from './app'
 export { watchLoadNotebooks };
-import { watchRedirectToJupyterHub, watchInvalidateSession } from './jupyterlab'
-export { watchRedirectToJupyterHub, watchInvalidateSession}
+import { watchRedirectToJupyterHub, watchInvalidateSession, watchInvalidateToken } from './jupyterlab'
+export { watchRedirectToJupyterHub, watchInvalidateSession, watchInvalidateToken}
 
 import girderClient from '@openchemistry/girder-client';
 import { watchLoadCalculationNotebooks, watchLoadCalculations } from './calculations'
