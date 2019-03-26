@@ -51,11 +51,18 @@
         },
         "order" : [ 1, 1 ]
       },
+      "cube": {
+        "dimensions": [1,1,1],
+        "origin": [0,0,0],
+        "spacing": [1,1,1],
+        "scalars": [1]
+      },
       "chemical json" : 0
     };
 
     let el = document.querySelector("oc-molecule");
     el.cjson = cjson;
+    el.isoValue = 0.005;
   </script>
 
 </body>

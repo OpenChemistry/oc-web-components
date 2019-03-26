@@ -292,6 +292,7 @@ export class Molecule {
               colorsX={this.colorsX}
               opacities={this.opacities}
               opacitiesX={this.opacitiesX}
+              isoValue={this.isoValue}
               range={this.range}
               histograms={this.histograms}
               moleculeRenderer={this.moleculeRenderer}
