@@ -17,7 +17,14 @@ import {
 
 class LoginOptions extends Component {
   render = () => {
-    const {show, girder, nersc, oauth, handleClose, handleGoogle, handleGirder, handleNersc} = this.props;
+    const {show, girder, oauth, handleClose, handleGoogle, handleGirder, handleNersc} = this.props;
+
+    let { nersc } = this.props;
+    // Oauth is disable at nersc deployments, use this flag to show the login option
+    // if `nersc` is not passed explicitly
+    if (nersc === undefined || nersc === null) {
+      nersc = !oauth;
+    }
 
     const actions = [
       <Button key="cancel" color="primary" onClick={handleClose}>
