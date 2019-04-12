@@ -28,12 +28,14 @@ class GirderLoginContainer extends Component {
   handleLogin = (values, dispatch) => {
 
     const { username, password } = values;
-  
+    const { reset } = this.props;
+
     let onSubmitPromise = new Promise((resolve, reject) => {
       dispatch(auth.actions.usernameLogin({username, password, resolve, reject}));
     })
-    .then(val => {
+    .then(_val => {
       dispatch(auth.actions.showGirderLogin(false));
+      reset();
     })
     .catch(_error => {
       throw new SubmissionError({ _error });
