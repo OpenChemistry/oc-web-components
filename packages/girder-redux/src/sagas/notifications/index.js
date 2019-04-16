@@ -2,6 +2,8 @@ import { take, put, call, fork, takeEvery } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import {has, isNil} from 'lodash-es'
 
+import girderClient from '@openchemistry/girder-client'
+
 import {
   connectToNotifications,
   receiveNotification,
@@ -12,8 +14,8 @@ import { setToken } from '../../ducks/auth';
 
 function createEventSource() {
   return eventChannel(emit => {
-    const origin = window.location.origin;
-    const eventSource = new EventSource(`${origin}/api/v1/notification/stream`);
+    const baseURL = girderClient().getBaseURL();
+    const eventSource = new EventSource(`${baseURL}/notification/stream`);
     eventSource.onmessage = (e) => {
       const msg = JSON.parse(e.data);
       emit(msg);
