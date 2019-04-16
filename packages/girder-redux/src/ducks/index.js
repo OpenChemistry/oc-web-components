@@ -66,3 +66,15 @@ export const authSelectors = {
   getShowNerscLogin,
   getApiKey
 }
+
+
+import { connectToNotifications, receiveNotification, eventSourceError } from './notifications';
+export const notificationsActions = {
+  connectToNotifications,
+  receiveNotification,
+  eventSourceError
+}
+
+export const notificationsSelectors = {};
+
+export {default as notificationsReducer} from './notifications';
