@@ -24,3 +24,6 @@ export const authSagas = {
   watchLoadTokenFromApiKey,
   watchFetchApiKey
 }
+
+import * as notifications from './notifications';
+export const notificationsSagas = notifications;
