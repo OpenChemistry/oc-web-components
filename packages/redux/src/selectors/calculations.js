@@ -21,3 +21,7 @@ export const getNotebooks = (state, id) => {
 }
 
 export const getCalculations = state => Object.values(state.calculations.byId);
+
+export const getMoleculeCalculations = (state, moleculeId) => {
+  return getCalculations(state).filter(calculation => calculation.moleculeId === moleculeId);
+}
