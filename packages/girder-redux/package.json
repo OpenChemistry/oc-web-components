@@ -22,11 +22,8 @@
   "dependencies": {
     "@openchemistry/girder-client": "^0.0.11",
     "axios": "^0.18.0",
-    "core-js": "^2.5.7",
     "lodash-es": "^4.17.11",
-    "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
-    "redux-saga": "^0.16.2",
     "regenerator-runtime": "^0.13.1",
     "reselect": "^4.0.0",
     "universal-cookie": "^3.0.4"
@@ -36,6 +33,10 @@
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@types/core-js": "^2.5.0"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.0",
+    "redux-saga": "^0.16.0 || ^1.0.0"
   },
   "publishConfig": {
     "access": "public"
