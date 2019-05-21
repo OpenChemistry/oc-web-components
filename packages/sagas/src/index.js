@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { has } from 'lodash-es'
 import { put, call, takeEvery, take, select } from 'redux-saga/effects'
 
 import { molecules } from '@openchemistry/redux';
@@ -25,8 +26,22 @@ import jp from 'jsonpath';
 
 // var jp = require('jsonpath')
 
-export function fetchMoleculesFromGirder() {
-  return girderClient().get('molecules')
+function setPaginationDefaults(options)
+{
+  const defaults = { limit: 25, offset: 0, sort: '_id', sortdir: -1 }
+  for (const key in defaults) {
+    if (!has(options, key)) {
+      options[key] = defaults[key]
+    }
+  }
+}
+
+export function fetchMoleculesFromGirder(options={}) {
+  // Let's modify a clone of the options instead of the original options
+  const optionsClone = { ...options }
+  setPaginationDefaults(optionsClone)
+  const params = { params: optionsClone }
+  return girderClient().get('molecules', params)
           .then(response => response.data )
 }
 
@@ -42,10 +57,12 @@ export function fetchMoleculeByIdFromGirder(id) {
 
 // Molecules
 
-export function* fetchMolecules() {
+export function* fetchMolecules(action) {
+  const options = action.payload
   try {
     yield put( molecules.requestMolecules() )
-    const newMolecules = yield call(fetchMoleculesFromGirder)
+    const res = yield call(fetchMoleculesFromGirder, options)
+    const newMolecules = res.results
     yield put( molecules.receiveMolecules(newMolecules) )
   }
   catch(error) {
