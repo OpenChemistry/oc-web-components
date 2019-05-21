@@ -46,7 +46,7 @@ const reducer = handleActions({
     }
   },
   RECEIVE_MOLECULES: (state, action) => {
-    const molecules = action.payload.molecules.results;
+    const molecules = action.payload.molecules
     let byId = {};
     byId = molecules.reduce((result, item) => {
       result[item._id] = item;
