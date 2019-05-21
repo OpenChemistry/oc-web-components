@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { has } from 'lodash-es'
 import { put, call, takeEvery, take, select } from 'redux-saga/effects'
 
 import { molecules } from '@openchemistry/redux';
@@ -29,7 +30,7 @@ function setPaginationDefaults(options)
 {
   const defaults = { limit: 25, offset: 0, sort: '_id', sortdir: -1 }
   for (const key in defaults) {
-    if (options[key] === undefined) {
+    if (!has(options, key)) {
       options[key] = defaults[key]
     }
   }
