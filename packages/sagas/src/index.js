@@ -55,7 +55,7 @@ export function fetchMoleculeByIdFromGirder(id) {
 // Molecules
 
 export function* fetchMolecules(action) {
-  let options = action.payload
+  const options = action.payload
   try {
     yield put( molecules.requestMolecules() )
     const res = yield call(fetchMoleculesFromGirder, options)
