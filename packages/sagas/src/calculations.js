@@ -47,7 +47,8 @@ export function* watchLoadCalculationNotebooks() {
 function* loadCalculations(action) {
   try {
     const { moleculeId } = action.payload || {};
-    const calculations = yield call(fetchCalculations, moleculeId);
+    const res = yield call(fetchCalculations, moleculeId);
+    const calculations = res.results;
     yield put(calculationsRedux.receiveCalculations({calculations}));
   } catch(error) {
     yield put(calculationsRedux.requestCalculations(error))
