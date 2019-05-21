@@ -25,8 +25,20 @@ import jp from 'jsonpath';
 
 // var jp = require('jsonpath')
 
-export function fetchMoleculesFromGirder() {
-  return girderClient().get('molecules')
+function setPaginationDefaults(options)
+{
+  const defaults = { limit: 25, offset: 0, sort: '_id', sortDir: -1 }
+  for (const key in defaults) {
+    if (options[key] === undefined) {
+      options[key] = defaults[key]
+    }
+  }
+}
+
+export function fetchMoleculesFromGirder(options={}) {
+  setPaginationDefaults(options)
+  const params = { params: options }
+  return girderClient().get('molecules', params)
           .then(response => response.data )
 }
 
@@ -42,10 +54,11 @@ export function fetchMoleculeByIdFromGirder(id) {
 
 // Molecules
 
-export function* fetchMolecules() {
+export function* fetchMolecules(action) {
+  var options = action.payload
   try {
     yield put( molecules.requestMolecules() )
-    const res = yield call(fetchMoleculesFromGirder)
+    const res = yield call(fetchMoleculesFromGirder, options)
     const newMolecules = res.results
     yield put( molecules.receiveMolecules(newMolecules) )
   }
