@@ -27,7 +27,7 @@ import jp from 'jsonpath';
 
 function setPaginationDefaults(options)
 {
-  const defaults = { limit: 25, offset: 0, sort: '_id', sortDir: -1 }
+  const defaults = { limit: 25, offset: 0, sort: '_id', sortdir: -1 }
   for (const key in defaults) {
     if (options[key] === undefined) {
       options[key] = defaults[key]
