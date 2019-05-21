@@ -26,7 +26,7 @@ import jp from 'jsonpath';
 
 // var jp = require('jsonpath')
 
-function setPaginationDefaults(options)
+export function setPaginationDefaults(options)
 {
   const defaults = { limit: 25, offset: 0, sort: '_id', sortdir: -1 }
   for (const key in defaults) {
