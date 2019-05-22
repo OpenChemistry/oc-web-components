@@ -20,6 +20,7 @@ export const RECEIVE_CALCULATION_NOTEBOOKS   = 'RECEIVE_CALCULATION_NOTEBOOKS';
 
 const initialState = {
   byId: {},
+  matches: 0,
   orbitalsById: {},
   noteBooksById: {},
   error: null,
@@ -77,17 +78,17 @@ const reducer = handleActions({
       return {...state, error: action.payload.error};
     }
     else {
-      return {...state,  error:null };
+      return initialState;
     }
   },
   RECEIVE_CALCULATIONS: (state, action) => {
-    const {calculations} = action.payload;
+    const {calculations, matches} = action.payload;
     let byId = {};
     byId = calculations.reduce((result, item) => {
       result[item._id] = item;
       return result;
     }, byId);
-    return {...state, byId};
+    return {...state, byId, matches};
   }
 }, initialState);
 

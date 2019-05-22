@@ -2,7 +2,10 @@ import { select, put, call, all, takeEvery} from 'redux-saga/effects'
 import { isNil } from 'lodash-es'
 
 import { file } from '@openchemistry/rest'
-import { calculations as calculationsRedux } from '@openchemistry/redux'
+import {
+  calculations as calculationsRedux,
+  molecules as moleculesRedux
+} from '@openchemistry/redux'
 import { selectors } from '@openchemistry/redux';
 
 import girderClient from '@openchemistry/girder-client';
@@ -52,10 +55,20 @@ export function* watchLoadCalculationNotebooks() {
 
 function* loadCalculations(action) {
   try {
-    const options = action.payload
+    const {options, loadMolecules} = action.payload
     const res = yield call(fetchCalculations, options);
     const calculations = res.results;
-    yield put(calculationsRedux.receiveCalculations({calculations}));
+    const matches = res.matches;
+    yield put(calculationsRedux.receiveCalculations({calculations, matches}));
+    if (loadMolecules) {
+      const moleculeIds = new Set();
+      calculations.forEach(calc => {
+        moleculeIds.add(calc.moleculeId);
+      });
+      for (let _id of moleculeIds) {
+        yield put(moleculesRedux.loadMoleculeById(_id));
+      }
+    }
   } catch(error) {
     yield put(calculationsRedux.requestCalculations(error))
   }

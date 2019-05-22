@@ -62,8 +62,9 @@ export function* fetchMolecules(action) {
   try {
     yield put( molecules.requestMolecules() )
     const res = yield call(fetchMoleculesFromGirder, options)
-    const newMolecules = res.results
-    yield put( molecules.receiveMolecules(newMolecules) )
+    const newMolecules = res.results;
+    const matches = res.matches;
+    yield put( molecules.receiveMolecules(newMolecules, matches) )
   }
   catch(error) {
     yield put( molecules.requestMolecules(error) )

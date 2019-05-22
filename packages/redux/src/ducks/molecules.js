@@ -16,6 +16,7 @@ export const SELECT_MOLECULE = 'SELECT_MOLECULE';
 const initialState = {
     byId: {},
     byInchiKey: {},
+    matches: 0,
     error: null,
   };
 
@@ -26,7 +27,7 @@ const reducer = handleActions({
       return {...state, error: action.payload.error};
     }
     else {
-      return {...state,  error:null };
+      return initialState;
     }
   },
   REQUEST_MOLECULE: (state, action) => {
@@ -46,7 +47,7 @@ const reducer = handleActions({
     }
   },
   RECEIVE_MOLECULES: (state, action) => {
-    const molecules = action.payload.molecules
+    const { molecules, matches } = action.payload;
     let byId = {};
     byId = molecules.reduce((result, item) => {
       result[item._id] = item;
@@ -57,7 +58,7 @@ const reducer = handleActions({
       result[item.inchikey] = item._id;
       return result;
     }, byInchiKey);
-    return {...state,  byId, byInchiKey };
+    return {...state,  byId, byInchiKey, matches };
   },
   RECEIVE_MOLECULE: (state, action) => {
     const molecule = action.payload.molecule;
@@ -74,7 +75,7 @@ export const loadMolecules = createAction(LOAD_MOLECULES);
 
 export const requestMolecules = createAction(REQUEST_MOLECULES);
 
-export const receiveMolecules = createAction(RECEIVE_MOLECULES, (molecules) => ({ molecules }));
+export const receiveMolecules = createAction(RECEIVE_MOLECULES, (molecules, matches) => ({ molecules, matches }));
 
 // Fetch molecule
 export const loadMolecule = createAction(LOAD_MOLECULE, (inchikey) => ({ inchikey }));
@@ -88,4 +89,3 @@ export const requestMolecule = createAction(REQUEST_MOLECULE, (inchikey) => ({ i
 export const receiveMolecule = createAction(RECEIVE_MOLECULE, (molecule) => ({ molecule }));
 
 export default reducer;
-

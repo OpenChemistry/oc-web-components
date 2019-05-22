@@ -2,6 +2,8 @@
 
 export const getCalculationsById = state => state.calculations.byId;
 
+export const getMatches = state => state.calculations.matches;
+
 export const getOrbitals = (state, id) => {
   if (id in state.calculations.orbitalsById) {
     return state.calculations.orbitalsById[id];
