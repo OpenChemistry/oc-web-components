@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/redux",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": " ",
   "module": "esm/index.js",
   "files": [
