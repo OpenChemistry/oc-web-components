@@ -2,13 +2,22 @@ import { select, put, call, all, takeEvery} from 'redux-saga/effects'
 import { isNil } from 'lodash-es'
 
 import { file } from '@openchemistry/rest'
-import { calculations as calculationsRedux } from '@openchemistry/redux'
+import {
+  calculations as calculationsRedux,
+  molecules as moleculesRedux
+} from '@openchemistry/redux'
 import { selectors } from '@openchemistry/redux';
 
 import girderClient from '@openchemistry/girder-client';
 
-function fetchCalculations(moleculeId) {
-  return girderClient().get('calculations', {params: {moleculeId}})
+import { setPaginationDefaults } from './index'
+
+function fetchCalculations(options={}) {
+  // Let's modify a clone of the options instead of the original options
+  const optionsClone = { ...options };
+  setPaginationDefaults(optionsClone);
+  const params = { params: optionsClone };
+  return girderClient().get('calculations', params)
           .then(response => response.data )
 }
 
@@ -46,9 +55,20 @@ export function* watchLoadCalculationNotebooks() {
 
 function* loadCalculations(action) {
   try {
-    const { moleculeId } = action.payload || {};
-    const calculations = yield call(fetchCalculations, moleculeId);
-    yield put(calculationsRedux.receiveCalculations({calculations}));
+    const {options, loadMolecules} = action.payload
+    const res = yield call(fetchCalculations, options);
+    const calculations = res.results;
+    const matches = res.matches;
+    yield put(calculationsRedux.receiveCalculations({calculations, matches}));
+    if (loadMolecules) {
+      const moleculeIds = new Set();
+      calculations.forEach(calc => {
+        moleculeIds.add(calc.moleculeId);
+      });
+      for (let _id of moleculeIds) {
+        yield put(moleculesRedux.loadMoleculeById(_id));
+      }
+    }
   } catch(error) {
     yield put(calculationsRedux.requestCalculations(error))
   }

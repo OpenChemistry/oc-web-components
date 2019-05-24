@@ -26,7 +26,7 @@ import jp from 'jsonpath';
 
 // var jp = require('jsonpath')
 
-function setPaginationDefaults(options)
+export function setPaginationDefaults(options)
 {
   const defaults = { limit: 25, offset: 0, sort: '_id', sortdir: -1 }
   for (const key in defaults) {
@@ -62,8 +62,9 @@ export function* fetchMolecules(action) {
   try {
     yield put( molecules.requestMolecules() )
     const res = yield call(fetchMoleculesFromGirder, options)
-    const newMolecules = res.results
-    yield put( molecules.receiveMolecules(newMolecules) )
+    const newMolecules = res.results;
+    const matches = res.matches;
+    yield put( molecules.receiveMolecules(newMolecules, matches) )
   }
   catch(error) {
     yield put( molecules.requestMolecules(error) )
