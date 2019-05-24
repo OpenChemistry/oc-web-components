@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:10.6.0
+    - image: circleci/node:12.2.0
 
 version: 2
 jobs:
@@ -23,7 +23,7 @@ jobs:
     - run:
         name: Run build
         command: npm run build-serial
-        no_output_timeout: 30m
+        no_output_timeout: 5h
     - save_cache:
         paths:
           - node_modules
