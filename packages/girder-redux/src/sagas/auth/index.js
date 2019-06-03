@@ -1,6 +1,6 @@
 import { put, call, takeEvery, takeLatest} from 'redux-saga/effects'
 import Cookies from 'universal-cookie'
-import { isNil } from 'lodash-es';
+import { isNil, isEmpty } from 'lodash-es';
 
 import {
   AUTHENTICATE,
@@ -62,8 +62,8 @@ export function* watchFetchOauthProviders() {
 
 function* testOauthEnabled() {
   try {
-    yield call(fetchProviders, 'dummy');
-    yield put( setOauthEnabled(true) );
+    const providers = yield call(fetchProviders, 'dummy');
+    yield put( setOauthEnabled(!isEmpty(providers)) );
   }
   catch(error) {
     yield put( setOauthEnabled(false) );
