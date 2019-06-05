@@ -20,8 +20,6 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "@material-ui/core": "^3.5.1",
-    "@material-ui/icons": "^3.0.1",
     "@openchemistry/girder-redux": "^0.0.22",
     "lodash-es": "^4.17.11",
     "redux-form-material-ui": "^5.0.0-beta.3"
@@ -34,6 +32,8 @@
     "@babel/preset-react": "^7.0.0"
   },
   "peerDependencies": {
+    "@material-ui/core": "^3.0.0 || ^4.0.0",
+    "@material-ui/icons": "^3.0.0 || ^4.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.0 || ^6.0.0 || ^7.0.0",
