@@ -7,7 +7,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  TextField
 } from '@material-ui/core';
 
 import red from '@material-ui/core/colors/red';
@@ -15,10 +16,23 @@ import red from '@material-ui/core/colors/red';
 import InputIcon from '@material-ui/icons/Input';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import {
-  TextField
-} from 'redux-form-material-ui';
 import { Field } from 'redux-form'
+
+const renderTextField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+)
 
 const red500 = red['500'];
 
@@ -59,7 +73,7 @@ class GirderLogin extends Component {
               <Field
                 fullWidth
                 name="username"
-                component={TextField}
+                component={renderTextField}
                 placeholder="Username"
                 label="Username"
               />
@@ -68,7 +82,7 @@ class GirderLogin extends Component {
               <Field
                 fullWidth
                 name="password"
-                component={TextField}
+                component={renderTextField}
                 placeholder="Password"
                 label="Password"
                 type="password"
@@ -79,7 +93,7 @@ class GirderLogin extends Component {
               <Field
                 fullWidth
                 name="mfa"
-                component={TextField}
+                component={renderTextField}
                 placeholder="Multi-factor (if enabled)"
                 label="Multi-factor (if enabled)"
                 type="password"
