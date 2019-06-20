@@ -4,7 +4,7 @@ import { isNil, has } from "lodash-es";
 
 import { IChemJson, IDisplayOptions } from '@openchemistry/types';
 import { isChemJson, validateChemJson, composeDisplayOptions, makeBins } from '@openchemistry/utils';
-import { redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
+import { redBlue, redYelBlu, viridis, plasma, gray } from '@openchemistry/utils';
 import { linearSpace } from '@openchemistry/utils';
 
 import memoizeOne from 'memoize-one';
@@ -14,6 +14,15 @@ import '@openchemistry/molecule-vtkjs';
 import '@openchemistry/molecule-moljs';
 import '@openchemistry/vibrational-spectrum';
 import 'split-me';
+
+const defaultOpacityFn = (range: [number, number]) => {
+  const opacities = [1, 1, 0.75, 0, 0, 0.75, 1, 1];
+  const extreme = Math.min(Math.abs(range[0]), Math.abs(range[1]));
+  const midPoint = 0.25 * extreme;
+  const eps = 0.00001;
+  const opacitiesX = [range[0], -extreme, -midPoint, -eps, eps, midPoint, extreme, range[0]];
+  return {opacities, opacitiesX};
+}
 
 @Component({
   tag: 'oc-molecule',
@@ -49,7 +58,7 @@ export class Molecule {
   @Prop({ mutable: true }) opacitiesX: number[];
   @Prop({ mutable: true }) range: [number, number];
   @Prop({ mutable: true }) histograms: number[];
-  @Prop({ mutable: true }) activeMapName: string = 'Red Yellow Blue';
+  @Prop({ mutable: true }) activeMapName: string = 'Red Blue';
   // Orbital options
   @Prop({ mutable: true }) iOrbital: number | string = -1;
   // Other options
@@ -63,6 +72,7 @@ export class Molecule {
   cjsonData: IChemJson;
 
   colorMaps = {
+    'Red Blue': redBlue,
     'Red Yellow Blue': redYelBlu,
     'Viridis': viridis,
     'Plasma': plasma,
@@ -114,10 +124,20 @@ export class Molecule {
       delete this.colorMaps['Custom'];
     }
     if (isNil(this.colorsX)) {
-      this.colorsX = linearSpace(this.range[0], this.range[1], this.colorMaps[this.activeMapName].length);
+      if (this.range[0] < 0 && this.activeMapName === 'Red Blue') {
+        this.colorsX = [this.range[0], -0.000001, 0.000001, this.range[1]];
+      } else {
+        this.colorsX = linearSpace(this.range[0], this.range[1], this.colorMaps[this.activeMapName].length);
+      }
     }
     if (isNil(this.opacities)) {
-      this.opacities = [1, 0, 1];
+      if (this.range[0] < 0) {
+        const { opacities, opacitiesX } = defaultOpacityFn(this.range);
+        this.opacities = opacities;
+        this.opacitiesX = opacitiesX;
+      } else {
+        this.opacities = [0, 1];
+      }
     }
     if (isNil(this.opacitiesX)) {
       this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);

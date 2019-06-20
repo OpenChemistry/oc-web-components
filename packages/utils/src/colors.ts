@@ -65,8 +65,6 @@ export const plasma : [number, number, number][] = [
   [0.940015, 0.975158, 0.131326]
 ];
 
-
-
 export const gray : [number, number, number][] = [
   [0, 0, 0],
   [1, 1, 1]
@@ -83,3 +81,9 @@ export const redYelBlu : [number, number, number][] = [
   [0, 0, 1]
 ];
 
+export const redBlue : [number, number, number][] = [
+  [1, 0, 0],
+  [1, 0, 0],
+  [0, 0, 1],
+  [0, 0, 1]
+]
