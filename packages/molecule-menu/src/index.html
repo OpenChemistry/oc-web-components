@@ -9,17 +9,58 @@
 <body>
   
   <div style="width: 100%; height:40rem; background-color: aliceblue;">
-      <oc-molecule-menu orbital-select n-electrons="10" scf-type="uhf"/>
+      <oc-molecule-menu id="molecule-menu"/>
   </div>
   <div style="width: 100%; height:40rem; background-color: aquamarine; position: relative;">
     <oc-molecule-menu-popup>
-      <oc-molecule-menu id="molecule-menu" />
+      <oc-molecule-menu/>
     </oc-molecule-menu-popup>
   </div>
 
   <script>
     let menu = document.getElementById('molecule-menu');
-    menu.nModes = 12;
+    // menu.nModes = 12;
+    menu.moleculeRenderer = 'vtkjs';
+    menu.displayStyle = 'vdW';
+
+    menu.opacities = [1, 0.25, 0.75, 0.25, 1];
+    menu.opacitiesX = [-1, -0.5, 0, .5, 1];
+
+    menu.range = [-1, 1];
+
+    menu.colors = [
+      [1, 0, 0],
+      [1, 0, 0],
+      [0, 0, 1],
+      [0, 0, 1]
+    ];
+
+    menu.colorsX = [-1, -0.00001, 0.00001, 1];
+
+    menu.hasVolume = true;
+    menu.showVolume = true;
+
+    const events = {
+      'displayStyleChanged': 'displayStyle',
+      'sphereScaleChanged': 'sphereScale',
+      'stickRadiusChanged': 'stickRadius',
+      'moleculeRendererChanged': 'moleculeRenderer',
+      'mapRangeChanged': 'mapRange',
+      'showVolumeChanged': 'showVolume',
+      'showIsoSurfaceChanged': 'showIsoSurface'
+    };
+
+    Object.entries(events).forEach(([eventName, propName]) => {
+      menu.addEventListener(eventName, ({detail}) => {
+        menu[propName] = detail;
+      });
+    });
+
+    menu.addEventListener('opacitiesChanged', ({detail}) => {
+      const {opacity, opacityScalarValue} = detail;
+      menu.opacities = opacity;
+      menu.opacitiesX = opacityScalarValue;
+    });
   </script>
 </body>
 </html>
