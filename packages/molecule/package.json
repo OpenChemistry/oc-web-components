@@ -20,6 +20,7 @@
     "@openchemistry/types": "^0.8.8",
     "@openchemistry/utils": "^0.6.8",
     "@openchemistry/vibrational-spectrum": "^0.1.25",
+    "immer": "~1.8.0",
     "lodash-es": "^4.17.11",
     "memoize-one": "^5.0.0",
     "split-me": "^1.1.6"
