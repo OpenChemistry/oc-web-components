@@ -1,0 +1,21 @@
+.main-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.menu-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  max-width: 100%;
+  width: 30rem;
+}
+
+.molecule-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
