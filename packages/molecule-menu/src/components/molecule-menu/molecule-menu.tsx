@@ -381,17 +381,19 @@ export class MoleculeMenu {
                 onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 0)}}
               ></ion-input>
             </div>
-            <ion-range
-              dualKnobs
-              min={this.range ? this.range[0] : 0}
-              max={this.range ? this.range[1] : 1}
-              step={0.001}
-              value={{
-                lower: this.mapRange ? this.mapRange[0] : this.range ? this.range[0] : 0,
-                upper: this.mapRange ? this.mapRange[1] : this.range ? this.range[1] : 1
-              }}
-              onIonChange={ (e: CustomEvent)=>{this.mapRangeHandler(e.detail.value)}}
-            />
+            <div class="item-content">
+              <ion-range
+                dualKnobs
+                min={this.range ? this.range[0] : 0}
+                max={this.range ? this.range[1] : 1}
+                step={0.001}
+                value={{
+                  lower: this.mapRange ? this.mapRange[0] : this.range ? this.range[0] : 0,
+                  upper: this.mapRange ? this.mapRange[1] : this.range ? this.range[1] : 1
+                }}
+                onIonChange={ (e: CustomEvent)=>{this.mapRangeHandler(e.detail.value)}}
+              />
+            </div>
             <div class="end-slot" slot="end">
               <ion-input value={ this.mapRange && isFinite(this.mapRange[1]) ? this.mapRange[1].toFixed(3) : this.range ? this.range[1].toFixed(3) : "1.000"}
                 debounce={1000}
