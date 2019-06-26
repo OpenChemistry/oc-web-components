@@ -37,7 +37,7 @@ export class Molecule {
   defaultOptions: IDisplayOptions = composeDisplayOptions({});
 
   // IsoSurface options
-  @Prop() isoValue: number = 0.05;
+  @Prop() isoValue: number = 0.005;
   // Style options
   @Prop() displayStyle: string = 'ballAndStick';
   @Prop() sphereScale: number = 0.3;
@@ -49,7 +49,7 @@ export class Molecule {
   @Prop() animationSpeed: number = 1;
   // Visibility options
   @Prop() showVolume: boolean = false;
-  @Prop() showIsoSurface: boolean = false;
+  @Prop() showIsoSurface: boolean = true;
   @Prop() showSpectrum: boolean = true;
   @Prop() showMenu: boolean = true;
   // Volume options
@@ -62,12 +62,12 @@ export class Molecule {
   @Prop() histograms: number[];
   @Prop() activeMapName: string = 'Red Blue';
   // Orbital options
-  @Prop() iOrbital: number | string;
+  @Prop() iOrbital: number | string = -1;
   // Other options
-  @Prop() rotate: boolean;
-  @Prop() orbitalSelect: boolean;
+  @Prop() rotate: boolean = false;
+  @Prop() orbitalSelect: boolean = false;
   // Molecule renderer
-  @Prop() moleculeRenderer: string = 'vtkjs';
+  @Prop() moleculeRenderer: string = 'moljs';
 
   @State() state: {[name: string]: {touched: boolean; value: any}};
 
