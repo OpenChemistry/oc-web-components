@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/sagas",
-  "version": "0.3.31",
+  "version": "0.3.32",
   "description": " ",
   "module": "esm/index.js",
   "files": [
@@ -22,7 +22,7 @@
   "dependencies": {
     "@openchemistry/girder-client": "^0.0.14",
     "@openchemistry/girder-redux": "^0.0.22",
-    "@openchemistry/redux": "^0.3.19",
+    "@openchemistry/redux": "^0.3.20",
     "@openchemistry/rest": "^0.3.20",
     "axios": "^0.18.0",
     "jsonpath": "^1.0.0",
