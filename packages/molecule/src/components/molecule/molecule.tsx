@@ -33,6 +33,8 @@ export class Molecule {
 
   // The chemical json object in input
   @Prop() cjson: IChemJson;
+  // The url to a chemical json file
+  @Prop() src: string;
 
   defaultOptions: IDisplayOptions = composeDisplayOptions({});
 
@@ -95,6 +97,18 @@ export class Molecule {
     this.updateVolumeOptions();
   }
 
+  @Watch('src')
+  srcHandler(val) {
+    if (val) {
+      fetch(val)
+      .then(res => res.json())
+      .then(cjson => {
+        this.cjsonData = validateChemJson(cjson) ? cjson : null;
+        this.updateVolumeOptions();
+      });
+    }
+  }
+
   @Watch('activeMapName')
   @Watch('opacitiesX')
   @Watch('opacities')
@@ -140,9 +154,13 @@ export class Molecule {
       moleculeRenderer: {touched: false, value: this.moleculeRenderer},
     }
     this.updateVolumeOptions();
+    this.srcHandler(this.src);
   }
 
   updateVolumeOptions() {
+    if (isNil(this.cjsonData)) {
+      return;
+    }
     let range: [number, number] = this.getRange(this.cjsonData.cube.scalars);
     const isOrbitalCube = range[0] < 0 && range[1] > 0;
     // If the cube has positive and negative values, make the range symmetric
