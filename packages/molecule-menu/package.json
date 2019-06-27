@@ -14,7 +14,7 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@ionic/core": "^4.0.2",
+    "@ionic/core": "^4.5.0",
     "@openchemistry/types": "^0.8.8",
     "@openchemistry/utils": "^0.6.8",
     "@openchemistry/volume-controls": "^0.1.16",
