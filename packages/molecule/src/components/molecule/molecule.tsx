@@ -25,6 +25,24 @@ const defaultOpacityFn = (range: [number, number]) => {
   return {opacities, opacitiesX};
 }
 
+const sameArray = (arr0: number[], arr1: number[], eps = Number.EPSILON) : boolean => {
+  if (isNil(arr0) && isNil(arr1)) {
+    return true;
+  }
+  if (isNil(arr0) || isNil(arr1)) {
+    return false;
+  }
+  if (arr0.length !== arr1.length) {
+    return false;
+  }
+  for (let i in arr0) {
+    if (Math.abs(arr0[i] - arr1[i]) > eps) {
+      return false;
+    }
+  }
+  return true;
+}
+
 @Component({
   tag: 'oc-molecule',
   shadow: true
@@ -75,6 +93,7 @@ export class Molecule {
 
   @Event() iOrbitalChanged: EventEmitter;
 
+  @State()
   cjsonData: IChemJson;
 
   colorMaps = {
@@ -91,9 +110,7 @@ export class Molecule {
 
   @Watch('cjson')
   cjsonHandler(val) {
-    this.cjsonData = null;
-    this.cjson = val;
-    this.cjsonData = this.getCjson();
+    this.setCjson(val);
     this.updateVolumeOptions();
   }
 
@@ -103,7 +120,7 @@ export class Molecule {
       fetch(val)
       .then(res => res.json())
       .then(cjson => {
-        this.cjsonData = validateChemJson(cjson) ? cjson : null;
+        this.setCjson(cjson);
         this.updateVolumeOptions();
       });
     }
@@ -126,7 +143,6 @@ export class Molecule {
     }
     this.getRange = memoizeOne(this.getRange);
     this.makeBins = memoizeOne(makeBins);
-    this.cjsonData = this.getCjson();
     this.state = {
       isoValue: {touched: false, value: this.isoValue},
       displayStyle: {touched: false, value: this.displayStyle},
@@ -153,12 +169,13 @@ export class Molecule {
       orbitalSelect: {touched: false, value: this.orbitalSelect},
       moleculeRenderer: {touched: false, value: this.moleculeRenderer},
     }
+    this.setCjson(this.cjson);
     this.updateVolumeOptions();
     this.srcHandler(this.src);
   }
 
   updateVolumeOptions() {
-    if (isNil(this.cjsonData)) {
+    if (isNil(this.cjsonData) || isNil(this.cjsonData.cube) || isNil(this.cjsonData.cube.scalars)) {
       return;
     }
     let range: [number, number] = this.getRange(this.cjsonData.cube.scalars);
@@ -176,13 +193,15 @@ export class Molecule {
     } else {
       delete this.colorMaps['Custom'];
     }
+    const activeMapName = this.getValue('activeMapName');
+    const colors = this.colorMaps[activeMapName];
 
     let colorsX: number[];
     if (isNil(this.colorsX)) {
-      if (isOrbitalCube && this.activeMapName === 'Red Blue') {
+      if (isOrbitalCube && activeMapName === 'Red Blue') {
         colorsX = [range[0], -0.000001, 0.000001, range[1]];
       } else {
-        colorsX = linearSpace(range[0], range[1], this.colorMaps[this.activeMapName].length);
+        colorsX = linearSpace(range[0], range[1], this.colorMaps[activeMapName].length);
       }
     } else {
       colorsX = [...this.colorsX];
@@ -214,6 +233,7 @@ export class Molecule {
       draft['mapRange'].touched = false;
       draft['histograms'].value = histograms;
       draft['histograms'].touched = false;
+      draft['colors'].value = colors;
       draft['colorsX'].value = colorsX;
       draft['colorsX'].touched = false;
       draft['opacities'].value = opacities;
@@ -235,24 +255,26 @@ export class Molecule {
 
   getCjson(): IChemJson {
     if (isNil(this.cjsonData)) {
-      this.setCjson();
+      this.setCjson(this.cjson);
     }
     return this.cjsonData;
   }
 
-  setCjson() {
-    if (isNil(this.cjson)) {
+  setCjson(cjson: IChemJson | string) {
+    if (isNil(cjson)) {
       this.cjsonData = null;
       return;
     }
-    if (isChemJson(this.cjson)) {
-      this.cjsonData = this.cjson as IChemJson;
+    let cjsonData: IChemJson;
+    if (isChemJson(cjson)) {
+      cjsonData = cjson as IChemJson;
     } else {
-      this.cjsonData = JSON.parse(this.cjson);
+      cjsonData = JSON.parse(cjson);
     }
-    if (!validateChemJson(this.cjsonData)) {
-      this.cjsonData = null;
+    if (!validateChemJson(cjsonData)) {
+      cjsonData = null;
     }
+    this.cjsonData = cjsonData;
   }
 
   onValueChanged = (val: any, key: string) => {
@@ -271,7 +293,9 @@ export class Molecule {
   }
 
   onMapRangeChanged = (range: [number, number]) => {
-    console.log('MAP RANGE CHANGE', range);
+    if (sameArray(range, this.getValue('mapRange'), 0.001)) {
+      return;
+    }
     const colors = this.state['colors'].value;
     const colorsX = linearSpace(range[0], range[1], colors.length);
 
@@ -284,6 +308,9 @@ export class Molecule {
   }
 
   onMapChanged = (activeMapName: string) => {
+    if (activeMapName === this.getValue('activeMapName')) {
+      return;
+    }
     const colors = this.colorMaps[activeMapName];
     let range = this.state['range'].value;
     const isOrbitalCube = range[0] < 0 && range[1] > 0;
@@ -305,6 +332,8 @@ export class Molecule {
     this.state = produce(this.state, draft => {
       draft['activeMapName'].value = activeMapName;
       draft['activeMapName'].touched = true;
+      draft['colors'].value = colors;
+      draft['colors'].touched = true;
       draft['colorsX'].value = colorsX;
       draft['colorsX'].touched = true;
       draft['mapRange'].value = mapRange;
@@ -315,6 +344,10 @@ export class Molecule {
   onOpacitiesChanged = (val: any) => {
     const opacities = [...val.opacity];
     const opacitiesX = [...val.opacityScalarValue];
+    if (sameArray(opacities, this.getValue('opacities')) && sameArray(opacitiesX, this.getValue('opacitiesX'))) {
+      return;
+    }
+
     this.state = produce(this.state, draft => {
       draft['opacities'].value = opacities;
       draft['opacities'].touched = true;
@@ -349,7 +382,7 @@ export class Molecule {
         showIsoSurface={this.getValue('showIsoSurface')}
         showVolume={this.getValue('showVolume')}
         colorMapNames={Object.keys(this.colorMaps)}
-        colors={this.colorMaps[this.getValue('activeMapName')]}
+        colors={this.getValue('colors')}
         colorsX={this.getValue('colorsX')}
         opacities={this.getValue('opacities')}
         opacitiesX={this.getValue('opacitiesX')}
