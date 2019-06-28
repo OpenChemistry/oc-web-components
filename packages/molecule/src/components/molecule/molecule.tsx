@@ -86,6 +86,7 @@ export class Molecule {
   // Other options
   @Prop() rotate: boolean = false;
   @Prop() orbitalSelect: boolean = false;
+  @Prop() zoom: number = 0.75;
   // Molecule renderer
   @Prop() moleculeRenderer: string = 'moljs';
 
@@ -394,6 +395,7 @@ export class Molecule {
         iOrbital={this.getValue('iOrbital')}
         orbitalSelect={this.getValue('orbitalSelect')}
         showMenu={this.getValue('showMenu')}
+        zoom={this.zoom}
         // Events
         onIModeChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'iMode')}}
         onPlayChanged={(e: CustomEvent) => {this.onValueChanged(e.detail, 'play')}}

@@ -54,6 +54,7 @@ export class MoleculeBase {
   @Prop() colorMapNames: string[] = [];
   @Prop() rotate: boolean;
   @Prop() orbitalSelect: boolean;
+  @Prop() zoom: number;
   // Molecule renderer
   @Prop() moleculeRenderer: string;
 
@@ -215,6 +216,7 @@ export class MoleculeBase {
               cjson={cjson}
               options={moleculeOptions}
               rotate={this.rotate}
+              zoom={this.zoom}
             />
             }
             { this.moleculeRenderer !== 'vtkjs' &&
