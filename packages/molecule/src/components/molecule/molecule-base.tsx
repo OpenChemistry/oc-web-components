@@ -54,6 +54,7 @@ export class MoleculeBase {
   @Prop() colorMapNames: string[] = [];
   @Prop() rotate: boolean;
   @Prop() orbitalSelect: boolean;
+  @Prop() zoom: number;
   // Molecule renderer
   @Prop() moleculeRenderer: string;
 
@@ -86,13 +87,11 @@ export class MoleculeBase {
 
   @Watch('cjson')
   cjsonHandler(val) {
-    this.cjsonData = null;
-    this.cjson = val;
-    this.cjsonData = this.getCjson();
+    this.setCjson(val);
   }
 
   componentWillLoad() {
-    console.log('Molecule is about to be rendered');
+    console.log('MoleculeBase is about to be rendered');
     // Map props names to event emitters
     this.keyToEvent = {
       displayStyle: this.displayStyleChanged,
@@ -110,7 +109,7 @@ export class MoleculeBase {
       moleculeRenderer: this.moleculeRendererChanged,
       iOrbital: this.iOrbitalChanged
     }
-    this.cjsonData = this.getCjson();
+    this.setCjson(this.cjson);
   }
 
   makeIsoSurfaces = (iso: number) => {
@@ -129,24 +128,26 @@ export class MoleculeBase {
 
   getCjson(): IChemJson {
     if (isNil(this.cjsonData)) {
-      this.setCjson();
+      this.setCjson(this.cjson);
     }
     return this.cjsonData;
   }
 
-  setCjson() {
-    if (isNil(this.cjson)) {
+  setCjson(cjson: IChemJson | string) {
+    if (isNil(cjson)) {
       this.cjsonData = null;
       return;
     }
-    if (isChemJson(this.cjson)) {
-      this.cjsonData = this.cjson as IChemJson;
+    let cjsonData: IChemJson;
+    if (isChemJson(cjson)) {
+      cjsonData = cjson as IChemJson;
     } else {
-      this.cjsonData = JSON.parse(this.cjson);
+      cjsonData = JSON.parse(cjson);
     }
-    if (!validateChemJson(this.cjsonData)) {
-      this.cjsonData = null;
+    if (!validateChemJson(cjsonData)) {
+      cjsonData = null;
     }
+    this.cjsonData = cjsonData;
   }
 
   onValueChanged(val: any, key: string) {
@@ -215,6 +216,7 @@ export class MoleculeBase {
               cjson={cjson}
               options={moleculeOptions}
               rotate={this.rotate}
+              zoom={this.zoom}
             />
             }
             { this.moleculeRenderer !== 'vtkjs' &&
