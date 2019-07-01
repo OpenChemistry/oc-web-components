@@ -18,28 +18,29 @@ class MembersContainer extends Component {
     render() {
       return (
         <Members
-	  handleDelete={this.handleDelete}
-	  {...this.props}/>
+      handleDelete = {this.handleDelete} {
+        ...this.props
+      } />
       );
     }
 }
 
 function membersMapStateToProps(state) {
-    const membersById = admin.selectors.getMembersByIds(state);
-    const group = admin.selectors.getCurrentGroup(state);
-    const showMembers = admin.selectors.getMembersVisibility(state);
+  const membersById = admin.selectors.getMembersByIds(state);
+  const group = admin.selectors.getCurrentGroup(state);
+  const showMembers = admin.selectors.getMembersVisibility(state);
 
-    const listOfMembers = [];
+  const listOfMembers = [];
 
-    for (const [key, value] of Object.entries(membersById)) {
-      listOfMembers.push(value);
-    }
+  for (const [key, value] of Object.entries(membersById)) {
+    listOfMembers.push(value);
+  }
 
-    return {
-	group,
-        listOfMembers,
-	showMembers
-    };
+  return {
+    group,
+    listOfMembers,
+    showMembers
+  };
 }
 
 MembersContainer = connect(membersMapStateToProps)(MembersContainer)

@@ -2,27 +2,24 @@ import { createAction, handleActions } from 'redux-actions';
 
 //Default State
 const initialState = {
-    byUserId: {
-	visible: false,
-	users: {}
-    },
-    byGroupId: {},
-    byMemberId: {
-	visible: false,
-	members: {}
-    },
-    currentGroup: {}
+  byUserId : {},
+  byGroupId : {},
+  byMemberId : {},
+  currentGroup : {},
+  ui : {membersVisible : false, usersVisible : false}
 };
 
 //Selectors
 let getRoot = (state) => state;
 export const initRoot = (getRootFn) => {getRoot = getRootFn;};
 export const getGroupsByIds = (state) => getRoot(state).admin.byGroupId;
-export const getMembersByIds = (state) => getRoot(state).admin.byMemberId.members;
-export const getUsersByIds = (state) => getRoot(state).admin.byUserId.users;
+export const getMembersByIds = (state) => getRoot(state).admin.byMemberId;
+export const getUsersByIds = (state) => getRoot(state).admin.byUserId;
 export const getCurrentGroup = (state) => getRoot(state).admin.currentGroup;
-export const getMembersVisibility = (state) => getRoot(state).admin.byMemberId.visible;
-export const getUsersVisibility = (state) => getRoot(state).admin.byUserId.visible;
+export const getMembersVisibility = (state) =>
+    getRoot(state).admin.ui.membersVisible;
+export const getUsersVisibility = (state) =>
+    getRoot(state).admin.ui.usersVisible;
 
 //Actions
 const FETCH_GROUPS_REQUESTED = 'FETCH_GROUPS_REQUESTED';
@@ -70,49 +67,47 @@ export const showUsers = createAction(SHOW_USERS);
 
 //Reducer
 const reducer = handleActions({
-    [FETCH_USERS_SUCCEEDED]: (state, action) => {
-	const payload = action.payload;
-	const byUserId = {...state.byUserId};
-	const value = payload.reduce((results, user) => {
-	    results[user._id] = user;
-	    return results;
-	}, {});
-	byUserId.users = value;
-      return {...state, byUserId };
-    },
-    [FETCH_GROUPS_SUCCEEDED]: (state, action) => {
-	const payload = action.payload;
-	const value = payload.reduce((results, group) => {
-	    results[group._id] = group;
-	    return results;
-	}, {});
-      return {...state, byGroupId: value };
-    },
-    [FETCH_MEMBERS_SUCCEEDED]: (state, action) => {
-	const byMemberId = {...state.byMemberId};
-	const value = action.payload.reduce((results, member) => {
-	    results[member._id] = member;
-	    return results;
-	}, {});
-	byMemberId.members = value;
-	return {...state, byMemberId};
-    },
-    [SET_CURRENT_GROUP]: (state, action) => {
-	const group = action.payload;
-	return {...state, currentGroup: group}
-    },
-    [SHOW_MEMBERS]: (state, action) => {
-	const visibility = action.payload;
-	const byMemberId = {...state.byMemberId};
-	byMemberId.visible = visibility;
-	return {...state, byMemberId}
-    },
-    [SHOW_USERS]: (state, action) => {
-	const visibility = action.payload;
-	const byUserId = {...state.byUserId};
-	byUserId.visible = visibility;
-	return {...state, byUserId}
-    },
-}, initialState);
+  [FETCH_USERS_SUCCEEDED] : (state, action) => {
+    const users = action.payload;
+    const value = users.reduce((results, user) => {
+      results[user._id] = user;
+      return results;
+    }, {});
+    return {...state, byUserId : value};
+  },
+  [FETCH_GROUPS_SUCCEEDED] : (state, action) => {
+    const groups = action.payload;
+    const value = groups.reduce((results, group) => {
+      results[group._id] = group;
+      return results;
+    }, {});
+    return {...state, byGroupId : value};
+  },
+  [FETCH_MEMBERS_SUCCEEDED] : (state, action) => {
+    const members = action.payload;
+    const value = members.reduce((results, member) => {
+      results[member._id] = member;
+      return results;
+    }, {});
+    return {...state, byMemberId : value};
+  },
+  [SET_CURRENT_GROUP] : (state, action) => {
+    const group = action.payload;
+    return { ...state, currentGroup: group }
+  },
+  [SHOW_MEMBERS] : (state, action) => {
+    const visibility = action.payload;
+    const ui = {...state.ui};
+    ui.membersVisible = visibility;
+    return { ...state, ui }
+  },
+  [SHOW_USERS] : (state, action) => {
+    const visibility = action.payload;
+    const ui = {...state.ui};
+    ui.usersVisible = visibility;
+    return { ...state, ui }
+  },
+},
+                              initialState);
 
 export default reducer;

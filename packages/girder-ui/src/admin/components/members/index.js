@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import {
+  Link,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography
+} from '@material-ui/core';
 import PropTypes from 'prop-types';
-
-import { Table,
-	 TableHead,
-	 TableBody,
-	 TableRow,
-	 TableCell,
-         Link,
-         TextField,
-         Typography, Paper } from '@material-ui/core';
-
+import React, {Component} from 'react';
 
 class Members extends Component {
   render() {

@@ -13,22 +13,19 @@ class GroupsContainer extends Component {
     	this.props.dispatch(admin.actions.fetchGroupsList());
     }
 
-    handleClick = (group) => {
-	this.props.dispatch(
-	    admin.actions.showMembers(true));
-	this.props.dispatch(
-	    admin.actions.showUsers(false));
-	this.props.dispatch(
-	    admin.actions.fetchMembersList(group));
-    }
+    handleClick =
+        (group) => {
+          this.props.dispatch(admin.actions.showMembers(true));
+          this.props.dispatch(admin.actions.showUsers(false));
+          this.props.dispatch(admin.actions.fetchMembersList(group));
+        }
 
-    handleDelete = (groupid) => {
-	this.props.dispatch(
-	    admin.actions.showMembers(false));
-	this.props.dispatch(
-	    admin.actions.removeGroup(groupid));
-    }
-    
+    handleDelete =
+        (groupid) => {
+          this.props.dispatch(admin.actions.showMembers(false));
+          this.props.dispatch(admin.actions.removeGroup(groupid));
+        }
+
     render() {
       return (
         <Groups
