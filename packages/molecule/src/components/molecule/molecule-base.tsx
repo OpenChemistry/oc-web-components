@@ -1,4 +1,4 @@
-import { Component, Prop, Watch, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Watch, Event, EventEmitter, h } from '@stencil/core';
 
 import { isNil, has } from "lodash-es";
 

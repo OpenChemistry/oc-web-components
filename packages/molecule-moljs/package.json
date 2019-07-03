@@ -2,18 +2,20 @@
   "name": "@openchemistry/molecule-moljs",
   "version": "0.4.21",
   "description": "Stencil Wrapper for 3Dmoljs with support for cjson chemical data",
-  "module": "dist/esm/index.js",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
   "files": [
-    "dist/"
+    "dist/",
+    "loader/"
   ],
   "scripts": {
-    "build": "stencil build",
-    "start": "stencil build --dev --watch --serve",
-    "test": "jest",
-    "test.watch": "jest --watch"
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
     "@openchemistry/moljs-es": "^0.1.12",
@@ -24,11 +26,7 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.15.2",
-    "@stencil/dev-server": "latest",
-    "@stencil/utils": "latest",
-    "@types/jest": "^23.3.9",
-    "jest": "^23.6.0"
+    "@stencil/core": "^1.2.0"
   },
   "repository": {
     "type": "git",
@@ -40,19 +38,6 @@
     "url": "https://github.com/OpenChemistry/oc-web-components"
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components",
-  "jest": {
-    "transform": {
-      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "jsx"
-    ]
-  },
   "publishConfig": {
     "access": "public"
   }

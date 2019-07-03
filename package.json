@@ -3,7 +3,7 @@
     "commitizen": "^2.10.1",
     "conventional-commit-types": "^2.2.0",
     "cz-conventional-changelog": "^2.1.0",
-    "lerna": "^3.4.3"
+    "lerna": "^3.16.4"
   },
   "scripts": {
     "build": "lerna run build --stream",
