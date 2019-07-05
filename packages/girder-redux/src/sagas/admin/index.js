@@ -20,6 +20,7 @@ import {
 } from '../../ducks/admin';
 
 import {
+  requestAllUsers,
   requestUsersList,
   requestGroupsList,
   requestMembersList,
@@ -33,7 +34,10 @@ import girderClient from '@openchemistry/girder-client';
 function* onFetchUsersList(action) {
   try {
     const user = action.payload;
-    const usersFound = yield call(requestUsersList, user);
+    const usersFound =
+      user
+      ? yield call(requestUsersList, user)
+      : yield call(requestAllUsers);
     yield put( receiveUsersList(usersFound) );
   } catch(error) {
     yield put( fetchUsersListFailed(error) );

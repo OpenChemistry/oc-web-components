@@ -6,6 +6,11 @@ export function requestUsersList(text) {
 	.then(response => response.data);
 }
 
+export function requestAllUsers() {
+    return girderClient().get('user')
+	.then(response => response.data);
+}
+
 export function requestGroupsList() {
     return girderClient().get('group', {})
 	.then(response => response.data);
