@@ -1,5 +1,4 @@
 import girderClient from '@openchemistry/girder-client';
-import axios from 'axios';
 
 export function requestUsersList(text) {
     return girderClient().get('user', { params: {text} })

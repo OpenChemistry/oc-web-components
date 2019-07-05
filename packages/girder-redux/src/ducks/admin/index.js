@@ -16,10 +16,8 @@ export const getGroupsByIds = (state) => getRoot(state).admin.byGroupId;
 export const getMembersByIds = (state) => getRoot(state).admin.byMemberId;
 export const getUsersByIds = (state) => getRoot(state).admin.byUserId;
 export const getCurrentGroup = (state) => getRoot(state).admin.currentGroup;
-export const getMembersVisibility = (state) =>
-    getRoot(state).admin.ui.membersVisible;
-export const getUsersVisibility = (state) =>
-    getRoot(state).admin.ui.usersVisible;
+export const getMembersVisibility = (state) => getRoot(state).admin.ui.membersVisible;
+export const getUsersVisibility = (state) => getRoot(state).admin.ui.usersVisible;
 
 //Actions
 const FETCH_GROUPS_REQUESTED = 'FETCH_GROUPS_REQUESTED';
@@ -107,7 +105,6 @@ const reducer = handleActions({
     ui.usersVisible = visibility;
     return { ...state, ui }
   },
-},
-                              initialState);
+}, initialState);
 
 export default reducer;
