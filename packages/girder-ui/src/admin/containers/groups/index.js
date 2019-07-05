@@ -23,6 +23,7 @@ class GroupsContainer extends Component {
     handleDelete =
         (groupid) => {
           this.props.dispatch(admin.actions.showMembers(false));
+          this.props.dispatch(admin.actions.showUsers(false));
           this.props.dispatch(admin.actions.removeGroup(groupid));
         }
 

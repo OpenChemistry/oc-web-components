@@ -16,7 +16,8 @@ import {
   addMember,
   addMemberFailed,
   removeGroup,
-  removeGroupFailed
+  removeGroupFailed,
+  showUsers
 } from '../../ducks/admin';
 
 import {
@@ -113,6 +114,7 @@ function* onRemoveGroup(action) {
     const groupid = action.payload;
     yield call(requestGroupRemoval, groupid);
     const groupsRemaining = yield call(requestGroupsList);
+    yield put( showUsers(false) );
     yield put( receiveGroupsList(groupsRemaining) );
   } catch(error) {
     yield put( removeGroupFailed(error) );
