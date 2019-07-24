@@ -2,15 +2,19 @@
   "name": "@openchemistry/molecule",
   "version": "0.4.21",
   "description": "Stencil component to display chemical json data",
-  "module": "dist/esm/index.js",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
   "files": [
-    "dist/"
+    "dist/",
+    "loader/"
   ],
   "scripts": {
-    "build": "stencil build",
+    "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
@@ -23,10 +27,10 @@
     "immer": "~1.8.0",
     "lodash-es": "^4.17.11",
     "memoize-one": "^5.0.0",
-    "split-me": "^1.1.6"
+    "split-me": "^1.2.1"
   },
   "devDependencies": {
-    "@stencil/core": "^0.12.4",
+    "@stencil/core": "^1.2.0",
     "@types/lodash-es": "^4.17.2"
   },
   "repository": {

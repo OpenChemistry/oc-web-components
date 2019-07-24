@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 
 import { scaleLinear, ScaleLinear, scaleLog, ScaleLogarithmic } from 'd3';
 

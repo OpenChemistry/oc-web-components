@@ -2,18 +2,20 @@
   "name": "@openchemistry/volume-controls",
   "version": "0.1.17",
   "description": "Component to plot adjust the opacity map and visualize its effect on the colormap",
-  "module": "dist/esm/index.js",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
   "files": [
-    "dist/"
+    "dist/",
+    "loader/"
   ],
   "scripts": {
-    "build": "stencil build",
-    "start": "stencil build --dev --watch --serve",
-    "test": "jest",
-    "test.watch": "jest --watch"
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
     "@openchemistry/utils": "^0.6.9",
@@ -21,10 +23,8 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "@stencil/core": "^0.15.2",
-    "@types/d3": "^5.0.1",
-    "@types/jest": "^23.3.9",
-    "jest": "^23.6.0"
+    "@stencil/core": "^1.2.0",
+    "@types/d3": "^5.0.1"
   },
   "repository": {
     "type": "git",
@@ -36,19 +36,6 @@
     "url": "https://github.com/OpenChemistry/oc-web-components"
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components",
-  "jest": {
-    "transform": {
-      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "jsx"
-    ]
-  },
   "publishConfig": {
     "access": "public"
   }

@@ -1,4 +1,4 @@
-import { Component, Prop, Watch, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Prop, Watch, Event, EventEmitter, State, h } from '@stencil/core';
 
 import { isNil } from "lodash-es";
 
@@ -9,12 +9,6 @@ import { linearSpace } from '@openchemistry/utils';
 
 import memoizeOne from 'memoize-one';
 import produce from 'immer';
-
-import '@openchemistry/molecule-menu';
-import '@openchemistry/molecule-vtkjs';
-import '@openchemistry/molecule-moljs';
-import '@openchemistry/vibrational-spectrum';
-import 'split-me';
 
 const defaultOpacityFn = (range: [number, number]) => {
   const opacities = [1, 0.25, 0, 0, 0.25, 1];
@@ -241,7 +235,6 @@ export class Molecule {
       draft['opacities'].touched = false;
       draft['opacitiesX'].value = opacitiesX;
       draft['opacitiesX'].touched = false;
-      draft;
     });
 
     this.state = newState;
