@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Tooltip } from '@material-ui/core';
 
 class AddUser extends Component {
   render() {
@@ -11,14 +11,16 @@ class AddUser extends Component {
       return(
         <div style={{ margin: 'auto', display: 'table', padding: '5px' }}>
           <form noValidate autoComplete="off">
-          <TextField
-            label = 'Add User'
-            value = {this.props.value}
-            onChange = {(e) => { this.props.handleChange(e) }}
-            margin = "normal"
-            variant = "outlined"
-            onKeyPress={(e) => { this.props.handleKeyPress(e) }}
-          />
+          <Tooltip title='Search for a user by name, or submit an empty search to return all possible users.'>
+            <TextField
+              label = 'Add User'
+              value = {this.props.value}
+              onChange = {(e) => { this.props.handleChange(e) }}
+              margin = "normal"
+              variant = "outlined"
+              onKeyPress={(e) => { this.props.handleKeyPress(e) }}
+            />
+          </Tooltip>
           </form>
           <Button style={{ margin:'auto', display:'block'}}
             variant="contained"

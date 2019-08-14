@@ -12,7 +12,7 @@ class Groups extends Component {
   render() {
     const { listOfGroups } = this.props;
     return(
-      <Paper>
+      <Paper style={{margin: '20px', maxWidth: '100%', padding: '5px'}}>
       <Table>
 	<TableHead>
           <TableRow>
