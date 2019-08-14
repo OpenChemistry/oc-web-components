@@ -1,8 +1,6 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 
 import { scaleLinear, ScaleLinear, scaleLog, ScaleLogarithmic } from 'd3';
-
-import { linearSpace } from '@openchemistry/utils';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -13,14 +11,14 @@ import ResizeObserver from 'resize-observer-polyfill';
 })
 export class VolumeControls {
 
-  @Prop() colors: [number, number, number][] = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
-  @Prop({mutable: true}) colorsX: number[];
+  @Prop() colors: [number, number, number][];
+  @Prop() colorsX: number[];
 
-  @Prop({mutable: true}) opacities: number[] = [0, 1];
-  @Prop({mutable: true}) opacitiesX: number[];
+  @Prop() opacities: number[];
+  @Prop() opacitiesX: number[];
 
   // The full range of the data
-  @Prop() range: [number, number] = [0, 1];
+  @Prop() range: [number, number];
   @Watch('range')
   watchRange() {
     this.updateScales();
@@ -45,15 +43,6 @@ export class VolumeControls {
   activeNode: number;
 
   ro: ResizeObserver;
-  
-  componentWillLoad() {
-    if (!this.colorsX) {
-      this.colorsX = linearSpace(this.range[0], this.range[1], this.colors.length);
-    }
-    if (!this.opacitiesX) {
-      this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
-    }
-  }
 
   componentDidLoad() {
     this.onResize();
@@ -65,13 +54,6 @@ export class VolumeControls {
   }
 
   componentWillUpdate() {
-    if (this.colorsX.length !== this.colors.length) {
-      this.colorsX = linearSpace(this.range[0], this.range[1], this.colors.length);
-    }
-
-    if (this.opacitiesX.length !== this.opacities.length) {
-      this.opacitiesX = linearSpace(this.range[0], this.range[1], this.opacities.length);
-    }
     this.drawCanvas();
   }
 
@@ -114,7 +96,6 @@ export class VolumeControls {
     if (node === undefined) {
       const {x, y} = this._mouseToXY(ev.clientX, ev.clientY);
       this.addOpacityNode(x, y);
-      this.drawCanvas();
     }
   }
 
@@ -123,7 +104,6 @@ export class VolumeControls {
     if (node !== undefined) {
       if (node > 0 && node < this.opacitiesX.length - 1) {
         this.removeOpacityNode(node);
-        this.drawCanvas();
       }
     }
   }
@@ -156,15 +136,16 @@ export class VolumeControls {
       }
       idx++;
     }
-    this.opacitiesX = [...this.opacitiesX.slice(0, idx), x, ...this.opacitiesX.slice(idx)];
-    this.opacities = [...this.opacities.slice(0, idx), y, ...this.opacities.slice(idx)];
-    this.opacitiesChangedHandler();
+
+    const opacitiesX = [...this.opacitiesX.slice(0, idx), x, ...this.opacitiesX.slice(idx)];
+    const opacities = [...this.opacities.slice(0, idx), y, ...this.opacities.slice(idx)];
+    this.opacitiesChangedHandler(opacities, opacitiesX);
   }
 
   removeOpacityNode(idx: number) {
-    this.opacitiesX = [...this.opacitiesX.slice(0, idx), ...this.opacitiesX.slice(idx + 1)];
-    this.opacities = [...this.opacities.slice(0, idx), ...this.opacities.slice(idx + 1)];
-    this.opacitiesChangedHandler();
+    const opacitiesX = [...this.opacitiesX.slice(0, idx), ...this.opacitiesX.slice(idx + 1)];
+    const opacities = [...this.opacities.slice(0, idx), ...this.opacities.slice(idx + 1)];
+    this.opacitiesChangedHandler(opacities, opacitiesX);
   }
 
   onDragStart(ev: DragEvent) {
@@ -194,27 +175,24 @@ export class VolumeControls {
     x = Math.max(this.range[0], x);
     if (i > 0) {
       x = Math.max(this.opacitiesX[i - 1] + dx, x);
-    } else {
-      x = this.range[0];
     }
     if (i < this.opacitiesX.length - 1) {
       x = Math.min(this.opacitiesX[i + 1] - dx, x);
-    } else {
-      x = this.range[1];
     }
 
     if (this.opacitiesX[i] !== x || this.opacities[i] !== y){
-      this.opacitiesX[i] = x;
-      this.opacities[i] = y;
-      this.opacitiesChangedHandler();
-      this.drawCanvas();
+      const opacitiesX = [...this.opacitiesX];
+      const opacities = [...this.opacities];
+      opacitiesX[i] = x;
+      opacities[i] = y;
+      this.opacitiesChangedHandler(opacities, opacitiesX);
     }
   }
 
-  opacitiesChangedHandler() {
+  opacitiesChangedHandler(opacities: number[], opacitiesX: number[]) {
     let val = {
-      opacity: this.opacities,
-      opacityScalarValue: this.opacitiesX
+      opacity: opacities,
+      opacityScalarValue: opacitiesX
     }
     this.opacitiesChanged.emit(val);
   }

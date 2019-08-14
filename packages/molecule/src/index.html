@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Stencil Component Starter</title>
-  <script src="/build/molecule.js"></script>
+  <script type="module" src="/build/molecule.esm.js"></script>
+  <script nomodule src="/build/molecule.js"></script>
 </head>
 <body>
   
@@ -52,10 +53,10 @@
         "order" : [ 1, 1 ]
       },
       "cube": {
-        "dimensions": [1,1,1],
+        "dimensions": [2,2,2],
         "origin": [0,0,0],
         "spacing": [1,1,1],
-        "scalars": [1]
+        "scalars": [1, 0, 1, 0, 1, 0, 1, 0]
       },
       "chemical json" : 0
     };
@@ -63,6 +64,8 @@
     let el = document.querySelector("oc-molecule");
     el.cjson = cjson;
     el.isoValue = 0.005;
+    el.showMenu = true;
+    el.hasVolume = false;
   </script>
 
 </body>

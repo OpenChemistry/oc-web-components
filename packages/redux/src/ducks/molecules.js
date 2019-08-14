@@ -35,7 +35,18 @@ const reducer = handleActions({
       return {...state, error: action.payload.error};
     }
     else {
-      return {...state,  error:null };
+      // Remove the molecule we are requesting from the state
+      const inchikey = action.payload.inchikey;
+      const id = state.byInchiKey[inchikey];
+
+      const byInchiKey = {...state.byInchiKey};
+      const byId = {...state.byId};
+
+      delete byInchiKey[inchikey];
+      delete byId[id];
+      const matches = state.matches - 1;
+
+      return {...state, byId, byInchiKey, matches, error:null };
     }
   },
   REQUEST_MOLECULE_BY_ID: (state, action) => {

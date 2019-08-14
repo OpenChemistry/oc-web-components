@@ -1,27 +1,31 @@
 {
   "name": "@openchemistry/molecule-menu",
-  "version": "0.6.16",
+  "version": "0.6.18",
   "description": "Stencil component to display chemical json data",
-  "module": "dist/esm/index.js",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
   "files": [
-    "dist/"
+    "dist/",
+    "loader/"
   ],
   "scripts": {
-    "build": "stencil build",
+    "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@ionic/core": "^4.0.2",
-    "@openchemistry/types": "^0.8.8",
-    "@openchemistry/utils": "^0.6.8",
-    "@openchemistry/volume-controls": "^0.1.16",
+    "@ionic/core": "^4.6.0",
+    "@openchemistry/types": "^0.8.9",
+    "@openchemistry/utils": "^0.6.10",
+    "@openchemistry/volume-controls": "^0.1.18",
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
-    "@stencil/core": "^0.12.4",
+    "@stencil/core": "^1.2.0",
     "@types/lodash-es": "^4.17.2"
   },
   "repository": {

@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Watch } from '@stencil/core';
+import { Component, Prop, Element, Watch, h } from '@stencil/core';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -31,6 +31,13 @@ export class MoleculeVtkjs {
   @Watch('options') optionsHandler() {
     this.optionsHasChanged = true;
     this.optionsData = null;
+  }
+
+  @Prop() zoom: number = 0.75;
+  @Watch('zoom') zoomHandler(zoom) {
+    if (this.renderer && this.renderWindow) {
+      this.resetCamera(zoom);
+    }
   }
 
   @Prop() rotate: boolean = false;
@@ -99,9 +106,7 @@ export class MoleculeVtkjs {
       this.updateMolecule();
       this.updateVolume();
       this.updateUnitCell();
-      this.renderer.resetCamera();
-      this.renderer.getActiveCamera().zoom(0.75);
-      this.renderWindow.render();
+      this.resetCamera(this.zoom);
       this.cjsonHasChanged = false;
     }
 
@@ -115,6 +120,17 @@ export class MoleculeVtkjs {
 
     this.startAnimation();
     this.handleRotate();
+  }
+
+  getMoleculeBounds() : number[] {
+    return this.sphereActor.getBounds();
+  }
+
+  resetCamera(zoom) {
+    this.renderer.resetCamera(this.getMoleculeBounds());
+    this.renderer.getActiveCamera().dolly(zoom);
+    this.renderer.resetCameraClippingRange();
+    this.renderWindow.render();
   }
 
   initVtkJs() {
@@ -190,9 +206,7 @@ export class MoleculeVtkjs {
       this.renderer.addActor(this.unitCellActors[i]);
     }
 
-    this.renderer.resetCamera();
-    this.renderer.getActiveCamera().zoom(0.75);
-    this.renderWindow.render();
+    this.resetCamera(this.zoom);
   }
 
   cleanupVtkjs() {
