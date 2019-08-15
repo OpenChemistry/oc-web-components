@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/types",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "Typescript interfaces used by openchemistry packages",
   "main": "dist/index",
   "types": "dist/index",
