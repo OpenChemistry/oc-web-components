@@ -78,3 +78,127 @@ export const notificationsActions = {
 export const notificationsSelectors = {};
 
 export {default as notificationsReducer} from './notifications';
+
+//ADMIN
+//Import actions
+import {
+    fetchUsersList,
+    receiveUsersList,
+    fetchUsersListFailed,
+    fetchGroupsList,
+    receiveGroupsList,
+    fetchGroupsListFailed,
+    fetchMembersList,
+    receiveMembersList,
+    fetchMembersListFailed,
+    setCurrentGroup,
+    removeMember,
+    removeMemberFailed,
+    addMember,
+    addMemberFailed,
+    removeGroup,
+    removeGroupFailed,
+    showMembers,
+    showUsers
+} from './admin';
+
+//Import Selectors
+import {
+    initRoot,
+    getUsersByIds,
+    getGroupsByIds,
+    getMembersByIds,
+    getCurrentGroup,
+    getMembersVisibility,
+    getUsersVisibility
+} from './admin';
+
+//Import reducer
+export {default as adminReducer} from './admin';
+
+export const adminActions = {
+    fetchUsersList,
+    receiveUsersList,
+    fetchUsersListFailed,
+    fetchGroupsList,
+    receiveGroupsList,
+    fetchGroupsListFailed,
+    fetchMembersList,
+    receiveMembersList,
+    fetchMembersListFailed,
+    setCurrentGroup,
+    removeMember,
+    removeMemberFailed,
+    addMember,
+    addMemberFailed,
+    removeGroup,
+    removeGroupFailed,
+    showMembers,
+    showUsers
+}
+
+export const adminSelectors = {
+    initRoot,
+    getUsersByIds,
+    getGroupsByIds,
+    getMembersByIds,
+    getCurrentGroup,
+    getMembersVisibility,
+    getUsersVisibility
+}
+
+//USER
+//Import actions
+import {
+  fetchUserData,
+  userDataReceived,
+  fetchUserDataFailed,
+  updateUserInformation,
+  userInformationUpdated,
+  userUpdateFailed,
+  changePassword,
+  changePasswordFailed,
+  passwordChanged,
+  linkToTwitter,
+  twitterLinked,
+  linkToTwitterFailed,
+  linkToOrcid,
+  orcidLinked,
+  linkToOrcidFailed
+} from './user';
+
+//Import Selectors
+import {
+  createRoot,
+  getUserData,
+  getTwitterStatus,
+  getOrcidStatus
+} from './user';
+
+//Import reducer
+export {default as userReducer} from './user';
+
+export const userActions = {
+  fetchUserData,
+  userDataReceived,
+  fetchUserDataFailed,
+  updateUserInformation,
+  userInformationUpdated,
+  userUpdateFailed,
+  changePassword,
+  changePasswordFailed,
+  passwordChanged,
+  linkToTwitter,
+  twitterLinked,
+  linkToTwitterFailed,
+  linkToOrcid,
+  orcidLinked,
+  linkToOrcidFailed
+}
+
+export const userSelectors = {
+  createRoot,
+  getUserData,
+  getTwitterStatus,
+  getOrcidStatus
+}

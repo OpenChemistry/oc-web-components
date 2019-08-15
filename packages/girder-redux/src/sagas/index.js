@@ -27,3 +27,37 @@ export const authSagas = {
 
 import * as notifications from './notifications';
 export const notificationsSagas = notifications;
+
+import {
+    watchFetchUsersList,
+    watchFetchGroupsList,
+    watchFetchMembersList,
+    watchRemoveMember,
+    watchAddMember,
+    watchRemoveGroup
+} from './admin';
+
+export const adminSagas = {
+    watchFetchUsersList,
+    watchFetchGroupsList,
+    watchFetchMembersList,
+    watchRemoveMember,
+    watchAddMember,
+    watchRemoveGroup
+};
+
+import {
+  watchFetchUserInformation,
+  watchUpdateUserInformation,
+  watchChangePassword,
+  watchTwitterLogin,
+  watchOrcidLogin
+} from './user';
+
+export const userSagas = {
+  watchFetchUserInformation,
+  watchUpdateUserInformation,
+  watchChangePassword,
+  watchTwitterLogin,
+  watchOrcidLogin
+}
