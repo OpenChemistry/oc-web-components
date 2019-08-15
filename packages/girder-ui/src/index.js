@@ -8,7 +8,6 @@ import { default as Users } from './admin/containers/users';
 import { default as Groups } from './admin/containers/groups';
 import { default as Members } from './admin/containers/members';
 import { default as AddUser } from './admin/containers/add-user';
-import { default as Profile } from './admin/components/profile';
 
 export const auth = {
   LoginButton,
@@ -23,6 +22,5 @@ export const admin = {
     Users,
     Groups,
     Members,
-    AddUser,
-    Profile
+    AddUser
 }
