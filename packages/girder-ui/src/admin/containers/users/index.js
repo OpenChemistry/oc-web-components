@@ -24,20 +24,35 @@ class UsersContainer extends Component {
 }
 
 function usersMapStateToProps(state) {
-  const usersById = admin.selectors.getUsersByIds(state);
-  const group = admin.selectors.getCurrentGroup(state);
-  const showUsers = admin.selectors.getUsersVisibility(state);
+  const usersById=admin.selectors.getUsersByIds(state);
+  const membersById=admin.selectors.getMembersByIds(state);
+  const group=admin.selectors.getCurrentGroup(state);
+  const showUsers=admin.selectors.getUsersVisibility(state);
+  const search=admin.selectors.getUserSearch(state);
+
+  const listOfUsers=[];
+  const listOfMembers=[];
 
   const listOfUsers = [];
 
   for (const [key, value] of Object.entries(usersById)) {
     listOfUsers.push(value);
   }
+  for (const [key, value] of Object.entries(membersById)) {
+    listOfMembers.push(value);
+  }
+
+  const possibleUsers = listOfUsers.filter(function (user) {
+    return !listOfMembers.some(function (member) {
+      return member._id === user._id;
+    })
+  });
 
   return {
     group,
-    listOfUsers,
-    showUsers
+    possibleUsers,
+    showUsers,
+    search
   };
 }
 
