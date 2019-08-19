@@ -39,7 +39,7 @@ function* onFetchUsersList(action) {
       user
       ? yield call(requestUsersList, user)
       : yield call(requestAllUsers);
-    yield put( receiveUsersList(usersFound) );
+    yield put( receiveUsersList({usersFound, user}) );
   } catch(error) {
     yield put( fetchUsersListFailed(error) );
   }

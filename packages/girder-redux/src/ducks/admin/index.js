@@ -6,7 +6,7 @@ const initialState = {
   byGroupId : {},
   byMemberId : {},
   currentGroup : {},
-  ui : {membersVisible : false, usersVisible : false}
+  ui : {usersVisible : false, userSearch : ''}
 };
 
 //Selectors
@@ -16,8 +16,8 @@ export const getGroupsByIds = (state) => getRoot(state).admin.byGroupId;
 export const getMembersByIds = (state) => getRoot(state).admin.byMemberId;
 export const getUsersByIds = (state) => getRoot(state).admin.byUserId;
 export const getCurrentGroup = (state) => getRoot(state).admin.currentGroup;
-export const getMembersVisibility = (state) => getRoot(state).admin.ui.membersVisible;
 export const getUsersVisibility = (state) => getRoot(state).admin.ui.usersVisible;
+export const getUserSearch = (state) => getRoot(state).admin.ui.userSearch;
 
 //Actions
 const FETCH_GROUPS_REQUESTED = 'FETCH_GROUPS_REQUESTED';
@@ -66,12 +66,14 @@ export const showUsers = createAction(SHOW_USERS);
 //Reducer
 const reducer = handleActions({
   [FETCH_USERS_SUCCEEDED] : (state, action) => {
-    const users = action.payload;
-    const value = users.reduce((results, user) => {
-      results[user._id] = user;
+    const { user, usersFound } = action.payload;
+    const ui = {...state.ui}
+    ui.userSearch = user;
+    const value = usersFound.reduce((results, users) => {
+      results[users._id] = users;
       return results;
     }, {});
-    return {...state, byUserId : value};
+    return {...state, byUserId : value, ui};
   },
   [FETCH_GROUPS_SUCCEEDED] : (state, action) => {
     const groups = action.payload;

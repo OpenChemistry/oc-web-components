@@ -7,12 +7,15 @@ import Members from '../../components/members';
 import { admin } from '@openchemistry/girder-redux';
 
 
-class MembersContainer extends Component {
-    handleDelete = (userId, group) => {
-	this.props.dispatch(
-	    admin.actions.removeMember({
-		userId, group
-	    }));
+  class MembersContainer extends Component {
+    handleDelete=(userId, group, search) => {
+      this.props.dispatch(
+        admin.actions.removeMember({
+          userId, group
+      }));
+
+      this.props.dispatch(
+        admin.actions.fetchUsersList(search));
     }
 
     render() {
@@ -25,10 +28,10 @@ class MembersContainer extends Component {
     }
 }
 
-function membersMapStateToProps(state) {
-  const membersById = admin.selectors.getMembersByIds(state);
-  const group = admin.selectors.getCurrentGroup(state);
-  const showMembers = admin.selectors.getMembersVisibility(state);
+  function membersMapStateToProps(state) {
+    const membersById=admin.selectors.getMembersByIds(state);
+    const group=admin.selectors.getCurrentGroup(state);
+    const search=admin.selectors.getUserSearch(state);
 
   const listOfMembers = [];
 
@@ -36,13 +39,13 @@ function membersMapStateToProps(state) {
     listOfMembers.push(value);
   }
 
-  return {
-    group,
-    listOfMembers,
-    showMembers
-  };
-}
+    return {
+      group,
+      listOfMembers,
+      search
+    };
+  }
 
-MembersContainer = connect(membersMapStateToProps)(MembersContainer)
+MembersContainer=connect(membersMapStateToProps)(MembersContainer)
 
 export default MembersContainer;
