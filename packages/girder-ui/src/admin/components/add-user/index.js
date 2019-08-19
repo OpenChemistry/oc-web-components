@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { TextField, Button, Tooltip } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
 class AddUser extends Component {
   render() {
@@ -25,7 +26,7 @@ class AddUser extends Component {
           <Button style={{ margin:'auto', display:'block'}}
             variant="contained"
             onClick={(e) => {this.props.handleSubmit(e)}}>
-              Submit
+              <SearchIcon />
           </Button>
         </div>
       );

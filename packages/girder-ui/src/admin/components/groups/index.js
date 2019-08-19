@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Table,
-	 TableHead,
-	 TableBody,
-	 TableRow,
-	 TableCell,
-         Link, Paper } from '@material-ui/core';
+import {
+	Table, TableHead, TableBody, TableRow, TableCell, Link, Paper
+} from '@material-ui/core';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 class Groups extends Component {
   render() {
@@ -44,7 +42,7 @@ class Groups extends Component {
 		<Link component="button"
 	          onClick={(e) => {
 		    this.props.handleDelete(group._id)}}>
-		  Remove
+		  <DeleteOutlineIcon />
 	        </Link>
 	      </TableCell>
 	    </TableRow>
