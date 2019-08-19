@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router'
 
 import Groups from '../../components/groups';
 
@@ -8,9 +8,15 @@ import { admin } from '@openchemistry/girder-redux';
 
 
 class GroupsContainer extends Component {
-    
-    componentDidMount() {
-    	this.props.dispatch(admin.actions.fetchGroupsList());
+  componentDidMount() {
+    this.props.dispatch(admin.actions.fetchGroupsList());
+  }
+
+  handleClick=
+    (group) => {
+      this.props.dispatch(admin.actions.showUsers(false));
+      this.props.dispatch(admin.actions.fetchMembersList(group));
+      this.props.dispatch(push(`/groups/${group._id}/members`));
     }
 
     handleClick =
