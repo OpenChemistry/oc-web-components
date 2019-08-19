@@ -1,17 +1,10 @@
 import {
-  Link,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
+	Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography
 } from '@material-ui/core';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class Members extends Component {
 	render() {
@@ -62,13 +55,13 @@ class Members extends Component {
 }
 
 Members.propTypes = {
-    listOfMembers: PropTypes.array,
-    group: PropTypes.object
+	listOfMembers: PropTypes.array,
+	group: PropTypes.object
 }
 
 Members.defaultProps = {
-    listOfMembers: [],
-    group: {}
+	listOfMembers: [],
+	group: {}
 }
 
 export default Members;

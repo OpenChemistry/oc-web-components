@@ -5,32 +5,30 @@ import SearchIcon from '@material-ui/icons/Search';
 
 class AddUser extends Component {
   render() {
-    const {showSearch} = this.props;
-    if(!showSearch) {
-      return null;
-    } else {
-      return(
-        <div style={{ margin: 'auto', display: 'table', padding: '5px' }}>
-          <form noValidate autoComplete="off">
+    return(
+      <div style={{display:'flex', padding:'5px', justifyContent:'flex-end', margin:'10px'}}>
+        <form noValidate autoComplete="off" style={{display:'contents'}}>
           <Tooltip title='Search for a user by name, or submit an empty search to return all possible users.'>
             <TextField
-              label = 'Add User'
-              value = {this.props.value}
-              onChange = {(e) => { this.props.handleChange(e) }}
-              margin = "normal"
-              variant = "outlined"
-              onKeyPress={(e) => { this.props.handleKeyPress(e) }}
+              fullWidth
+              variant='filled'
+              style={{verticalAlign:'sub'}}
+              label='Search for User'
+              value={this.props.value}
+              onChange={(e) => {this.props.handleChange(e)}}
+              onKeyPress={(e) => {this.props.handleKeyPress(e)}}
             />
           </Tooltip>
-          </form>
-          <Button style={{ margin:'auto', display:'block'}}
-            variant="contained"
+          <Button
+            style={{marginLeft:'10px'}}
+            color='primary'
+            variant='contained'
             onClick={(e) => {this.props.handleSubmit(e)}}>
               <SearchIcon />
           </Button>
-        </div>
-      );
-    }
+        </form>
+      </div>
+    );
   }
 }
 

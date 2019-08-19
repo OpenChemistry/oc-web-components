@@ -21,23 +21,23 @@ import { admin } from '@openchemistry/girder-redux';
     render() {
       return (
         <Members
-      handleDelete = {this.handleDelete} {
-        ...this.props
-      } />
+          handleDelete={this.handleDelete}
+          {...this.props}
+        />
       );
     }
-}
+  }
 
   function membersMapStateToProps(state) {
     const membersById=admin.selectors.getMembersByIds(state);
     const group=admin.selectors.getCurrentGroup(state);
     const search=admin.selectors.getUserSearch(state);
 
-  const listOfMembers = [];
+    const listOfMembers=[];
 
-  for (const [key, value] of Object.entries(membersById)) {
-    listOfMembers.push(value);
-  }
+    for (const [key, value] of Object.entries(membersById)) {
+      listOfMembers.push(value);
+    }
 
     return {
       group,
