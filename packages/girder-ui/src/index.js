@@ -5,11 +5,6 @@ import { default as OauthRedirect } from './auth/containers/oauth-redirect';
 import { default as UserMenu } from './auth/containers/user-menu';
 import { default as NerscLogin } from './auth/containers/nersc-login';
 
-import { default as Users } from './admin/containers/users';
-import { default as Groups } from './admin/containers/groups';
-import { default as Members } from './admin/containers/members';
-import { default as AddUser } from './admin/containers/add-user';
-
 import { default as BasicInfo } from './user/containers/basic-info';
 import { default as Password } from './user/containers/password';
 
@@ -20,13 +15,6 @@ export const auth = {
   OauthRedirect,
   UserMenu,
   NerscLogin
-}
-
-export const admin = {
-    Users,
-    Groups,
-    Members,
-    AddUser
 }
 
 export const user = {
