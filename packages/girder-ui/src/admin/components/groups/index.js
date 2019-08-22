@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment'
 
 import {
 	Table, TableHead, TableBody, TableRow, TableCell, Link, Paper
@@ -33,10 +34,8 @@ class Groups extends Component {
                 </Link>	      
 	      </TableCell>
 	      <TableCell>{group.description}</TableCell>
-	      <TableCell>{group.created.slice(0,10)}</TableCell>
-	      <TableCell>{group.updated.slice(0,10)
-			   +' at '
-			   +group.updated.slice(11, 19) }</TableCell>
+	      <TableCell>{moment(group.created).calendar()}</TableCell>
+	      <TableCell>{moment(group.updated).fromNow()}</TableCell>
 	      <TableCell>{group.public ? "Public" : "Private"}</TableCell>
 	      <TableCell>
 		<Link component='button'

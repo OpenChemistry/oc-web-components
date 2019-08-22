@@ -6,6 +6,7 @@ import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import moment from 'moment'
 
 class Members extends Component {
   render() {
@@ -39,7 +40,7 @@ class Members extends Component {
                   <TableCell>{user.firstName}</TableCell>
                   <TableCell>{user.lastName}</TableCell>
                   <TableCell>{user.login}</TableCell>
-                  <TableCell>{user.created.slice(0,10)}</TableCell>
+                  <TableCell>{moment(user.created).calendar()}</TableCell>
                   <TableCell>{user.admin ? 'Yes' : 'No'}</TableCell>
                   <TableCell>
                     <Link
