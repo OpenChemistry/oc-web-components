@@ -78,3 +78,65 @@ export const notificationsActions = {
 export const notificationsSelectors = {};
 
 export {default as notificationsReducer} from './notifications';
+
+//ADMIN
+//Import actions
+import {
+  fetchUsersList,
+  receiveUsersList,
+  fetchUsersListFailed,
+  fetchGroupsList,
+  receiveGroupsList,
+  fetchGroupsListFailed,
+  fetchMembersList,
+  receiveMembersList,
+  fetchMembersListFailed,
+  setCurrentGroup,
+  removeMember,
+  removeMemberFailed,
+  addMember,
+  addMemberFailed,
+  removeGroup,
+  removeGroupFailed
+} from './admin';
+
+//Import Selectors
+import {
+  initRoot,
+  getUsersByIds,
+  getGroupsByIds,
+  getMembersByIds,
+  getCurrentGroup,
+  getUserSearch
+} from './admin';
+
+//Import reducer
+export {default as adminReducer} from './admin';
+
+export const adminActions = {
+  fetchUsersList,
+  receiveUsersList,
+  fetchUsersListFailed,
+  fetchGroupsList,
+  receiveGroupsList,
+  fetchGroupsListFailed,
+  fetchMembersList,
+  receiveMembersList,
+  fetchMembersListFailed,
+  setCurrentGroup,
+  removeMember,
+  removeMemberFailed,
+  addMember,
+  addMemberFailed,
+  removeGroup,
+  removeGroupFailed
+}
+
+export const adminSelectors = {
+  initRoot,
+  getUsersByIds,
+  getGroupsByIds,
+  getMembersByIds,
+  getCurrentGroup,
+  getUserSearch
+}
