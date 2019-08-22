@@ -6,7 +6,6 @@ import { default as UserMenu } from './auth/containers/user-menu';
 import { default as NerscLogin } from './auth/containers/nersc-login';
 
 import { default as BasicInfo } from './user/containers/basic-info';
-import { default as Password } from './user/containers/password';
 
 export const auth = {
   LoginButton,
@@ -18,6 +17,5 @@ export const auth = {
 }
 
 export const user = {
-  BasicInfo,
-  Password
+  BasicInfo
 }
