@@ -2,6 +2,7 @@ import {
   Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography
 } from '@material-ui/core';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -14,6 +15,12 @@ class Members extends Component {
         <Typography style={{textAlign:'center'}} variant='h4' gutterBottom>
           {group.name}
         </Typography>
+        <Paper style={{backgroundColor:'#37474F', display:'flex', justifyContent:'space-between', marginBottom:'5px'}}>
+          <Typography variant='h6' style={{textAlign:'center', color:'white', margin:'auto'}}>
+            <PeopleOutlineIcon color='primary' style={{marginRight:'5px', verticalAlign:'text-bottom'}}/>
+            Current Members
+          </Typography>
+        </Paper>
         <Paper>
           <Table>
             <TableHead>
