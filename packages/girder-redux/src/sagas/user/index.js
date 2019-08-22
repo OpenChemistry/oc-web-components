@@ -42,9 +42,8 @@ export function* watchFetchUserInformation() {
 function* onUpdateUserInformation(action) {
   try {
     const {id, values} = action.payload;
-    yield call(restUpdateUser, id, values);
-    yield call(restFetchUser)
-    yield put( userInformationUpdated() );
+    const user = yield call(restUpdateUser, id, values);
+    yield put( userInformationUpdated(user) );
   } catch(error) {
     yield put( userUpdateFailed(error) );
   }

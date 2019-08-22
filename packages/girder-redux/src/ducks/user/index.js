@@ -56,7 +56,7 @@ export const retrieveOrcidId = createAction(ORCID_ID_REQUESTED);
 const reducer = handleActions({
   [FETCH_USER_SUCCEEDED] : (state, action) => {
     const { info, tId, oId } = action.payload;
-    return {...state, userInfo: info, twitterId: tId, orcidId: oId};
+    return {userInfo: info, twitterId: tId, orcidId: oId};
   },
   [TWITTER_SUCCESS] : (state, action) => {
     const id = action.payload;
@@ -65,6 +65,10 @@ const reducer = handleActions({
   [ORCID_SUCCESS] : (state, action) => {
     const id = action.payload;
     return {...state, orcidId: id};
+  },
+  [UPDATE_USER_SUCCEEDED] : (state, action) => {
+    const info = action.payload;
+    return {...state, userInfo: info};
   },
 }, initialState);
 
