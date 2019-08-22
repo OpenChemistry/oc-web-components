@@ -16,9 +16,6 @@ class AddUser extends Component {
         <form style={{display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
           <Tooltip title='Search for a user by name, or submit an empty search to return all possible users.'>
             <TextField
-              fullWidth
-              variant='filled'
-              style={{verticalAlign:'sub'}}
               label='Search for User'
               value={this.props.value}
               onChange={(e) => {this.props.handleChange(e)}}
