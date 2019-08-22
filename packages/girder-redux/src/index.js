@@ -1,7 +1,7 @@
-import { authActions, notificationsActions, adminActions, userActions } from './ducks';
-import { authSelectors, notificationsSelectors, adminSelectors, userSelectors } from './ducks';
-import { authReducer, notificationsReducer, adminReducer, userReducer } from './ducks';
-import { authSagas, notificationsSagas, adminSagas, userSagas } from './sagas';
+import { authActions, notificationsActions, userActions } from './ducks';
+import { authSelectors, notificationsSelectors, userSelectors } from './ducks';
+import { authReducer, notificationsReducer, userReducer } from './ducks';
+import { authSagas, notificationsSagas, userSagas } from './sagas';
 
 export { default as girderClient } from '@openchemistry/girder-client';
 
@@ -17,13 +17,6 @@ export const notifications = {
   selectors: notificationsSelectors,
   sagas: notificationsSagas,
   reducer: notificationsReducer
-}
-
-export const admin = {
-  actions: adminActions,
-  selectors: adminSelectors,
-  sagas: adminSagas,
-  reducer: adminReducer
 }
 
 export const user = {
