@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/girder-redux",
-  "version": "0.0.23",
+  "version": "0.0.25",
   "description": " ",
   "module": "esm/index.js",
   "files": [
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "@openchemistry/girder-client": "^0.0.15",
+    "@openchemistry/girder-client": "^0.0.16",
     "axios": "^0.18.0",
     "lodash-es": "^4.17.11",
     "redux-actions": "^2.6.4",
