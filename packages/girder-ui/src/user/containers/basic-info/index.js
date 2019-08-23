@@ -28,13 +28,20 @@ class BasicInfo extends Component {
 
 function MapStateToProps(state) {
   const userInfo = user.selectors.getUserData(state);
-  const twitterId = user.selectors.getTwitterId(state);
-  const orcidId = user.selectors.getOrcidId(state);
+  var twitterId = user.selectors.getTwitterId(state);
+  var orcidId = user.selectors.getOrcidId(state);
+
+  if (!twitterId) {
+    twitterId = undefined
+  }
+  if (!orcidId) {
+    orcidId = undefined
+  }
+  const mediaIds = {twitterId, orcidId}
 
   return {
     userInfo,
-    twitterId,
-    orcidId
+    mediaIds
   };
 }
 

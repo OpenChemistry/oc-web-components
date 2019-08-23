@@ -20,7 +20,6 @@ const FETCH_USER_SUCCEEDED = 'FETCH_USER_SUCCEEDED';
 const FETCH_USER_FAILED = 'FETCH_USER_FAILED';
 
 const UPDATE_USER_REQUESTED = 'UPDATE_USER_REQUESTED';
-const UPDATE_USER_SUCCEEDED = 'UPDATE_USER_SUCCEEDED';
 const UPDATE_USER_FAILED = 'UPDATE_USER_FAILED';
 
 const TWITTER_LOGIN_REQUESTED = 'TWITTER_LOGIN_REQUESTED'
@@ -40,7 +39,6 @@ export const fetchUserDataFailed = createAction(FETCH_USER_FAILED);
 
 export const updateUserInformation = createAction(UPDATE_USER_REQUESTED);
 export const userUpdateFailed = createAction(UPDATE_USER_FAILED);
-export const userInformationUpdated = createAction(UPDATE_USER_SUCCEEDED);
 
 export const linkToTwitter = createAction(TWITTER_LOGIN_REQUESTED);
 export const twitterLinked = createAction(TWITTER_SUCCESS);
@@ -65,10 +63,6 @@ const reducer = handleActions({
   [ORCID_SUCCESS] : (state, action) => {
     const id = action.payload;
     return {...state, orcidId: id};
-  },
-  [UPDATE_USER_SUCCEEDED] : (state, action) => {
-    const info = action.payload;
-    return {...state, userInfo: info};
   },
 }, initialState);
 

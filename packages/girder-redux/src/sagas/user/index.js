@@ -5,7 +5,6 @@ import {
   userDataReceived,
   fetchUserDataFailed,
   updateUserInformation,
-  userInformationUpdated,
   userUpdateFailed,
   linkToTwitter,
   twitterLinked,
@@ -42,8 +41,12 @@ export function* watchFetchUserInformation() {
 function* onUpdateUserInformation(action) {
   try {
     const {id, values} = action.payload;
-    const user = yield call(restUpdateUser, id, values);
-    yield put( userInformationUpdated(user) );
+    const info = yield call (restUpdateUser, id, values);
+    const tData = yield call (twitterLogin, id, values.twitterId)
+    const oData = yield call (orcidLogin, id, values.orcidId)
+    const tId = tData.twitter
+    const oId = oData.orcid
+    yield put( userDataReceived({info, tId, oId}) );
   } catch(error) {
     yield put( userUpdateFailed(error) );
   }
