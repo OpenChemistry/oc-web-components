@@ -1,11 +1,29 @@
-//enforce dashes in orcid id
-
 import React, { useState } from 'react';
-import { Button, TextField, Link, Typography, InputAdornment } from '@material-ui/core';
+import {
+  withStyles, Button, TextField, Link, Typography, InputAdornment
+} from '@material-ui/core';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
+const styles = () => ({
+  root: {
+    margin: '20px',
+    maxWidth: '100%',
+    padding: '5px'
+  },
+  form: {
+    padding: '5px'
+  },
+  textField: {
+    marginTop: '8px'
+  },
+  button: {
+    display:'flex',
+    justifyContent:'flex-end'
+  },
+});
+
 const BasicInfoForm = props => {
-  const {userInfo, onSubmit, mediaIds} = props
+  const {userInfo, onSubmit, mediaIds, classes} = props
   const [formValues, setValues] = useState({
     firstName:userInfo.firstName,
     lastName:userInfo.lastName,
@@ -51,14 +69,14 @@ const BasicInfoForm = props => {
   }
 
   return (
-    <div style={{margin: '20px', maxWidth: '100%', padding: '5px'}}>
+    <div className={classes.root}>
       <Typography variant='h4'>
         Edit Profile Information
       </Typography>
-      <form style = {{padding: '5px'}} onSubmit={handleSubmit}>
+      <form className={classes.form} onSubmit={handleSubmit}>
         <div>
           <TextField
-            style={{marginTop: '8px'}}
+            className={classes.textField}
             name='firstName'
             helperText='First Name'
             value={
@@ -71,7 +89,7 @@ const BasicInfoForm = props => {
         </div>
         <div>
           <TextField
-            style={{marginTop: '8px'}}
+            className={classes.textField}
             name='lastName'
             helperText='Last Name'
             value={
@@ -85,7 +103,7 @@ const BasicInfoForm = props => {
         <div>
           <TextField
             inputProps={{maxLength:15}}
-            style={{marginTop: '8px'}}
+            className={classes.textField}
             name='email'
             helperText='Email Address'
             value={
@@ -98,7 +116,7 @@ const BasicInfoForm = props => {
         </div>
         <div>
           <TextField
-            style={{marginTop: '8px'}}
+            className={classes.textField}
             name='twitterId'
             helperText='Twitter Handle'
             placeholder='No Associated Handle'
@@ -125,7 +143,7 @@ const BasicInfoForm = props => {
         <div>
           <TextField
             inputProps={{maxLength:19}}
-            style={{marginTop: '8px'}}
+            className={classes.textField}
             name='orcidId'
             id='orcidId'
             helperText='Orcid ID'
@@ -150,7 +168,7 @@ const BasicInfoForm = props => {
             onChange={updateFields}
           />
         </div>
-        <div style={{display:'flex', justifyContent:'flex-end'}}>
+        <div className={classes.button}>
           <Button type='submit' variant='contained' color='primary'>Save</Button>
         </div>
       </form>
@@ -158,4 +176,4 @@ const BasicInfoForm = props => {
   );
 };
 
-export default BasicInfoForm;
+export default withStyles(styles)(BasicInfoForm);

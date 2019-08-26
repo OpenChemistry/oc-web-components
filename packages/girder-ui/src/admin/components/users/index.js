@@ -1,22 +1,33 @@
 import {
-  Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography
+  withStyles, Link, Paper, Table, TableBody, TableCell,
+  TableHead, TableRow, Typography
 } from '@material-ui/core';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+const styles = () => ({
+  root: {
+    paddingTop:'5px',
+    margin:'10px'
+  },
+  typography: {
+    textAlign: 'center'
+  },
+});
+
 class Users extends Component {
   render() {
-    const {group, possibleUsers, search}=this.props;
+    const {group, possibleUsers, search, classes}=this.props;
     const query=search ? "'"+search+"'" : 'all available users'
     if (possibleUsers.length) {
       return(
         <div>
-          <Typography style={{textAlign: 'center'}} variant='subtitle1'>
+          <Typography className={classes.typography} variant='subtitle1'>
           Showing search results for {query}:
           </Typography>
-          <Paper style={{paddingTop:'5px', margin:'10px'}}>
+          <Paper className={classes.root}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -51,7 +62,7 @@ class Users extends Component {
       );
     } else { 
       return (
-        <Typography style={{textAlign: 'center'}}>No Users to Add</Typography>
+        <Typography className={classes.typography}>No Users to Add</Typography>
       );
     }
   }
@@ -65,4 +76,4 @@ Users.defaultProps = {
   possibleUsers: []
 }
 
-export default Users;
+export default withStyles(styles)(Users);

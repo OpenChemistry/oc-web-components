@@ -3,15 +3,23 @@ import PropTypes from 'prop-types';
 import moment from 'moment'
 
 import {
-	Table, TableHead, TableBody, TableRow, TableCell, Link, Paper
+	withStyles, Table, TableHead, TableBody, TableRow, TableCell, Link, Paper
 } from '@material-ui/core';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+const styles = () => ({
+  root: {
+		margin:'20px',
+		maxWidth:'100%',
+		padding:'5px'
+  },
+});
 
 class Groups extends Component {
   render() {
-    const {listOfGroups} = this.props;
+    const {listOfGroups, classes} = this.props;
     return(
-      <Paper style={{margin:'20px', maxWidth:'100%', padding:'5px'}}>
+      <Paper className={classes.root}>
       <Table>
 	<TableHead>
           <TableRow>
@@ -41,7 +49,7 @@ class Groups extends Component {
 		<Link component='button'
 	          onClick={(e) => {
 		    this.props.handleDelete(group._id)}}>
-		  <DeleteOutlineIcon />
+		  <DeleteIcon />
 	        </Link>
 	      </TableCell>
 	    </TableRow>
@@ -61,4 +69,4 @@ Groups.defaultProps = {
     listOfGroups: []
 }
 
-export default Groups;
+export default withStyles(styles)(Groups);
