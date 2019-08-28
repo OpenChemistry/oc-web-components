@@ -54,14 +54,14 @@ const BasicInfoForm = props => {
     for (var key in formValues) {
       if (!formValues[key]) {
         if (key == 'twitterId' || key == 'orcidId') {
-          formValues[key] = mediaIds[key];
+          formValues[key] = '';
         } else {
           formValues[key] = userInfo[key];
         }
       }
 
-      if (key == 'orcidId' && formValues[key].length < 19) {
-        formValues[key] = mediaIds[key]
+      if (formValues['orcidId'] && formValues['orcidId'].length < 19) {
+        formValues['orcidId'] = mediaIds['orcidId']
       }
     }
 
@@ -102,7 +102,6 @@ const BasicInfoForm = props => {
         </div>
         <div>
           <TextField
-            inputProps={{maxLength:15}}
             className={classes.textField}
             name='email'
             helperText='Email Address'
@@ -116,14 +115,14 @@ const BasicInfoForm = props => {
         </div>
         <div>
           <TextField
+            inputProps={{maxLength:15}}
             className={classes.textField}
             name='twitterId'
             helperText='Twitter Handle'
             placeholder='No Associated Handle'
             value={
               formValues.twitterId == undefined
-              ? mediaIds.twitterId
-              : formValues.twitterId}
+              ? '' : formValues.twitterId}
             InputProps ={{
               startAdornment:
               <InputAdornment position='start'>
@@ -146,12 +145,16 @@ const BasicInfoForm = props => {
             className={classes.textField}
             name='orcidId'
             id='orcidId'
-            helperText='Orcid ID'
+            error={formValues.orcidId && formValues.orcidId.length < 19}
+            helperText={
+              formValues.orcidId && formValues.orcidId.length < 19
+              ? 'ID must be 16 characters long'
+              : 'Orcid ID'
+            }
             placeholder='No Associated Handle'
             value={
               formValues.orcidId == undefined
-              ? mediaIds.orcidId
-              : formValues.orcidId}
+              ? '' : formValues.orcidId}
             InputProps ={{
               startAdornment:
               <InputAdornment position='start'>
