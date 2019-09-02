@@ -42,10 +42,10 @@ function* onUpdateUserInformation(action) {
   try {
     const {id, values} = action.payload;
     const info = yield call (restUpdateUser, id, values);
-    const tData = yield call (twitterLogin, id, values.twitterId)
-    const oData = yield call (orcidLogin, id, values.orcidId)
-    const tId = tData.twitter
-    const oId = oData.orcid
+    var data = yield call (twitterLogin, id, values.twitterId)
+    const tId = data.twitter
+    var data = yield call (orcidLogin, id, values.orcidId)
+    const oId = data.orcid;
     yield put( userDataReceived({info, tId, oId}) );
   } catch(error) {
     yield put( userUpdateFailed(error) );

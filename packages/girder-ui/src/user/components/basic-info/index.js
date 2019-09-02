@@ -52,16 +52,18 @@ const BasicInfoForm = props => {
   const handleSubmit = e => {
     e.preventDefault();
     for (var key in formValues) {
+      if (formValues['orcidId'] && formValues['orcidId'].length < 19) {
+        formValues['orcidId'] = mediaIds['orcidId']
+      }
+
       if (!formValues[key]) {
         if (key == 'twitterId' || key == 'orcidId') {
-          formValues[key] = '';
+          if (formValues[key] == undefined) {
+            formValues[key] = mediaIds[key] ? mediaIds[key] : '';
+          }
         } else {
           formValues[key] = userInfo[key];
         }
-      }
-
-      if (formValues['orcidId'] && formValues['orcidId'].length < 19) {
-        formValues['orcidId'] = mediaIds['orcidId']
       }
     }
 
@@ -121,12 +123,14 @@ const BasicInfoForm = props => {
             helperText='Twitter Handle'
             placeholder='No Associated Handle'
             value={
-              formValues.twitterId == undefined
-              ? '' : formValues.twitterId}
-            InputProps ={{
+              formValues.twitterId != undefined
+              ? formValues.twitterId
+              : mediaIds.twitterId != 'undefined'
+                ? mediaIds.twitterId : ''}
+            InputProps={{
               startAdornment:
               <InputAdornment position='start'>
-                {mediaIds.twitterId
+                {mediaIds.twitterId != undefined
                 ? <Link
                     href={'http://www.twitter.com/'+mediaIds.twitterId}
                     target='_blank'
@@ -153,12 +157,14 @@ const BasicInfoForm = props => {
             }
             placeholder='No Associated Handle'
             value={
-              formValues.orcidId == undefined
-              ? '' : formValues.orcidId}
-            InputProps ={{
+              formValues.orcidId != undefined
+              ? formValues.orcidId
+              : mediaIds.orcidId != 'undefined'
+                ? mediaIds.orcidId : ''}
+            InputProps={{
               startAdornment:
               <InputAdornment position='start'>
-                {mediaIds.orcidId
+                {mediaIds.orcidId != undefined
                 ? <Link
                     href={'http://www.orcid.com/'+mediaIds.orcidId}
                     target='_blank'
