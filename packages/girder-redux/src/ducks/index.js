@@ -78,7 +78,6 @@ export const notificationsActions = {
 export const notificationsSelectors = {};
 
 export {default as notificationsReducer} from './notifications';
-
 //ADMIN
 //Import actions
 import {
@@ -139,4 +138,54 @@ export const adminSelectors = {
   getMembersByIds,
   getCurrentGroup,
   getUserSearch
+}
+
+//USER
+//Import actions
+import {
+  fetchUserData,
+  userDataReceived,
+  fetchUserDataFailed,
+  updateUserInformation,
+  userInformationUpdated,
+  userUpdateFailed,
+  linkToTwitter,
+  twitterLinked,
+  linkToTwitterFailed,
+  linkToOrcid,
+  orcidLinked,
+  linkToOrcidFailed
+} from './user';
+
+//Import Selectors
+import {
+  createRoot,
+  getUserData,
+  getTwitterId,
+  getOrcidId
+} from './user';
+
+//Import reducer
+export {default as userReducer} from './user';
+
+export const userActions = {
+  fetchUserData,
+  userDataReceived,
+  fetchUserDataFailed,
+  updateUserInformation,
+  userInformationUpdated,
+  userUpdateFailed,
+  linkToTwitter,
+  twitterLinked,
+  linkToTwitterFailed,
+  linkToOrcid,
+  orcidLinked,
+  linkToOrcidFailed
+}
+
+export const userSelectors = {
+  createRoot,
+  getUserData,
+  getTwitterId,
+  getOrcidId
 }

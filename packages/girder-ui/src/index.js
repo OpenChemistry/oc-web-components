@@ -9,6 +9,8 @@ import { default as Groups } from './admin/containers/groups';
 import { default as Members } from './admin/containers/members';
 import { default as AddUser } from './admin/containers/add-user';
 
+import { default as BasicInfo } from './user/containers/basic-info';
+
 export const auth = {
   LoginButton,
   LoginOptions,
@@ -23,4 +25,8 @@ export const admin = {
     Groups,
     Members,
     AddUser
+}
+
+export const user = {
+  BasicInfo
 }

@@ -45,3 +45,17 @@ export const adminSagas = {
   watchAddMember,
   watchRemoveGroup
 };
+
+import {
+  watchFetchUserInformation,
+  watchUpdateUserInformation,
+  watchTwitterLogin,
+  watchOrcidLogin
+} from './user';
+
+export const userSagas = {
+  watchFetchUserInformation,
+  watchUpdateUserInformation,
+  watchTwitterLogin,
+  watchOrcidLogin
+}

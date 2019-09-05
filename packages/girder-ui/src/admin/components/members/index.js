@@ -1,24 +1,49 @@
 import {
-  Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography
+  withStyles, Link, Paper, Table, TableBody, TableCell,
+  TableHead, TableRow, Typography
 } from '@material-ui/core';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PeopleIcon from '@material-ui/icons/People';
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import moment from 'moment'
 
+const styles = () => ({
+  root: {
+    margin:'10px'
+  },
+  header: {
+    textAlign:'center'
+  },
+  paper: {
+    backgroundColor:'#37474F',
+    display:'flex',
+    justifyContent:'space-between',
+    marginBottom:'5px'
+  },
+  title: {
+    textAlign:'center',
+    color:'white',
+    margin:'auto'
+  },
+  icon: {
+    marginRight:'5px',
+    verticalAlign:'text-bottom'
+  }
+});
+
 class Members extends Component {
   render() {
-    const {group, listOfMembers, search} = this.props;
+    const {group, listOfMembers, search, classes} = this.props;
     return(
-      <div style={{margin:'10px'}}>
-        <Typography style={{textAlign:'center'}} variant='h4' gutterBottom>
+      <div className={classes.root}>
+        <Typography className={classes.header} variant='h4' gutterBottom>
           {group.name}
         </Typography>
-        <Paper style={{backgroundColor:'#37474F', display:'flex', justifyContent:'space-between', marginBottom:'5px'}}>
-          <Typography variant='h6' style={{textAlign:'center', color:'white', margin:'auto'}}>
-            <PeopleOutlineIcon color='primary' style={{marginRight:'5px', verticalAlign:'text-bottom'}}/>
+        <Paper className={classes.paper}>
+          <Typography variant='h6' className={classes.title}>
+            <PeopleIcon color='primary' className={classes.icon}/>
             Current Members
           </Typography>
         </Paper>
@@ -49,7 +74,7 @@ class Members extends Component {
                         {this.props.handleDelete(user._id, group, search)}
                       }
                     >
-                      <DeleteOutlineIcon />
+                      <DeleteIcon />
                     </Link>
                   </TableCell>
                 </TableRow>
@@ -72,4 +97,4 @@ Members.defaultProps = {
   group: {}
 }
 
-export default Members;
+export default withStyles(styles)(Members);
