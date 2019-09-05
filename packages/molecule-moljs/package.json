@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/molecule-moljs",
-  "version": "0.4.23",
+  "version": "0.4.24",
   "description": "Stencil Wrapper for 3Dmoljs with support for cjson chemical data",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -18,9 +18,9 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@openchemistry/moljs-es": "^0.1.14",
-    "@openchemistry/types": "^0.8.10",
-    "@openchemistry/utils": "^0.6.11",
+    "@openchemistry/moljs-es": "^0.1.15",
+    "@openchemistry/types": "^0.8.11",
+    "@openchemistry/utils": "^0.6.12",
     "@types/lodash-es": "^4.17.1",
     "lodash-es": "^4.17.11",
     "resize-observer-polyfill": "^1.5.0"

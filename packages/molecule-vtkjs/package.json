@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/molecule-vtkjs",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "description": "Stencil Wrapper for vtkjs with support for cjson chemical data",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -18,13 +18,13 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@openchemistry/utils": "^0.6.11",
+    "@openchemistry/utils": "^0.6.12",
     "lodash-es": "^4.17.11",
     "resize-observer-polyfill": "^1.5.0",
     "vtk.js": "^8.11.1"
   },
   "devDependencies": {
-    "@openchemistry/types": "^0.8.10",
+    "@openchemistry/types": "^0.8.11",
     "@stencil/core": "^1.2.0",
     "@types/lodash-es": "^4.17.1"
   },
