@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/girder-ui",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": " ",
   "module": "esm/index.js",
   "files": [
