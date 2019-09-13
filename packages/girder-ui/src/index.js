@@ -8,6 +8,8 @@ import { default as Users } from './admin/containers/users';
 import { default as Groups } from './admin/containers/groups';
 import { default as Members } from './admin/containers/members';
 import { default as AddUser } from './admin/containers/add-user';
+import { default as Private } from './route/private';
+import { default as Public } from './route/public';
 
 import { default as BasicInfo } from './user/containers/basic-info';
 
@@ -29,4 +31,9 @@ export const admin = {
 
 export const user = {
   BasicInfo
+}
+
+export const route = {
+  Public,
+  Private
 }
