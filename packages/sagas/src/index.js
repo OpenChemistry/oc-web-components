@@ -9,8 +9,8 @@ import { cumulus } from '@openchemistry/redux';
 import { selectors } from '@openchemistry/redux';
 import { auth } from '@openchemistry/girder-redux';
 
-import { watchNotifications, watchNewToken } from './notifications'
-export { watchNotifications, watchNewToken };
+import { watchNotifications, watchNewToken, watchAsyncOrbital } from './notifications'
+export { watchNotifications, watchNewToken, watchAsyncOrbital };
 import { watchLoadNotebooks } from './app'
 export { watchLoadNotebooks };
 import { watchRedirectToJupyterHub, watchInvalidateSession, watchInvalidateToken } from './jupyterlab'
@@ -196,6 +196,13 @@ export function* receiveNotification(action) {
     if (refreshTaskFlow) {
       yield put(cumulus.loadTaskFlow({id: taskFlowId}));
     }
+  }
+  else if (type === 'cube.status') {
+    const orbital = yield call(fetchOrbitalFromGirder, data.id, data.mo);
+    if ('cube' in orbital && orbital.cube == {}) {
+      delete orbital.cube;
+    }
+    yield put( calculations.receiveOrbital(data.id, data.mo, orbital) );
   }
 }
 
