@@ -4,6 +4,7 @@ import {has, isNil} from 'lodash-es'
 
 import { girder } from '@openchemistry/redux';
 import { auth } from '@openchemistry/girder-redux';
+import { calculations } from '@openchemistry/redux';
 
 function createEventSource() {
   return eventChannel(emit => {
@@ -64,4 +65,13 @@ function* onNewToken() {
 export function* watchNewToken() {
   // Connect to notification stream when a new token is set
   yield takeEvery(auth.actions.setToken.toString(), onNewToken);
+}
+
+function* onAsyncOrbital() {
+  yield put(girder.connectToNotifications());
+}
+
+export function* watchAsyncOrbital() {
+  // Connect to notification stream when an orbital is requested
+  yield takeEvery(calculations.requestOrbital, onAsyncOrbital);
 }

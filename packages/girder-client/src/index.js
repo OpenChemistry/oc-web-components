@@ -41,9 +41,7 @@ function delete_(url, config) {
 }
 
 function updateToken(token) {
-  _girderClient.defaults.headers = {
-     'Girder-Token': token
-  }
+  _girderClient.defaults.headers.common['Girder-Token'] = token;
 }
 
 function setPrefix(prefix) {

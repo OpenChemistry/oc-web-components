@@ -33,8 +33,8 @@ class Route extends BaseRoute {
 
 Route.propTypes = {
   conditon: PropTypes.func,
-  component: PropTypes.oneOf(PropTypes.object, PropTypes.func),
-  fallback: PropTypes.oneOf(PropTypes.object, PropTypes.func),
+  component: PropTypes.oneOf([PropTypes.object, PropTypes.func]),
+  fallback: PropTypes.oneOf([PropTypes.object, PropTypes.func]),
   authenticated: PropTypes.bool,
   authenticating: PropTypes.bool
 }
