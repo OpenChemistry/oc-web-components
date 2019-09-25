@@ -12,11 +12,11 @@ import girderClient from '@openchemistry/girder-client';
 
 import { setPaginationDefaults } from './index'
 
-function fetchCalculations(options={}) {
+function fetchCalculations(options={}, creatorId) {
   // Let's modify a clone of the options instead of the original options
   const optionsClone = { ...options };
   setPaginationDefaults(optionsClone);
-  const params = { params: optionsClone };
+  const params = { params: {...optionsClone, creatorId} };
   return girderClient().get('calculations', params)
           .then(response => response.data )
 }
@@ -55,8 +55,8 @@ export function* watchLoadCalculationNotebooks() {
 
 function* loadCalculations(action) {
   try {
-    const {options, loadMolecules} = action.payload
-    const res = yield call(fetchCalculations, options);
+    const {options, loadMolecules, creatorId} = action.payload
+    const res = yield call(fetchCalculations, options, creatorId);
     const calculations = res.results;
     const matches = res.matches;
     yield put(calculationsRedux.receiveCalculations({calculations, matches}));
