@@ -7,17 +7,20 @@ import {
 const ApiKeyForm = props => {
   const {onClose, apiKey, newKey} = props;
   const [value, setValue] = useState(apiKey.scope ? 'restricted' : 'full');
-  const [formValues, setValues] = useState({ name: apiKey.name, days: apiKey.tokenDuration });
+  const [formValues, setValues] = useState({
+    name: newKey ? '' : apiKey.name,
+    days: newKey ? '' : apiKey.tokenDuration
+  });
   const [state, setState] = useState({
-    user_info: !newKey && apiKey.scope.includes('core.user_info.read'),
-    read: !newKey && apiKey.scope.includes('core.data.read'),
-    write: !newKey && apiKey.scope.includes('core.data.write'),
-    own: !newKey && apiKey.scope.includes('core.data.own'),
-    plugins: !newKey && apiKey.scope.includes('core.plugins.read'),
-    setting: !newKey && apiKey.scope.includes('core.setting.read'),
-    assetstore: !newKey && apiKey.scope.includes('core.assetstore.read'),
-    partial_upload: !newKey && apiKey.scope.includes('core.partial_upload.read'),
-    clean: !newKey && apiKey.scope.includes('core.partial_upload.clean')
+    user_info:apiKey.scope && apiKey.scope.includes('core.user_info.read'),
+    read:apiKey.scope && apiKey.scope.includes('core.data.read'),
+    write:apiKey.scope && apiKey.scope.includes('core.data.write'),
+    own:apiKey.scope && apiKey.scope.includes('core.data.own'),
+    plugins:apiKey.scope && apiKey.scope.includes('core.plugins.read'),
+    setting:apiKey.scope && apiKey.scope.includes('core.setting.read'),
+    assetstore:apiKey.scope && apiKey.scope.includes('core.assetstore.read'),
+    partial_upload:apiKey.scope && apiKey.scope.includes('core.partial_upload.read'),
+    clean:apiKey.scope && apiKey.scope.includes('core.partial_upload.clean')
   });
 
   if (!apiKey) { 
