@@ -154,7 +154,13 @@ import {
   linkToTwitterFailed,
   linkToOrcid,
   orcidLinked,
-  linkToOrcidFailed
+  linkToOrcidFailed,
+  requestApiKeys,
+  receiveApiKeys,
+  apiKeyFailed,
+  createApiKey,
+  editApiKey,
+  deleteApiKey
 } from './user';
 
 //Import Selectors
@@ -162,7 +168,8 @@ import {
   createRoot,
   getUserData,
   getTwitterId,
-  getOrcidId
+  getOrcidId,
+  getApiKeys
 } from './user';
 
 //Import reducer
@@ -180,12 +187,19 @@ export const userActions = {
   linkToTwitterFailed,
   linkToOrcid,
   orcidLinked,
-  linkToOrcidFailed
+  linkToOrcidFailed,
+  requestApiKeys,
+  receiveApiKeys,
+  apiKeyFailed,
+  createApiKey,
+  editApiKey,
+  deleteApiKey
 }
 
 export const userSelectors = {
   createRoot,
   getUserData,
   getTwitterId,
-  getOrcidId
+  getOrcidId,
+  getApiKeys
 }
