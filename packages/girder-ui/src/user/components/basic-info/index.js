@@ -72,9 +72,6 @@ const BasicInfoForm = props => {
 
   return (
     <div className={classes.root}>
-      <Typography variant='h4'>
-        Edit Profile Information
-      </Typography>
       <form className={classes.form} onSubmit={handleSubmit}>
         <div>
           <TextField
