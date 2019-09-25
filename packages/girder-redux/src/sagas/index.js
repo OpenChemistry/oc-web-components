@@ -50,12 +50,20 @@ import {
   watchFetchUserInformation,
   watchUpdateUserInformation,
   watchTwitterLogin,
-  watchOrcidLogin
+  watchOrcidLogin,
+  watchApiKeyEdited,
+  watchApiKeyCreated,
+  watchApiKeyDeleted,
+  watchApiKeyRequested
 } from './user';
 
 export const userSagas = {
   watchFetchUserInformation,
   watchUpdateUserInformation,
   watchTwitterLogin,
-  watchOrcidLogin
+  watchOrcidLogin,
+  watchApiKeyEdited,
+  watchApiKeyCreated,
+  watchApiKeyDeleted,
+  watchApiKeyRequested
 }

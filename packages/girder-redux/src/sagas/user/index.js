@@ -11,7 +11,13 @@ import {
   linkToTwitterFailed,
   linkToOrcid,
   orcidLinked,
-  linkToOrcidFailed
+  linkToOrcidFailed,
+  requestApiKeys,
+  receiveApiKeys,
+  apiKeyFailed,
+  createApiKey,
+  editApiKey,
+  deleteApiKey
 } from '../../ducks/user';
 
 import {
@@ -20,7 +26,11 @@ import {
   twitterLogin,
   orcidLogin,
   twitterId,
-  orcidId
+  orcidId,
+  getApiKeys as getKeys,
+  deleteApiKey as deleteKey,
+  editApiKey as editKey,
+  createApiKey as createKey
 } from '../../rest/user';
 
 function* onFetchUserInformation(action) {
@@ -82,4 +92,59 @@ function* onOrcidLogin(action) {
 
 export function* watchOrcidLogin() {
   yield takeEvery(linkToOrcid.toString(), onOrcidLogin);
+}
+
+function* onApiKeyEdited(action) {
+  try {
+    const key = action.payload;
+    yield call(editKey, key);
+    yield call(onApiKeyRequested);
+  } catch (error) {
+    yield put( apiKeyFailed(error) );
+  }
+}
+
+export function* watchApiKeyEdited() {
+  yield takeEvery(editApiKey.toString(), onApiKeyEdited);
+}
+
+function* onApiKeyCreated(action) {
+  try {
+    const key = action.payload;
+    yield call(createKey, key);
+    yield call(onApiKeyRequested);
+  } catch (error) {
+    yield put( apiKeyFailed(error) );
+  }
+}
+
+export function* watchApiKeyCreated() {
+  yield takeEvery(createApiKey.toString(), onApiKeyCreated);
+}
+
+function* onApiKeyDeleted(action) {
+  try {
+    const id = action.payload;
+    yield call(deleteKey, id);
+    yield call(onApiKeyRequested);
+  } catch (error) {
+    yield put( apiKeyFailed(error) );
+  }
+}
+
+export function* watchApiKeyDeleted() {
+  yield takeEvery(deleteApiKey.toString(), onApiKeyDeleted);
+}
+
+function* onApiKeyRequested(action) {
+  try {
+    const keys = yield call(getKeys);
+    yield put( receiveApiKeys(keys) )
+  } catch (error) {
+    yield put( apiKeyFailed(error) );
+  }
+}
+
+export function* watchApiKeyRequested() {
+  yield takeEvery(requestApiKeys.toString(), onApiKeyRequested);
 }
