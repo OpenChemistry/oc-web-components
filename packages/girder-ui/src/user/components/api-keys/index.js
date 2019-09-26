@@ -23,7 +23,7 @@ const styles = () => ({
 });
 
 const ApiKeys = props => {
-  const {apiKeys, handleEdit, handleDelete, handleSubmit, classes} = props;
+  const {apiKeys, handleEdit, handleDelete, handleSubmit, classes, scopeOptions} = props;
   const [popup, setPopup] = React.useState({visible: null, currentKey: null});
   const [openDialog, setOpenDialog] = React.useState({show: false, target: {}, create: true});
 
@@ -65,7 +65,9 @@ const ApiKeys = props => {
         <ApiKeyForm
           onClose={handleClose}
           apiKey={openDialog.target}
-          newKey={openDialog.create}/>
+          newKey={openDialog.create}
+          scopeOptions={scopeOptions}
+        />
       </Dialog>
       <Table>
         <TableHead>

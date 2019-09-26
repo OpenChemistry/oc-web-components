@@ -1,12 +1,34 @@
 import React, { useState } from 'react';
 import { 
   TextField, DialogActions, DialogContent, DialogTitle, Typography, FormControl,
-  RadioGroup, FormControlLabel, Checkbox, Radio, FormGroup, Button 
+  RadioGroup, FormControlLabel, Checkbox, Radio, FormGroup, Button, withStyles
 } from '@material-ui/core';
 
+const styles = () => ({
+  checkForm: {
+    display: 'inline'
+  },
+  checkBoxes: {
+    width: '50%',
+    minWidth: 'fit-content',
+    boxSizing: 'border-box',
+    marginRight: '10px'
+  },
+  title: {
+    textAlign: 'center'
+  },
+  root: {
+    width: 'fit-content'
+  }
+});
+
 const ApiKeyForm = props => {
-  const {onClose, apiKey, newKey} = props;
-  const [value, setValue] = useState(apiKey.scope ? 'restricted' : 'full');
+  const {onClose, apiKey, newKey, scopeOptions, classes} = props;
+  if (!apiKey) {
+    apiKey = {name: '', scope: null, tokenDuration: '', active: true}
+  }
+
+  const [value, setValue] = useState(apiKey.scope && apiKey.scope.length == scopeOptions.length ? 'full' : 'restricted');
   const [formValues, setValues] = useState({
     name: newKey ? '' : apiKey.name,
     days: newKey ? '' : apiKey.tokenDuration
@@ -23,9 +45,37 @@ const ApiKeyForm = props => {
     clean:apiKey.scope && apiKey.scope.includes('core.partial_upload.clean')
   });
 
-  if (!apiKey) { 
-    apiKey = {name: '', scope: null, tokenDuration: '', active: true} 
+  /*
+    scopeOptions are optional and can be used to limit the permissions available.
+
+    user_info:
+      Allows clients to look up your user information, including private fields such
+      as email address.
+    read:
+      Allows clients to read all data that you have access to.
+    write:
+      Allows clients to edit data in the hierarchy and create new data anywhere you
+      have write access.
+    own:
+      Allows administrative control on data you own, including setting access control
+      and deletion.
+    plugins:
+      Allows clients to see the list of plugins installed on the server.
+    setting:
+      Allows clients to view the value of any system setting.
+    assetstore:
+      Allows clients to see all assetstore information.
+    partial_upload:
+      View unfinished uploads. Allows clients to see all partial uploads.
+    clean:
+      Allows clients to remove unfinished uploads.
+  */
+  if (!scopeOptions) {
+    var properties = ['user_info', 'read', 'write', 'own', 'plugins', 'setting', 'assetstore', 'partial_upload', 'clean']
+  } else {
+    var properties = scopeOptions;
   }
+
   const { user_info, read, write, own, plugins, setting, assetstore, partial_upload, clean } = state;
 
   const handleRadioChange = event => {
@@ -37,15 +87,21 @@ const ApiKeyForm = props => {
   };
 
   const handleClickClose = (choice) => {
-    if (value == 'restricted') {
+    if (choice != 'cancel') {
+      if (!apiKey.scope) {
+        createScope();
+      }
       createJson();
-    } else {
-      apiKey.scope = null;
+      createKey();
     }
-    createKey();
     onClose(apiKey, choice);
   };
 
+  const createScope = () => {
+    properties.forEach((element) => {
+      state[element]=true;
+    });
+  }
   const createJson = () => {
     var json_list = []
     for (var key in state) {
@@ -59,8 +115,7 @@ const ApiKeyForm = props => {
         }
       }
     }
-    console.log(json_list)
-    apiKey.scope = json_list.length > 0 ? json_list : null;
+    apiKey.scope = json_list;
   };
 
   const createKey = () => {
@@ -77,8 +132,8 @@ const ApiKeyForm = props => {
   };
 
   return (
-    <div>
-      <DialogTitle style={{textAlign:'center'}}>API Key Information</DialogTitle>
+    <div className={classes.root}>
+      <DialogTitle className={classes.title}>API Key Information</DialogTitle>
       <DialogContent>
         <Typography variant="h6">API Key Name</Typography>
         <TextField
@@ -106,56 +161,87 @@ const ApiKeyForm = props => {
             <FormControlLabel value='full' control={<Radio />} label='Allow all actions' />
             <FormControlLabel value='restricted' control={<Radio />} label='Allow specific permissions' />
           </RadioGroup>
-          <FormGroup row>
-            <FormGroup>
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={user_info} onChange={handleCheckChange('user_info')} value='user_info' />}
-                label='Read user information'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={read} onChange={handleCheckChange('read')} value='read' />}
-                label='Read data'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={write} onChange={handleCheckChange('write')} value='write' />}
-                label='Write data'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={own} onChange={handleCheckChange('own')} value='own' />}
-                label='Data ownership'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={plugins} onChange={handleCheckChange('plugins')} value='plugins' />}
-                label='See installed plugins'
-              />
-              </FormGroup>
-              <FormGroup>
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={setting} onChange={handleCheckChange('setting')} value='setting' />}
-                label='See system setting values'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={assetstore} onChange={handleCheckChange('assetstore')} value='assetstore' />}
-                label='View assetstores'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={partial_upload} onChange={handleCheckChange('partial_upload')} value='partial_upload' />}
-                label='View unfinished uploads'
-              />
-              <FormControlLabel
-                disabled={value == 'full'}
-                control={<Checkbox checked={clean} onChange={handleCheckChange('clean')} value='clean' />}
-                label='Remove unfinished uploads'
-              />
-            </FormGroup>
+          <FormGroup className={classes.checkForm}>
+            {properties.includes('user_info')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={user_info} onChange={handleCheckChange('user_info')} value='user_info' />}
+                  label='Read user information'
+                />
+              : null}
+
+            {properties.includes('read')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={read} onChange={handleCheckChange('read')} value='read' />}
+                  label='Read data'
+                />
+              : null}
+
+            {properties.includes('write')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={write} onChange={handleCheckChange('write')} value='write' />}
+                  label='Write data'
+                />
+              : null}
+
+            {properties.includes('own')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={own} onChange={handleCheckChange('own')} value='own' />}
+                  label='Data ownership'
+                />
+              : null}
+
+            {properties.includes('plugins')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={plugins} onChange={handleCheckChange('plugins')} value='plugins' />}
+                  label='See installed plugins'
+                />
+              : null}
+
+            {properties.includes('setting')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={setting} onChange={handleCheckChange('setting')} value='setting' />}
+                  label='See system setting values'
+                />
+              : null}
+
+            {properties.includes('assetstore')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={assetstore} onChange={handleCheckChange('assetstore')} value='assetstore' />}
+                  label='View assetstores'
+                />
+              : null}
+
+            {properties.includes('partial_upload')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={partial_upload} onChange={handleCheckChange('partial_upload')} value='partial_upload' />}
+                  label='View unfinished uploads'
+                />
+              : null}
+
+            {properties.includes('clean')
+              ? <FormControlLabel
+                  className={classes.checkBoxes}
+                  disabled={value == 'full'}
+                  control={<Checkbox checked={clean} onChange={handleCheckChange('clean')} value='clean' />}
+                  label='Remove unfinished uploads'
+                />
+              : null}
           </FormGroup>
         </FormControl>
       </DialogContent>
@@ -171,4 +257,4 @@ const ApiKeyForm = props => {
   );
 }
 
-export default ApiKeyForm;
+export default withStyles(styles)(ApiKeyForm);
