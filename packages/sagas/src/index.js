@@ -40,7 +40,12 @@ export function fetchMoleculesFromGirder(options={}, creatorId) {
   // Let's modify a clone of the options instead of the original options
   const optionsClone = { ...options }
   setPaginationDefaults(optionsClone)
-  const params = { params: {...optionsClone, creatorId} }
+
+  var params = { params: optionsClone }
+  if (creatorId){
+    params = { params: {...optionsClone, creatorId} }
+  }
+
   return girderClient().get('molecules', params)
           .then(response => response.data )
 }
