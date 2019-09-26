@@ -155,95 +155,99 @@ const ApiKeyForm = props => {
           fullWidth
           onChange={updateFields}
         />
-        <Typography variant="h6">Permission Scope</Typography>
-        <FormControl>
-          <RadioGroup value={value} onChange={handleRadioChange}>
-            <FormControlLabel value='full' control={<Radio />} label='Allow all actions' />
-            <FormControlLabel value='restricted' control={<Radio />} label='Allow specific permissions' />
-          </RadioGroup>
-          <FormGroup className={classes.checkForm}>
-            {properties.includes('user_info')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={user_info} onChange={handleCheckChange('user_info')} value='user_info' />}
-                  label='Read user information'
-                />
-              : null}
+        {properties.length > 1
+          ? <div>
+          <Typography variant="h6">Permission Scope</Typography>
+          <FormControl>
+            <RadioGroup value={value} onChange={handleRadioChange}>
+              <FormControlLabel value='full' control={<Radio />} label='Allow all actions' />
+              <FormControlLabel value='restricted' control={<Radio />} label='Allow specific permissions' />
+            </RadioGroup>
+            <FormGroup className={classes.checkForm}>
+              {properties.includes('user_info')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={user_info} onChange={handleCheckChange('user_info')} value='user_info' />}
+                    label='Read user information'
+                  />
+                : null}
 
-            {properties.includes('read')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={read} onChange={handleCheckChange('read')} value='read' />}
-                  label='Read data'
-                />
-              : null}
+              {properties.includes('read')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={read} onChange={handleCheckChange('read')} value='read' />}
+                    label='Read data'
+                  />
+                : null}
 
-            {properties.includes('write')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={write} onChange={handleCheckChange('write')} value='write' />}
-                  label='Write data'
-                />
-              : null}
+              {properties.includes('write')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={write} onChange={handleCheckChange('write')} value='write' />}
+                    label='Write data'
+                  />
+                : null}
 
-            {properties.includes('own')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={own} onChange={handleCheckChange('own')} value='own' />}
-                  label='Data ownership'
-                />
-              : null}
+              {properties.includes('own')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={own} onChange={handleCheckChange('own')} value='own' />}
+                    label='Data ownership'
+                  />
+                : null}
 
-            {properties.includes('plugins')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={plugins} onChange={handleCheckChange('plugins')} value='plugins' />}
-                  label='See installed plugins'
-                />
-              : null}
+              {properties.includes('plugins')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={plugins} onChange={handleCheckChange('plugins')} value='plugins' />}
+                    label='See installed plugins'
+                  />
+                : null}
 
-            {properties.includes('setting')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={setting} onChange={handleCheckChange('setting')} value='setting' />}
-                  label='See system setting values'
-                />
-              : null}
+              {properties.includes('setting')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={setting} onChange={handleCheckChange('setting')} value='setting' />}
+                    label='See system setting values'
+                  />
+                : null}
 
-            {properties.includes('assetstore')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={assetstore} onChange={handleCheckChange('assetstore')} value='assetstore' />}
-                  label='View assetstores'
-                />
-              : null}
+              {properties.includes('assetstore')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={assetstore} onChange={handleCheckChange('assetstore')} value='assetstore' />}
+                    label='View assetstores'
+                  />
+                : null}
 
-            {properties.includes('partial_upload')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={partial_upload} onChange={handleCheckChange('partial_upload')} value='partial_upload' />}
-                  label='View unfinished uploads'
-                />
-              : null}
+              {properties.includes('partial_upload')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={partial_upload} onChange={handleCheckChange('partial_upload')} value='partial_upload' />}
+                    label='View unfinished uploads'
+                  />
+                : null}
 
-            {properties.includes('clean')
-              ? <FormControlLabel
-                  className={classes.checkBoxes}
-                  disabled={value == 'full'}
-                  control={<Checkbox checked={clean} onChange={handleCheckChange('clean')} value='clean' />}
-                  label='Remove unfinished uploads'
-                />
-              : null}
-          </FormGroup>
-        </FormControl>
+              {properties.includes('clean')
+                ? <FormControlLabel
+                    className={classes.checkBoxes}
+                    disabled={value == 'full'}
+                    control={<Checkbox checked={clean} onChange={handleCheckChange('clean')} value='clean' />}
+                    label='Remove unfinished uploads'
+                  />
+                : null}
+            </FormGroup>
+          </FormControl>
+          </div>
+          : null}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => {handleClickClose('cancel')}} color="primary">
