@@ -8,10 +8,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 const styles = () => ({
-  root: {
-    paddingTop:'5px',
-    margin:'10px'
-  },
   typography: {
     textAlign: 'center'
   },
@@ -27,7 +23,7 @@ class Users extends Component {
           <Typography className={classes.typography} variant='subtitle1'>
           Showing search results for {query}:
           </Typography>
-          <Paper className={classes.root}>
+          <Paper>
             <Table>
               <TableHead>
                 <TableRow>

@@ -3,23 +3,15 @@ import PropTypes from 'prop-types';
 import moment from 'moment'
 
 import {
-	withStyles, Table, TableHead, TableBody, TableRow, TableCell, Link, Paper
+	Table, TableHead, TableBody, TableRow, TableCell, Link, Paper
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const styles = () => ({
-  root: {
-		margin:'20px',
-		maxWidth:'100%',
-		padding:'5px'
-  },
-});
-
 class Groups extends Component {
   render() {
-    const {listOfGroups, classes} = this.props;
+    const {listOfGroups} = this.props;
     return(
-      <Paper className={classes.root}>
+      <Paper>
       <Table>
 	<TableHead>
           <TableRow>
@@ -69,4 +61,4 @@ Groups.defaultProps = {
     listOfGroups: []
 }
 
-export default withStyles(styles)(Groups);
+export default Groups;

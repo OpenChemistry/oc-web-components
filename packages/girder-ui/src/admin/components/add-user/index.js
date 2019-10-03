@@ -7,11 +7,10 @@ import PersonIcon from '@material-ui/icons/Person';
 
 const styles = () => ({
   root: {
-    margin:'50px 10px 0'
+    marginTop:'50px'
   },
   paper: {
-    backgroundColor:'#37474F',
-    marginBottom:'5px'
+    backgroundColor:'#37474F'
   },
   typography: {
     textAlign:'center',

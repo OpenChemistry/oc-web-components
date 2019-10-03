@@ -10,15 +10,11 @@ import React, { Component } from 'react';
 import moment from 'moment'
 
 const styles = () => ({
-  root: {
-    margin:'10px'
-  },
   header: {
     textAlign:'center'
   },
   paper: {
     backgroundColor:'#37474F',
-    display:'flex',
     justifyContent:'space-between',
     marginBottom:'5px'
   },
@@ -37,7 +33,7 @@ class Members extends Component {
   render() {
     const {group, listOfMembers, search, classes} = this.props;
     return(
-      <div className={classes.root}>
+      <div>
         <Typography className={classes.header} variant='h4' gutterBottom>
           {group.name}
         </Typography>
