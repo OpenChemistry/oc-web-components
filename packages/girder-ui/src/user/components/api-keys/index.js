@@ -9,12 +9,13 @@ import { Add, Delete, Edit, Assignment, Block, AddCircle } from '@material-ui/ic
 import ApiKeyForm from '../api-key-form';
 
 const styles = () => ({
-  root: {
-    padding: '5px'
+  buttonContainer: {
+    display:'flex',
+    justifyContent:'flex-end'
   },
   button: {
-    display:'flex',
-    justifyContent:'flex-end',
+    backgroundColor:'#37474F',
+    color: 'white',
     margin:'5px',
   },
   typography: {
@@ -60,7 +61,7 @@ const ApiKeys = props => {
   };
 
   return(
-    <Paper className={classes.root}>
+    <div>
       <Dialog open={openDialog.show} onClose={handleClose}>
         <ApiKeyForm
           onClose={handleClose}
@@ -142,8 +143,9 @@ const ApiKeys = props => {
           ))}
         </TableBody>
       </Table>
-      <div className={classes.button}>
+      <div className={classes.buttonContainer}>
         <Button
+          className={classes.button}
           onClick={() => {handleClickOpen({}, true)}}
           type='submit'
           variant='contained'
@@ -152,7 +154,7 @@ const ApiKeys = props => {
           Create New Key
         </Button>
       </div>
-    </Paper>
+    </div>
   );
 }
 
