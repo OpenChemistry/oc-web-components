@@ -70,10 +70,13 @@ export class MoleculeMoljs {
    * before the first render.
    *
    * componentWillLoad will only be called once.
-   */
-  componentWillLoad() {
-   console.log('Component is about to be rendered');
-  }
+   * 
+   * Uncomment the following lifecycle method if needed:
+   * 
+   * componentWillLoad() {
+   *  console.log('Component is about to be rendered');
+   * }
+  */
 
   /**
    * The component has loaded and has already rendered.
@@ -84,7 +87,6 @@ export class MoleculeMoljs {
    * componentDidLoad only be called once.
    */
   componentDidLoad() {
-    console.log('Component has been rendered');
     if (isNil(this.viewer)) {
       let config = { };
       // 3dmoljs expects the container element to have width and height functions
@@ -117,10 +119,13 @@ export class MoleculeMoljs {
    * the component as it updates.
    *
    * componentWillUpdate is not called on the first render.
+   * 
+   * Uncomment the following lifecycle method if needed:
+   * 
+   * componentWillUpdate() {
+   *  console.log('Component will update and re-render');
+   * }
    */
-  componentWillUpdate() {
-    console.log('Component will update and re-render');
-  }
 
   /**
    * The component has just re-rendered.
@@ -132,7 +137,6 @@ export class MoleculeMoljs {
    * first render.
    */
   componentDidUpdate() {
-    console.log('Component did update');
     if (this.cjsonHasChanged) {
       this.convertCjson();
     }
@@ -145,7 +149,6 @@ export class MoleculeMoljs {
    * will be destroyed.
    */
   componentDidUnload() {
-    console.log('Component removed from the DOM');
     if (!isNil(this.animationInterval)) {
       clearInterval(this.animationInterval);
     }
