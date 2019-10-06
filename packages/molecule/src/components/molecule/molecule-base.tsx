@@ -91,7 +91,6 @@ export class MoleculeBase {
   }
 
   componentWillLoad() {
-    console.log('MoleculeBase is about to be rendered');
     // Map props names to event emitters
     this.keyToEvent = {
       displayStyle: this.displayStyleChanged,
