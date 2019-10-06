@@ -34,12 +34,7 @@ export class EnergyPlot {
 
   renderQueue = 0;
 
-  componentWillLoad() {
-    console.log('EnergyPlot is about to be rendered');
-  }
-
   componentDidLoad() {
-    console.log('EnergyPlot has been rendered');
     this.tooltip = d3.select(this.containerElement).append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
@@ -206,21 +201,11 @@ export class EnergyPlot {
       .attr('class', 'line');
   }
 
-  componentWillUpdate() {
-    console.log('EnergyPlot will update and re-render');
-  }
-
   componentDidUpdate() {
-    console.log('EnergyPlot did update');
     if (this.energiesHasChanged) {
       this.renderChart();
       this.energiesHasChanged = false;
     }    
-  }
-
-  componentDidUnload() {
-    console.log('EnergyPlot removed from the DOM');
-
   }
 
   render() {

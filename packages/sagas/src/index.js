@@ -277,7 +277,6 @@ export function* fetchTaskFlow(action) {
     yield put( cumulus.receiveTaskFlow({taskflow}));
   }
   catch(error) {
-    console.log(error);
     yield put( cumulus.requestTaskFlow(error) )
   }
 }

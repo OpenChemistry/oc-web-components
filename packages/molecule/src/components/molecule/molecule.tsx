@@ -131,7 +131,6 @@ export class Molecule {
   }
 
   componentWillLoad() {
-    console.log('Molecule is about to be rendered');
     // Map props names to event emitters
     this.keyToEvent = {
       iOrbital: this.iOrbitalChanged,

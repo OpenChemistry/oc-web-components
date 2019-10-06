@@ -50,12 +50,7 @@ export class VibrationalSpectrum {
 
   ro: ResizeObserver;
 
-  componentWillLoad() {
-    console.log('VibrationalSpectrum is about to be rendered');
-  }
-
   componentDidLoad() {
-    console.log('VibrationalSpectrum has been rendered');
 
     let throttledResize = throttle(() => {
       if (!this.containerElement) {
@@ -240,12 +235,7 @@ export class VibrationalSpectrum {
       
   }
 
-  componentWillUpdate() {
-    console.log('VibrationalSpectrum will update and re-render');
-  }
-
   componentDidUpdate() {
-    console.log('VibrationalSpectrum did update');
     if (this.spectrumHasChanged) {
       this.renderChart();
       this.spectrumHasChanged = false;
@@ -265,7 +255,6 @@ export class VibrationalSpectrum {
   }
 
   componentDidUnload() {
-    console.log('VibrationalSpectrum removed from the DOM');
     if (this.el.parentElement) {
       this.ro.unobserve(this.el.parentElement);
     }
