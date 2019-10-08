@@ -12,6 +12,7 @@ import { default as Private } from './route/private';
 import { default as Public } from './route/public';
 
 import { default as BasicInfo } from './user/containers/basic-info';
+import { default as ApiKeys } from './user/containers/api-keys';
 
 export const auth = {
   LoginButton,
@@ -23,14 +24,15 @@ export const auth = {
 }
 
 export const admin = {
-    Users,
-    Groups,
-    Members,
-    AddUser
+  Users,
+  Groups,
+  Members,
+  AddUser
 }
 
 export const user = {
-  BasicInfo
+  BasicInfo,
+  ApiKeys
 }
 
 export const route = {

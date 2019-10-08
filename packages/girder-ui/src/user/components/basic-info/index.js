@@ -6,9 +6,6 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 const styles = () => ({
   root: {
-    margin: '20px',
-    maxWidth: '100%',
-    padding: '5px'
   },
   form: {
     padding: '5px'
@@ -16,9 +13,13 @@ const styles = () => ({
   textField: {
     marginTop: '8px'
   },
-  button: {
+  buttonContainer: {
     display:'flex',
     justifyContent:'flex-end'
+  },
+  button: {
+    backgroundColor:'#37474F',
+    color: 'white'
   },
 });
 
@@ -72,9 +73,6 @@ const BasicInfoForm = props => {
 
   return (
     <div className={classes.root}>
-      <Typography variant='h4'>
-        Edit Profile Information
-      </Typography>
       <form className={classes.form} onSubmit={handleSubmit}>
         <div>
           <TextField
@@ -177,8 +175,10 @@ const BasicInfoForm = props => {
             onChange={updateFields}
           />
         </div>
-        <div className={classes.button}>
-          <Button type='submit' variant='contained' color='primary'>Save</Button>
+        <div className={classes.buttonContainer}>
+          <Button className={classes.button} type='submit' variant='contained'>
+            Save
+          </Button>
         </div>
       </form>
     </div>
