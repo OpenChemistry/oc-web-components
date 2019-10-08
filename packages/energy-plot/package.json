@@ -25,7 +25,7 @@
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
-    "@stencil/core": "^1.2.0",
+    "@stencil/core": "^1.5.4",
     "@types/d3": "^5.0.1",
     "@types/lodash-es": "^4.17.1"
   },
