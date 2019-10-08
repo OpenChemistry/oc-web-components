@@ -18,7 +18,7 @@ function fetchCalculations(options={}, creatorId) {
   setPaginationDefaults(optionsClone);
 
   var params = { params: optionsClone };
-  if (creatorId) {
+  if (!isNil(creatorId)) {
     params = {params: {...optionsClone, creatorId}};
   }
 

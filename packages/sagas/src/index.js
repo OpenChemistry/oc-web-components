@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { has } from 'lodash-es'
+import { has, isNil } from 'lodash-es'
 import { put, call, takeEvery, take, select } from 'redux-saga/effects'
 
 import { molecules } from '@openchemistry/redux';
@@ -42,7 +42,7 @@ export function fetchMoleculesFromGirder(options={}, creatorId) {
   setPaginationDefaults(optionsClone)
 
   var params = { params: optionsClone }
-  if (creatorId){
+  if (!isNil(creatorId)){
     params = { params: {...optionsClone, creatorId} }
   }
 
@@ -63,7 +63,6 @@ export function fetchMoleculeByIdFromGirder(id) {
 // Molecules
 
 export function* fetchMolecules(action) {
-  console.log(action);
   const { options, creatorId } = action.payload
   try {
     yield put( molecules.requestMolecules() )
