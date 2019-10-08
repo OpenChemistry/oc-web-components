@@ -18,14 +18,14 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@ionic/core": "^4.6.0",
+    "@ionic/core": "^4.10.1",
     "@openchemistry/types": "^0.8.11",
     "@openchemistry/utils": "^0.6.12",
     "@openchemistry/volume-controls": "^0.1.20",
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
-    "@stencil/core": "^1.2.0",
+    "@stencil/core": "^1.5.4",
     "@types/lodash-es": "^4.17.2"
   },
   "repository": {

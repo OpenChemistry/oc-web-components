@@ -30,7 +30,7 @@
     "split-me": "^1.2.1"
   },
   "devDependencies": {
-    "@stencil/core": "^1.2.0",
+    "@stencil/core": "^1.5.4",
     "@types/lodash-es": "^4.17.2"
   },
   "repository": {

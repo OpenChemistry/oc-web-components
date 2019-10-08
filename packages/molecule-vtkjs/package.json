@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@openchemistry/types": "^0.8.11",
-    "@stencil/core": "^1.2.0",
+    "@stencil/core": "^1.5.4",
     "@types/lodash-es": "^4.17.1"
   },
   "repository": {
