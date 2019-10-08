@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/vibrational-spectrum",
-  "version": "0.1.28",
+  "version": "0.1.29",
   "description": "Component to plot the vibrational spectrum of in the cjson chemical data",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -18,7 +18,7 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@openchemistry/types": "^0.8.11",
+    "@openchemistry/types": "^0.8.12",
     "d3": "^5.7.0",
     "lodash-es": "^4.17.11",
     "resize-observer-polyfill": "^1.5.0"

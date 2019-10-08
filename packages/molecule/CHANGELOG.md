@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.25](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.4.24...@openchemistry/molecule@0.4.25) (2019-10-08)
+
+**Note:** Version bump only for package @openchemistry/molecule
+
+
+
+
+
 ## [0.4.24](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule@0.4.23...@openchemistry/molecule@0.4.24) (2019-09-05)
 
 **Note:** Version bump only for package @openchemistry/molecule

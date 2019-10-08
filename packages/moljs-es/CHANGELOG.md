@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.16](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/moljs-es@0.1.15...@openchemistry/moljs-es@0.1.16) (2019-10-08)
+
+**Note:** Version bump only for package @openchemistry/moljs-es
+
+
+
+
+
 ## [0.1.15](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/moljs-es@0.1.14...@openchemistry/moljs-es@0.1.15) (2019-09-05)
 
 **Note:** Version bump only for package @openchemistry/moljs-es
