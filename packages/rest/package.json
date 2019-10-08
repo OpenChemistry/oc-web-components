@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/rest",
-  "version": "0.3.26",
+  "version": "0.3.27",
   "description": " ",
   "module": "esm/index.js",
   "files": [
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "@openchemistry/girder-redux": "^0.0.28",
+    "@openchemistry/girder-redux": "^0.0.29",
     "axios": "^0.18.0",
     "lodash-es": "^4.17.11"
   },

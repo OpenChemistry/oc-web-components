@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/volume-controls",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Component to plot adjust the opacity map and visualize its effect on the colormap",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -18,7 +18,7 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@openchemistry/utils": "^0.6.13",
+    "@openchemistry/utils": "^0.6.14",
     "d3": "^5.7.0",
     "resize-observer-polyfill": "^1.5.0"
   },

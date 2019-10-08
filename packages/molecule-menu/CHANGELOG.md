@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.22](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-menu@0.6.21...@openchemistry/molecule-menu@0.6.22) (2019-10-08)
+
+**Note:** Version bump only for package @openchemistry/molecule-menu
+
+
+
+
+
 ## [0.6.21](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-menu@0.6.20...@openchemistry/molecule-menu@0.6.21) (2019-10-08)
 
 **Note:** Version bump only for package @openchemistry/molecule-menu
