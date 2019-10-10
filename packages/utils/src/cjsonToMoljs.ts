@@ -22,7 +22,7 @@ const elementSymbols = [
 function cjsonToMoljs(cjson: IChemJson) : IAtomSpec[] {
   let atoms = atomsToMoljs(cjson.atoms);
   if (!isNil(cjson.bonds)) {
-    atoms = bondsToMoljs(cjson.atoms, cjson.bonds, atoms);
+    atoms = bondsToMoljs(cjson.bonds, atoms);
   }
   return atoms;
 }
@@ -47,24 +47,28 @@ function atomsToMoljs(atomsIn: IAtoms) : IAtomSpec[] {
   return atoms;
 }
 
-function bondsToMoljs(atomsIn: IAtoms,
-                      bondsIn: IBonds,
-                      atoms: IAtomSpec[]) : IAtomSpec[] {
-  // let nAtoms : number = numberOfAtoms(atomsIn);
-  let nBonds: number = bondsIn.connections.index.length / 2;
+function bondsToMoljs(bondsIn: IBonds, atoms: IAtomSpec[]) : IAtomSpec[] {
+  let nBonds: number = Math.floor(bondsIn.connections.index.length / 2);
+  let bondsOrder = Array.isArray(bondsIn.order) ? bondsIn.order : [];
+  if (bondsOrder.length !== nBonds) {
+    bondsOrder = [];
+    for (let i = 0; i < nBonds; ++i) {
+      bondsOrder.push(1);
+    }
+  }
+
+  atoms.forEach(atom => {
+    atom.bonds = [];
+    atom.bondOrder = [];
+  });
+
   for (let i = 0; i < nBonds; ++i) {
     let iAtom: number = bondsIn.connections.index[i * 2];
     let jAtom: number = bondsIn.connections.index[i * 2 + 1];
-    if (isNil(atoms[iAtom].bonds)) {
-      atoms[iAtom].bonds = [];
-    }
     atoms[iAtom].bonds!.push(jAtom);
-    if (bondsIn.order) {
-      if (isNil(atoms[iAtom].bondOrder)) {
-        atoms[iAtom].bondOrder = [];
-      }
-      atoms[iAtom].bondOrder!.push(bondsIn.order[i]);
-    }
+    atoms[iAtom].bondOrder!.push(bondsOrder[i]);
+    atoms[jAtom].bonds!.push(iAtom);
+    atoms[jAtom].bondOrder!.push(bondsOrder[i]);
   }
   return atoms;
 }
