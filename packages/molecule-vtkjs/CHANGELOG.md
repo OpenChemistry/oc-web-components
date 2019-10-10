@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.20](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.3.19...@openchemistry/molecule-vtkjs@0.3.20) (2019-10-10)
+
+**Note:** Version bump only for package @openchemistry/molecule-vtkjs
+
+
+
+
+
 ## [0.3.19](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/molecule-vtkjs@0.3.18...@openchemistry/molecule-vtkjs@0.3.19) (2019-10-08)
 
 **Note:** Version bump only for package @openchemistry/molecule-vtkjs
