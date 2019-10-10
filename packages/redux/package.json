@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/redux",
-  "version": "0.3.27",
+  "version": "0.3.28",
   "description": " ",
   "module": "esm/index.js",
   "files": [
@@ -33,5 +33,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "19ea92847fed769fe97f41dc2ee6b9fcacc6c922"
 }

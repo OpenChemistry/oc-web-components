@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/girder-redux",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": " ",
   "module": "esm/index.js",
   "files": [
@@ -40,5 +40,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "19ea92847fed769fe97f41dc2ee6b9fcacc6c922"
 }

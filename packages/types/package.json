@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/types",
-  "version": "0.8.15",
+  "version": "0.8.16",
   "description": "Typescript interfaces used by openchemistry packages",
   "main": "dist/index",
   "types": "dist/index",
@@ -23,5 +23,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "19ea92847fed769fe97f41dc2ee6b9fcacc6c922"
 }

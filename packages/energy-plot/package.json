@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/energy-plot",
-  "version": "0.1.30",
+  "version": "0.1.31",
   "description": "Component to plot the free energy of a set of reactions",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -20,7 +20,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "dependencies": {
-    "@openchemistry/types": "^0.8.15",
+    "@openchemistry/types": "^0.8.16",
     "d3": "^5.7.0",
     "lodash-es": "^4.17.11"
   },
@@ -54,5 +54,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "19ea92847fed769fe97f41dc2ee6b9fcacc6c922"
 }
