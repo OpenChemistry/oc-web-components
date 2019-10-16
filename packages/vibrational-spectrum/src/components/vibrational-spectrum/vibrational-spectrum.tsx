@@ -92,10 +92,12 @@ export class VibrationalSpectrum {
                 .append("svg")
                 .attr("width",  "100%")
                 .attr("height", "100%");
+
     this.addXAxis(this.svg, this.vibrations.frequencies, 'Frequency (cm\u207B\u00B9)');
     this.addYAxis(this.svg, this.vibrations.intensities, "Intensity");
     this.addBars(this.svg, this.vibrations, resize);
     this.addTheoryLine(this.svg, this.vibrations, resize);
+    this.addExperimentalLine(this.svg, this.vibrations, resize);
   }
 
   addXAxis(svg: any, x: number[], label: string) {
@@ -208,8 +210,29 @@ export class VibrationalSpectrum {
       
   }
 
-  addExperimentalLine(svg: any, vibrations: IVibrations) {
-    console.log(svg, vibrations);
+  //addExperimentalLine(svg: any, vibrations: IVibrations) {
+    //console.log(svg, vibrations);
+  //}
+
+  addExperimentalLine(svg: any, vibrations: IVibrations, resize: boolean = false) {
+    let duration = resize ? 0 : 1000;
+    let xRange = this.xScale.domain();
+    let yRange = this.yScale.domain();
+    let lineData = this.generateExperimentalLine(vibrations, xRange, yRange, 40);
+    const line = d3.line()
+      .x((d: any) => {return this.xScale(d.x)})
+      .y((d: any) => {return this.yScale(d.y)});
+
+    svg.append("path")
+      .datum(lineData)
+      .attr("d", line)
+      .attr('stroke-width', 0)
+      .attr('fill', 'none')
+      .attr('class', 'line')
+      .transition()
+        .duration(duration)
+        .attr('stroke-width', 2.5)
+      
   }
 
   componentWillUpdate() {
@@ -245,6 +268,35 @@ export class VibrationalSpectrum {
   }
 
   generateTheoryLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) : any[] {
+    let freqRange = [ 0.0, 0.0 ];
+    let prefactor = 0.5 * gamma / Math.PI;
+    let lineFreqData = [];
+    let numberOfPoints = 400;
+    let increment = (frequencyRange[1] - frequencyRange[0]) / (numberOfPoints - 1);
+    let ggSq = (0.5 * gamma) ** 2;
+    for (let i = 0; i < numberOfPoints; ++i) {
+      let freqIntensity = 0.0;
+      let currentFreq = frequencyRange[0] + i * increment;
+      for (let j = 0; j < data.intensities.length; ++j) {
+        let xx0 = currentFreq - data.frequencies[j];
+        freqIntensity += prefactor * data.intensities[j] / (xx0 * xx0 + ggSq);
+      }
+      if (freqIntensity > freqRange[1]) {
+        freqRange[1] = freqIntensity;
+      }
+      lineFreqData.push({
+        'x': currentFreq,
+        'y': freqIntensity
+      });
+    }
+    let normalization = intensityRange[1] / freqRange[1];
+    for (let i = 0; i < numberOfPoints; ++i) {
+      lineFreqData[i].y *= normalization;
+    }
+    return lineFreqData;
+  }
+
+  generateExperimentalLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) : any[] {
     let freqRange = [ 0.0, 0.0 ];
     let prefactor = 0.5 * gamma / Math.PI;
     let lineFreqData = [];
