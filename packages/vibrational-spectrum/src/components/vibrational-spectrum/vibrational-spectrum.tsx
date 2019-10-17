@@ -1,6 +1,6 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, h } from '@stencil/core';
 
-import { IVibrations, INormalModeOptions } from '@openchemistry/types';
+import { IVibrations, INormalModeOptions, IVibrationsExperimental} from '@openchemistry/types';
 
 import { isNil, throttle } from "lodash-es";
 
@@ -24,6 +24,11 @@ export class VibrationalSpectrum {
     this.spectrumHasChanged = true;
   }
   @Prop() options: INormalModeOptions;
+
+  @Prop() vibrations_experimental: IVibrationsExperimental;
+  @Watch('vibrations_experimental') cjsonHandler() {
+    this.spectrumHasChanged = true;
+  }
 
   xScale: d3.ScaleLinear<any, any>;
   yScale: d3.ScaleLinear<any, any>;
@@ -97,7 +102,7 @@ export class VibrationalSpectrum {
     this.addYAxis(this.svg, this.vibrations.intensities, "Intensity");
     this.addBars(this.svg, this.vibrations, resize);
     this.addTheoryLine(this.svg, this.vibrations, resize);
-    this.addExperimentalLine(this.svg, this.vibrations, resize);
+    this.addExperimentalLine(this.svg, this.vibrations_experimental, resize);
   }
 
   addXAxis(svg: any, x: number[], label: string) {
@@ -214,7 +219,7 @@ export class VibrationalSpectrum {
     //console.log(svg, vibrations);
   //}
 
-  addExperimentalLine(svg: any, vibrations: IVibrations, resize: boolean = false) {
+  addExperimentalLine(svg: any, vibrations: IVibrationsExperimental, resize: boolean = false) {
     let duration = resize ? 0 : 1000;
     let xRange = this.xScale.domain();
     let yRange = this.yScale.domain();
@@ -229,6 +234,7 @@ export class VibrationalSpectrum {
       .attr('stroke-width', 0)
       .attr('fill', 'none')
       .attr('class', 'line')
+      .style("stroke", "black")
       .transition()
         .duration(duration)
         .attr('stroke-width', 2.5)
@@ -296,7 +302,7 @@ export class VibrationalSpectrum {
     return lineFreqData;
   }
 
-  generateExperimentalLine (data: IVibrations, frequencyRange, intensityRange, gamma: number) : any[] {
+  generateExperimentalLine (data: IVibrationsExperimental, frequencyRange, intensityRange, gamma: number) : any[] {
     let freqRange = [ 0.0, 0.0 ];
     let prefactor = 0.5 * gamma / Math.PI;
     let lineFreqData = [];

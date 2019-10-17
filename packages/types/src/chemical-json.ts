@@ -4,6 +4,7 @@ export {
   ICube,
   IChemJson,
   IVibrations,
+  IVibrationsExperimental,
   IMolecularOrbitals,
   IProperties,
   IBasisSet,
@@ -35,6 +36,13 @@ interface ICube {
 }
 
 interface IVibrations {
+  eigenVectors?: number[][];
+  frequencies?: number[];
+  intensities?: number[];
+  modes: number[];
+}
+
+interface IVibrationsExperimental {
   eigenVectors?: number[][];
   frequencies?: number[];
   intensities?: number[];
