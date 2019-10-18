@@ -46,7 +46,6 @@ interface IVibrationsExperimental {
   eigenVectors?: number[][];
   frequencies?: number[];
   intensities?: number[];
-  modes: number[];
 }
 
 interface IMolecularOrbitals {

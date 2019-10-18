@@ -26,7 +26,7 @@ export class VibrationalSpectrum {
   @Prop() options: INormalModeOptions;
 
   @Prop() vibrations_experimental: IVibrationsExperimental;
-  @Watch('vibrations_experimental') cjsonHandler() {
+  @Watch('vibrations_experimental') function() {
     this.spectrumHasChanged = true;
   }
 
