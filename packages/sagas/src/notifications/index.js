@@ -6,10 +6,13 @@ import { girder } from '@openchemistry/redux';
 import { auth } from '@openchemistry/girder-redux';
 import { calculations } from '@openchemistry/redux';
 
+import girderClient from '@openchemistry/girder-client';
+
 function createEventSource() {
   return eventChannel(emit => {
     const origin = window.location.origin;
     const eventSource = new EventSource(`${origin}/api/v1/notification/stream`);
+    console.log('EventSource: ', eventSource)
     eventSource.onmessage = (e) => {
       const msg = JSON.parse(e.data);
       emit(msg);
@@ -68,10 +71,12 @@ export function* watchNewToken() {
 }
 
 function* onAsyncOrbital() {
+  console.log('onAsyncOrbital')
   yield put(girder.connectToNotifications());
 }
 
 export function* watchAsyncOrbital() {
   // Connect to notification stream when an orbital is requested
+  console.log('watchAsyncOrbital')
   yield takeEvery(calculations.requestOrbital, onAsyncOrbital);
 }

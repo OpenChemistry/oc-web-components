@@ -84,21 +84,8 @@ graph TD;
   oc-molecule-base --> oc-molecule-menu-popup
   oc-molecule-base --> oc-molecule-menu
   oc-molecule-menu-popup --> ion-icon
-  oc-molecule-menu-popup --> ion-card
-  ion-card --> ion-ripple-effect
-  oc-molecule-menu --> ion-select-option
-  oc-molecule-menu --> ion-item
-  oc-molecule-menu --> ion-label
-  oc-molecule-menu --> ion-select
-  oc-molecule-menu --> ion-range
-  oc-molecule-menu --> ion-input
-  oc-molecule-menu --> ion-toggle
   oc-molecule-menu --> oc-volume-controls
-  oc-molecule-menu --> ion-button
   oc-molecule-menu --> ion-icon
-  ion-item --> ion-icon
-  ion-item --> ion-ripple-effect
-  ion-button --> ion-ripple-effect
   oc-molecule --> oc-molecule-base
   style oc-molecule-base fill:#f9f,stroke:#333,stroke-width:4px
 ```
