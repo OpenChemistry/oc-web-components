@@ -203,12 +203,12 @@ export function* receiveNotification(action) {
     }
   }
   else if (type === 'cube.status') {
-    let params = {};
     if (has(data, 'error')) {
-      params = {'status': data.error}
+      console.log(data.error);
+    } else {
+      const orbital = yield call(fetchOrbitalFromGirder, data.id, data.mo);
+      yield put( calculations.receiveOrbital(data.id, data.mo, orbital) );
     }
-    const orbital = yield call(fetchOrbitalFromGirder, data.id, data.mo, params);
-    yield put( calculations.receiveOrbital(data.id, data.mo, orbital) );
   }
 }
 
