@@ -25,8 +25,8 @@ export class VibrationalSpectrum {
   }
   @Prop() options: INormalModeOptions;
 
-  @Prop() vibrations_experimental: IVibrationsExperimental;
-  @Watch('vibrations_experimental') function() {
+  @Prop() VibrationsExperimental: IVibrationsExperimental;
+  @Watch('VibrationsExperimental') function() {
     this.spectrumHasChanged = true;
   }
 
@@ -102,7 +102,7 @@ export class VibrationalSpectrum {
     this.addYAxis(this.svg, this.vibrations.intensities, "Intensity");
     this.addBars(this.svg, this.vibrations, resize);
     this.addTheoryLine(this.svg, this.vibrations, resize);
-    this.addExperimentalLine(this.svg, this.vibrations_experimental, resize);
+    this.addExperimentalLine(this.svg, this.VibrationsExperimental, resize);
   }
 
   addXAxis(svg: any, x: number[], label: string) {
@@ -215,9 +215,6 @@ export class VibrationalSpectrum {
       
   }
 
-  //addExperimentalLine(svg: any, vibrations: IVibrations) {
-    //console.log(svg, vibrations);
-  //}
 
   addExperimentalLine(svg: any, vibrations: IVibrationsExperimental, resize: boolean = false) {
     let duration = resize ? 0 : 1000;
@@ -320,8 +317,8 @@ export class VibrationalSpectrum {
         freqRange[1] = freqIntensity;
       }
       lineFreqData.push({
-        'x': currentFreq,
-        'y': freqIntensity
+        x: currentFreq,
+        y: freqIntensity
       });
     }
     let normalization = intensityRange[1] / freqRange[1];

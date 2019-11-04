@@ -231,7 +231,7 @@ export class MoleculeBase {
             <oc-vibrational-spectrum
               slot='1'
               vibrations={cjson.vibrations}
-              vibrations_experimental={cjson.exp_vibrations}
+              VibrationsExperimental={cjson.exp_vibrations}
               options={{
                 modeIdx: this.iMode,
                 play: this.play
