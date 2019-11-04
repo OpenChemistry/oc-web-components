@@ -8,6 +8,8 @@ import ResizeObserver from 'resize-observer-polyfill';
 
 import * as d3 from "d3";
 
+let numberOfPoints = 400;
+
 @Component({
   tag: 'oc-vibrational-spectrum',
   styleUrl: 'vibrational-spectrum.css',
@@ -274,7 +276,6 @@ export class VibrationalSpectrum {
     let freqRange = [ 0.0, 0.0 ];
     let prefactor = 0.5 * gamma / Math.PI;
     let lineFreqData = [];
-    let numberOfPoints = 400;
     let increment = (frequencyRange[1] - frequencyRange[0]) / (numberOfPoints - 1);
     let ggSq = (0.5 * gamma) ** 2;
     for (let i = 0; i < numberOfPoints; ++i) {
@@ -303,7 +304,6 @@ export class VibrationalSpectrum {
     let freqRange = [ 0.0, 0.0 ];
     let prefactor = 0.5 * gamma / Math.PI;
     let lineFreqData = [];
-    let numberOfPoints = 400;
     let increment = (frequencyRange[1] - frequencyRange[0]) / (numberOfPoints - 1);
     let ggSq = (0.5 * gamma) ** 2;
     for (let i = 0; i < numberOfPoints; ++i) {
