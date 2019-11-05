@@ -60,6 +60,21 @@ export function fetchMoleculeByIdFromGirder(id) {
           .then(response => response.data )
 }
 
+export function fetchCreatorFromGirder(id) {
+  return girderClient().get(`user/${id}`)
+    .then(response => response.data)
+}
+
+export function fetchTwitterId(id) {
+  return girderClient().get(`user/${id}/twitter`)
+  .then(response => response.data);
+}
+
+export function fetchOrcidId(id) {
+  return girderClient().get(`user/${id}/orcid`)
+  .then(response => response.data)
+}
+
 // Molecules
 
 export function* fetchMolecules(action) {
@@ -80,7 +95,11 @@ export function* fetchMolecule(action) {
   try {
     yield put( molecules.requestMolecule(action.payload.inchikey) )
     const molecule = yield call(fetchMoleculeFromGirder, action.payload.inchikey)
-    yield put( molecules.receiveMolecule(molecule) )
+    const user = yield call(fetchCreatorFromGirder, molecule.creatorId)
+    const twitterId = yield call(fetchTwitterId, user._id)
+    const orcidId = yield call(fetchOrcidId, user._id)
+    const creator = {...user, twitterId, orcidId}
+    yield put( molecules.receiveMolecule({ molecule, creator }) )
   }
   catch(error) {
     yield put( molecules.requestMolecule(error) )
@@ -91,7 +110,11 @@ export function* fetchMoleculeById(action) {
   try {
     yield put( molecules.requestMoleculeById(action.payload.id) )
     const molecule = yield call(fetchMoleculeByIdFromGirder, action.payload.id)
-    yield put( molecules.receiveMolecule(molecule) )
+    const user = yield call(fetchCreatorFromGirder, molecule.creatorId)
+    const twitterId = yield call(fetchTwitterId, user._id)
+    const orcidId = yield call(fetchOrcidId, user._id)
+    const creator = {...user, twitterId, orcidId}
+    yield put( molecules.receiveMolecule({ molecule, creator }) )
   }
   catch(error) {
     yield put( molecules.requestMoleculeById(error) )
@@ -118,7 +141,11 @@ export function* fetchCalculationById(action) {
   try {
     yield put( calculations.requestCalculationById(action.payload.id) )
     const calculation = yield call(fetchCalculationByIdFromGirder, action.payload.id)
-    yield put( calculations.receiveCalculation(calculation) )
+    const user = yield call(fetchCreatorFromGirder, calculation.creatorId)
+    const twitterId = yield call(fetchTwitterId, user._id)
+    const orcidId = yield call(fetchOrcidId, user._id)
+    const creator = {...user, twitterId, orcidId}
+    yield put( calculations.receiveCalculation({ calculation, creator }) )
   }
   catch(error) {
     yield put( calculations.requestCalculationById(error) )
