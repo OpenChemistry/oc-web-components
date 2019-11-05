@@ -20,11 +20,21 @@
 .menu-card {
   background-color: rgba(255, 255, 255, 0.8);
   z-index: 10;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.16),0 0 2px 0 rgba(0,0,0,.12);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.75rem;
 }
 
 .open-menu-button {
   padding: 0.25rem;
-  font-size: 1.25rem;
   cursor: pointer;
   text-align: center;
+}
+
+.open-menu-icon {
+  height: 1.25rem;
+  width: auto;
+  vertical-align: middle;
 }

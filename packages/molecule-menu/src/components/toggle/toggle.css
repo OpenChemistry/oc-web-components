@@ -1,0 +1,18 @@
+@import "../../../node_modules/muicss/dist/css/mui.min.css";
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.label-container {
+  flex-grow: 1;
+}
+
+.toggle-container {
+  padding-right: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
