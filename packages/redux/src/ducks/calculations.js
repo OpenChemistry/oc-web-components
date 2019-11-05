@@ -24,6 +24,7 @@ const initialState = {
   orbitalsById: {},
   noteBooksById: {},
   error: null,
+  creator: {},
 };
 
 // Reducer
@@ -37,9 +38,9 @@ const reducer = handleActions({
     }
   },
   RECEIVE_CALCULATION: (state, action) => {
-    const calculation = action.payload.calculation;
+    const { calculation, creator } = action.payload.calculation;
     const byId = {...state.byId, [calculation._id]: calculation };
-    return {...state, byId};
+    return {...state, byId, creator};
   },
   REQUEST_ORBITAL: (state, action) => {
     if (action.error) {
