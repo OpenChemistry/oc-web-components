@@ -27,3 +27,5 @@ export const getCalculations = state => Object.values(state.calculations.byId);
 export const getMoleculeCalculations = (state, moleculeId) => {
   return getCalculations(state).filter(calculation => calculation.moleculeId === moleculeId);
 }
+
+export const getCalculationCreator = state => state.calculations.creator;
