@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.27](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.1.26...@openchemistry/volume-controls@0.1.27) (2019-11-06)
+
+**Note:** Version bump only for package @openchemistry/volume-controls
+
+
+
+
+
 ## [0.1.26](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/volume-controls@0.1.25...@openchemistry/volume-controls@0.1.26) (2019-11-06)
 
 **Note:** Version bump only for package @openchemistry/volume-controls
