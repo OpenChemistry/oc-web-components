@@ -5,8 +5,6 @@ import { IMolecularOrbitals } from '@openchemistry/types';
 import { PlayIcon, PauseIcon } from '../../icons';
 import { presets, renderers } from './constants';
 
-import '@ionic/core';
-import 'ionicons';
 import '@openchemistry/volume-controls';
 import { isNil } from 'lodash-es';
 
@@ -137,17 +135,17 @@ export class MoleculeMenu {
     this.onValueChanged(val, 'displayStyle');
   }
 
-  mapRangeHandler(val: any) {
-    if (!val) {
+  mapRangeHandler(val: [number, number]) {
+    if (!Array.isArray(val)) {
       return;
     }
 
     const mapRange = this.mapRange ? [...this.mapRange] : [0, 1];
 
-    if (val.lower == mapRange[0] && val.upper == mapRange[1]) {
+    if (val[0] == mapRange[0] && val[1] == mapRange[1]) {
       return;
     }
-    this.onValueChanged([val.lower, val.upper], 'mapRange');
+    this.onValueChanged(val, 'mapRange');
   }
 
   mapRangeSingleHandler(val: number, index: number) {
@@ -160,41 +158,24 @@ export class MoleculeMenu {
   }
 
   render() {
-    const normalModeOptions = [];
-    normalModeOptions.push(
-      <ion-select-option key={'-1'} value={'-1'}>None</ion-select-option>
-    );
+    const normalModeOptions = [
+      {value: '-1', label: 'None'}
+    ];
     for (let i = 0; i < this.nModes; ++i) {
       normalModeOptions.push(
-        <ion-select-option key={i.toString()} value={i.toString()}>{i}</ion-select-option>
+        {value: i.toString(), label: i.toString()}
       );
     }
 
-    const colorMapsOptions = [];
-    for (let mapName of this.colorMapNames || []) {
-      colorMapsOptions.push(
-        <ion-select-option key={mapName} value={mapName}>{mapName}</ion-select-option>
-      );
-    }
+    const colorMapsOptions = (this.colorMapNames || []).map(name => ({value: name, label: name}));
 
-    const displayStyleOptions = [];
-    for (let key in presets) {
-      displayStyleOptions.push(
-        <ion-select-option key={key} value={key}>{presets[key].label}</ion-select-option>
-      );
-    }
+    const displayStyleOptions = Object.entries(presets).map(([value, {label}]) => ({value, label}));
 
-    const moleculeRendererOptions = [];
-    for (let key in renderers) {
-      moleculeRendererOptions.push(
-        <ion-select-option key={key} value={key}>{renderers[key].label}</ion-select-option>
-      );
-    }
+    const moleculeRendererOptions = Object.entries(renderers).map(([value, {label}]) => ({value, label}));
 
-    const orbitalOptions = [];
-    orbitalOptions.push(
-      <ion-select-option key={'-1'} value={'-1'}>None</ion-select-option>
-    );
+    const orbitalOptions = [
+      {value: '-1', label: 'None'}
+    ];
     if (!isNil(this.orbitals)) {
       const { numbers, energies, occupations } = this.orbitals;
       const iLumo = occupations.findIndex((val) => val === 0);
@@ -212,9 +193,7 @@ export class MoleculeMenu {
         } else {
           label = `${numbers[i]} ${energies[i].toFixed(3)} Ha`;
         }
-        orbitalOptions.push(
-          <ion-select-option key={i.toString()} value={value}>{label}</ion-select-option>
-        );
+        orbitalOptions.push({value, label});
       }
     } else {
       const iLumo = this.scfType === 'rhf' ? Math.floor(this.nElectrons / 2) : this.nElectrons;
@@ -236,126 +215,118 @@ export class MoleculeMenu {
         } else {
           label = `${i}`;
         }
-        orbitalOptions.push(
-          <ion-select-option key={i.toString()} value={value}>{label}</ion-select-option>
-        );
-      }  
+        orbitalOptions.push({value, label});
+      }
     }
 
     let menuItems = [];
-
     menuItems.push(
-      <ion-item key="displayStyle">
-        <ion-label color="primary" position="stacked">Molecule Style</ion-label>
-        <ion-select
-          style={{width: "100%"}}
-          value={this.displayStyle}
-          onIonChange={(e: CustomEvent)=>{this.onDisplayStyleChanged(e.detail.value)}}
-        >
-          {displayStyleOptions}
-        </ion-select>
-      </ion-item>
+      <oc-select
+        key="displayStyle"
+        label='Molecule Style'
+        value={this.displayStyle}
+        options={displayStyleOptions}
+        onOcChange={(e: CustomEvent) => {this.onDisplayStyleChanged(e.detail.value)}}
+      />
     );
 
     if (this.displayStyle === 'custom') {
 
       menuItems.push(
-        <ion-item key="ballSlider">
-          <ion-label color="primary" position="stacked">Ball scale</ion-label>
-          <ion-range
-            // debounce={150}
-            min={0.0}
-            max={1.0}
-            step={0.01}
-            value={this.sphereScale}
-            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'sphereScale')}}
-          />
-          <div class="end-slot" slot="end">
-            <ion-input value={isFinite(this.sphereScale) ? this.sphereScale.toFixed(2) : "0.00"}
+        <oc-slider
+          key="sphereScale"
+          label="Ball size"
+          value={this.sphereScale}
+          min={0}
+          max={1}
+          step={0.01}
+          onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'sphereScale')}}
+        >
+          <div slot="end" class="end-slot">
+            <oc-input
+              value={isFinite(this.sphereScale) ? this.sphereScale.toFixed(2) : "0.00"}
               debounce={1000}
-              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'sphereScale')}}
-            ></ion-input>
+              onOcChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'sphereScale')}}
+            />
           </div>
-        </ion-item>
-      );
+        </oc-slider>
+      )
 
       menuItems.push(
-        <ion-item key="stickSlider">
-          <ion-label color="primary" position="stacked">Stick radius</ion-label>
-          <ion-range
-            // debounce={150}
-            min={0.0}
-            max={this.sphereScale}
-            step={0.01}
-            value={this.stickRadius}
-            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'stickRadius')}}
-          />
-          <div class="end-slot" slot="end">
-            <ion-input value={isFinite(this.stickRadius) ? this.stickRadius.toFixed(2) : "0.00"}
+        <oc-slider
+          key="stickRadius"
+          label="Stick radius"
+          value={this.stickRadius}
+          min={0}
+          max={this.sphereScale}
+          step={0.01}
+          onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'stickRadius')}}
+        >
+          <div slot="end" class="end-slot">
+            <oc-input
+              value={isFinite(this.stickRadius) ? this.stickRadius.toFixed(2) : "0.00"}
               debounce={1000}
-              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'stickRadius')}}
-            ></ion-input>
+              onOcChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'stickRadius')}}
+            />
           </div>
-        </ion-item>
-      );
-
+        </oc-slider>
+      )
     }
 
     if (this.orbitalSelect) {
       menuItems.push(
-        <ion-item key="orbitalSelect">
-          <ion-label color="primary" position="stacked">Molecular orbital</ion-label>
-          <ion-select
-            style={{width: "100%"}}
-            value={this.iOrbital ? this.iOrbital.toString() : ''}
-            onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'iOrbital')}}
-          >
-            {orbitalOptions}
-          </ion-select>
-        </ion-item>
+        <oc-select
+          key="iOrbital"
+          label='Molecular orbital'
+          value={this.iOrbital ? this.iOrbital.toString() : ''}
+          options={orbitalOptions}
+          onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'iOrbital')}}
+        />
       );
     }
 
     if (this.hasVolume) {
       menuItems.push(
-        <ion-item key="isoSurfaceToggle">
-          <ion-label>Show Isosurface</ion-label>
-          <ion-toggle
-            checked={this.showIsoSurface}
-            onIonChange={(e) => {this.onValueChanged(e.detail.checked, 'showIsoSurface')}}
-          />
-        </ion-item>
+        <oc-toggle
+          key="showIsoSurface"
+          label="Show Isosurface"
+          value={this.showIsoSurface}
+          onOcChange={(e) => {this.onValueChanged(e.detail.value, 'showIsoSurface')}}
+        />
       );
+
       if (this.showIsoSurface) {
         menuItems.push(
-          <ion-item key="isoSurfaceSlider">
-            <ion-label color="primary" position="stacked">Isovalue</ion-label>
-            <ion-range
-              debounce={150}
-              min={0.0005}
-              max={0.05}
-              step={0.0001}
-              value={this.isoValue}
-              onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'isoValue')}}
-            />
-            <div class="end-slot" slot="end">
-              <ion-input value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0000"}
+          <oc-slider
+            key="isoValue"
+            label="Isovalue"
+            value={this.isoValue}
+            min={0.0005}
+            max={0.05}
+            step={0.0001}
+            onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'isoValue')}}
+          >
+            <div slot="end" class="end-slot">
+              <oc-input
+                value={isFinite(this.isoValue) ? this.isoValue.toFixed(4) : "0.0001"}
                 debounce={1000}
-                onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'isoValue')}}
-              ></ion-input>
+                onOcChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'isoValue')}}
+              />
             </div>
-          </ion-item>
+          </oc-slider>
         );
       }
+
       menuItems.push(
-        <ion-item key="volumeToggle" disabled={this.moleculeRenderer !== 'vtkjs'}>
-          <ion-label>Show Volume {this.moleculeRenderer !== 'vtkjs' ? '(VTK.js only)' : ''}</ion-label>
-          <ion-toggle
-            checked={this.showVolume}
-            onIonChange={(e) => {this.onValueChanged(e.detail.checked, 'showVolume')}}
-          />
-        </ion-item>
+        <oc-toggle
+          key="showVolume"
+          label={`Show Volume ${this.moleculeRenderer !== 'vtkjs' ? '(VTK.js only)' : ''}`}
+          value={this.showVolume}
+          disabled={this.moleculeRenderer !== 'vtkjs'}
+          onOcChange={(e) => {this.onValueChanged(e.detail.value, 'showVolume')}}
+        />
       );
+
       if (this.showVolume && this.moleculeRenderer === 'vtkjs') {
         menuItems.push(
           <div style={{width: "100%", height: "8rem"}}>
@@ -372,120 +343,120 @@ export class MoleculeMenu {
             />
           </div>
         );
+
         menuItems.push(
-          <ion-item key="mapRange">
-            <ion-label color="primary" position="stacked">Color map range</ion-label>
-            <div class="start-slot" slot="start">
-              <ion-input value={ this.mapRange && isFinite(this.mapRange[0]) ? this.mapRange[0].toFixed(3) : this.range ? this.range[0].toFixed(3) : "0.000"}
+          <oc-double-slider
+            key="mapRange"
+            label="Color map range"
+            value={[
+              this.mapRange ? this.mapRange[0] : this.range ? this.range[0] : 0,
+              this.mapRange ? this.mapRange[1] : this.range ? this.range[1] : 1
+            ]}
+            min={this.range ? this.range[0] : 0}
+            max={this.range ? this.range[1] : 1}
+            step={0.001}
+            onOcChange={(e: CustomEvent)=>{this.mapRangeHandler(e.detail.value)}}
+          >
+            <div slot="start" class="start-slot">
+              <oc-input
+                value={ this.mapRange && isFinite(this.mapRange[0]) ? this.mapRange[0].toFixed(3) : this.range ? this.range[0].toFixed(3) : "0.000"}
                 debounce={1000}
-                onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 0)}}
-              ></ion-input>
-            </div>
-            <div class="item-content">
-              <ion-range
-                dualKnobs
-                min={this.range ? this.range[0] : 0}
-                max={this.range ? this.range[1] : 1}
-                step={0.001}
-                value={{
-                  lower: this.mapRange ? this.mapRange[0] : this.range ? this.range[0] : 0,
-                  upper: this.mapRange ? this.mapRange[1] : this.range ? this.range[1] : 1
-                }}
-                onIonChange={ (e: CustomEvent)=>{this.mapRangeHandler(e.detail.value)}}
+                onOcChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 0)}}
               />
             </div>
-            <div class="end-slot" slot="end">
-              <ion-input value={ this.mapRange && isFinite(this.mapRange[1]) ? this.mapRange[1].toFixed(3) : this.range ? this.range[1].toFixed(3) : "1.000"}
+            <div slot="end" class="end-slot">
+              <oc-input
+                value={ this.mapRange && isFinite(this.mapRange[1]) ? this.mapRange[1].toFixed(3) : this.range ? this.range[1].toFixed(3) : "1.000"}
                 debounce={1000}
-                onIonChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 1)}}
-              ></ion-input>
+                onOcChange={(e: CustomEvent)=>{this.mapRangeSingleHandler(parseFloat(e.detail.value), 1)}}
+              />
             </div>
-          </ion-item>
+          </oc-double-slider>
         );
+
         menuItems.push(
-            <ion-item key="colormapSelect">
-              <ion-label color="primary" position="stacked">Color Map</ion-label>
-              <ion-select
-                style={{width: "100%"}}
-                value={this.activeMapName}
-                onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'activeMapName')}}
-              >
-                {colorMapsOptions}
-              </ion-select>
-            </ion-item>
+          <oc-select
+            key="activeMapName"
+            label='Color Map'
+            value={this.activeMapName}
+            options={colorMapsOptions}
+            onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'activeMapName')}}
+          />
         );
       }
     }
 
     if (this.nModes > 0) {
       menuItems.push(
-        <ion-item key="normalModeSelect">
-          <ion-label color="primary" position="stacked">Normal Mode</ion-label>
-          <ion-select
-            style={{width: "100%"}}
-            value={this.iMode ? this.iMode.toString() : ''}
-            onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseInt(e.detail.value), 'iMode')}}
-          >
-            {normalModeOptions}
-          </ion-select>
-          <div class="end-slot" slot="end">
-            <ion-button fill="solid" color="light" shape="round" onClick={() => {this.onValueChanged(!this.play, 'play')}}>
-              <ion-icon icon={this.play ? PauseIcon : PlayIcon}></ion-icon>
-            </ion-button>
+        <oc-select
+          key="iMode"
+          label='Normal Mode'
+          value={this.iMode ? this.iMode.toString() : ''}
+          options={normalModeOptions}
+          onOcChange={(e: CustomEvent)=>{this.onValueChanged(parseInt(e.detail.value), 'iMode')}}
+        >
+          <div slot="end" class="end-slot">
+            <oc-icon-button
+              icon={this.play ? PauseIcon : PlayIcon}
+              onOcChange={() => {this.onValueChanged(!this.play, 'play')}}
+            />
           </div>
-        </ion-item>
+        </oc-select>
       );
+
       menuItems.push(
-        <ion-item disabled={!this.play || this.iMode < 0} key="animationScaleSlider">
-          <ion-label color="primary" position="stacked">Animation Scale</ion-label>
-          <ion-range
-            debounce={150}
-            min={0.5}
-            max={3}
-            step={0.5}
-            value={this.animationScale}
-            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'animationScale')}}
-          />
-          <div class="end-slot" slot="end">
-            <ion-input value={isFinite(this.animationScale) ? this.animationScale.toFixed(1) : "0.0"}
+        <oc-slider
+          key="animationScale"
+          label="Animation Scale"
+          value={this.animationScale}
+          min={0.5}
+          max={3}
+          step={0.5}
+          disabled={!this.play || this.iMode < 0}
+          onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'animationScale')}}
+        >
+          <div slot="end" class="end-slot">
+            <oc-input
+              value={isFinite(this.animationScale) ? this.animationScale.toFixed(1) : "0.0"}
+              disabled={!this.play || this.iMode < 0}
               debounce={1000}
-              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationScale')}}
-            ></ion-input>
+              onOcChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationScale')}}
+            />
           </div>
-        </ion-item>
+        </oc-slider>
       );
+
       menuItems.push(
-        <ion-item disabled={!this.play || this.iMode < 0} key="animationSpeedSlider">
-          <ion-label color="primary" position="stacked">Animation Speed</ion-label>
-          <ion-range
-            debounce={150}
-            min={0.5}
-            max={3}
-            step={0.5}
-            value={this.animationSpeed}
-            onIonChange={ (e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'animationSpeed')}}
-          />
-          <div class="end-slot" slot="end">
-            <ion-input value={isFinite(this.animationSpeed) ? this.animationSpeed.toFixed(1) : "0.0"}
+        <oc-slider
+          key="animationSpeed"
+          label="Animation Speed"
+          value={this.animationSpeed}
+          min={0.5}
+          max={3}
+          step={0.5}
+          disabled={!this.play || this.iMode < 0}
+          onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'animationSpeed')}}
+        >
+          <div slot="end" class="end-slot">
+            <oc-input
+              value={isFinite(this.animationSpeed) ? this.animationSpeed.toFixed(1) : "0.0"}
+              disabled={!this.play || this.iMode < 0}
               debounce={1000}
-              onIonChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationSpeed')}}
-            ></ion-input>
+              onOcChange={(e: CustomEvent)=>{this.onValueChanged(parseFloat(e.detail.value), 'animationSpeed')}}
+            />
           </div>
-        </ion-item>
+        </oc-slider>
       );
     }
 
     menuItems.push(
-      <ion-item key="moleculeRenderer">
-        <ion-label color="primary" position="stacked">Molecule renderer</ion-label>
-        <ion-select
-          style={{width: "100%"}}
-          value={this.moleculeRenderer}
-          onIonChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'moleculeRenderer')}}
-        >
-          {moleculeRendererOptions}
-        </ion-select>
-      </ion-item>
+      <oc-select
+        key="moleculeRenderer"
+        label="Molecule renderer"
+        value={this.moleculeRenderer}
+        options={moleculeRendererOptions}
+        onOcChange={(e: CustomEvent)=>{this.onValueChanged(e.detail.value, 'moleculeRenderer')}}
+      />
     );
 
     return (

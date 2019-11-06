@@ -64,33 +64,24 @@
 
 ### Depends on
 
-- ion-select-option
-- ion-item
-- ion-label
-- ion-select
-- ion-range
-- ion-input
-- ion-toggle
+- [oc-select](../select)
+- [oc-slider](../slider)
+- [oc-input](../input)
+- [oc-toggle](../toggle)
 - oc-volume-controls
-- ion-button
-- ion-icon
+- [oc-double-slider](../double-slider)
+- [oc-icon-button](../icon-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  oc-molecule-menu --> ion-select-option
-  oc-molecule-menu --> ion-item
-  oc-molecule-menu --> ion-label
-  oc-molecule-menu --> ion-select
-  oc-molecule-menu --> ion-range
-  oc-molecule-menu --> ion-input
-  oc-molecule-menu --> ion-toggle
+  oc-molecule-menu --> oc-select
+  oc-molecule-menu --> oc-slider
+  oc-molecule-menu --> oc-input
+  oc-molecule-menu --> oc-toggle
   oc-molecule-menu --> oc-volume-controls
-  oc-molecule-menu --> ion-button
-  oc-molecule-menu --> ion-icon
-  ion-item --> ion-icon
-  ion-item --> ion-ripple-effect
-  ion-button --> ion-ripple-effect
+  oc-molecule-menu --> oc-double-slider
+  oc-molecule-menu --> oc-icon-button
   style oc-molecule-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
