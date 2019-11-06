@@ -1,0 +1,21 @@
+@import "../../../node_modules/muicss/dist/css/mui.min.css";
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.input-container {
+  flex-grow: 1;
+}
+
+.mui-select {
+  margin-bottom: 0;
+}
+
+.end-container {
+}
+
+.full-width {
+  width: 100%;
+}

@@ -1,0 +1,5 @@
+@import "../../../node_modules/muicss/dist/css/mui.min.css";
+
+.oc-icon {
+  vertical-align: middle;
+}

@@ -7,9 +7,9 @@
   <script type="module" src="/build/molecule-menu.esm.js"></script>
   <script nomodule src="/build/molecule-menu.js"></script>
 </head>
-<body>
+<body style="font-family: sans-serif;">
   
-  <div style="width: 100%; height:40rem; background-color: aliceblue;">
+  <div style="width: 100%; height:40rem; background-color: aliceblue; overflow-y: scroll;">
       <oc-molecule-menu id="molecule-menu"/>
   </div>
   <div style="width: 100%; height:40rem; background-color: aquamarine; position: relative;">
@@ -41,6 +41,17 @@
     menu.hasVolume = true;
     menu.showVolume = true;
 
+    menu.orbitalSelect = true;
+    menu.nOrbitals = 12;
+    menu.iOrbital = 11;
+    menu.nElectrons = 8;
+    menu.scfType = 'rhf';
+
+    menu.colorMapNames = ['foo', 'bar'];
+    menu.activeMapName = 'bar';
+
+    menu.nModes = 5;
+
     const events = {
       'displayStyleChanged': 'displayStyle',
       'sphereScaleChanged': 'sphereScale',
@@ -48,7 +59,11 @@
       'moleculeRendererChanged': 'moleculeRenderer',
       'mapRangeChanged': 'mapRange',
       'showVolumeChanged': 'showVolume',
-      'showIsoSurfaceChanged': 'showIsoSurface'
+      'showIsoSurfaceChanged': 'showIsoSurface',
+      'isoValueChanged': 'isoValue',
+      'playChanged': 'play',
+      'animationScaleChanged': 'animationScale',
+      'animationSpeedChanged': 'animationSpeed'
     };
 
     Object.entries(events).forEach(([eventName, propName]) => {
@@ -62,6 +77,14 @@
       menu.opacities = opacity;
       menu.opacitiesX = opacityScalarValue;
     });
+
+    // setTimeout(() => {
+    //   menu.displayStyle = 'custom';
+    // }, 1000);
+
+    // setTimeout(() => {
+    //   menu.displayStyle = 'ballAndStick';
+    // }, 2000);
   </script>
 </body>
 </html>
