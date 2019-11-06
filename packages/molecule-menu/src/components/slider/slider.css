@@ -20,6 +20,10 @@
   width: 100%;
 }
 
+/*
+Slider style boilerplate taken from https://www.cssportal.com/style-input-range/
+*/
+
 input[type=range] {
   height: 26px;
   -webkit-appearance: none;

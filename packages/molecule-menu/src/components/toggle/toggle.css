@@ -1,8 +1,15 @@
-@import "../../../node_modules/muicss/dist/css/mui.min.css";
+:host {
+  --checked-color: #2196F3;
+  --text-color: #ffffff;
+  --unchecked-color: #9E9E9E;
+  --disabled-color: #BDBDBD;
+}
 
 .container {
   display: flex;
   align-items: center;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .label-container {
@@ -15,4 +22,57 @@
 
 .full-width {
   width: 100%;
+}
+
+/*
+Checkbox styling implementation adapted from https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Advanced_styling_for_HTML_forms
+*/
+
+input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type=checkbox] {
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+  border-width: 0.15em;
+  border-style: solid;
+  border-radius: 0.25em;
+  border-color: var(--unchecked-color);
+  /* Adjusts the position of the checkboxes on the text baseline */
+  vertical-align: -2px;
+  /* Set here so that Windows' High-Contrast Mode can override */
+  color: var(--text-color);;
+  cursor: pointer;
+}
+
+input[type=checkbox]:checked {
+  border-color: var(--checked-color);
+  background-color: var(--checked-color);
+}
+
+input[type=checkbox]::before {
+  content: "✓";
+  position: absolute;
+  font-size: 1.4em;
+  top: -0.2em;
+  left: 0.1em;
+  visibility: hidden;
+}
+
+input[type=checkbox]:checked::before {
+  /* Use `visibility` instead of `display` to avoid recalculating layout */
+  visibility: visible;
+}
+
+input[type=checkbox]:disabled {
+  border-color: var(--disabled-color);
+  cursor: default;
+}
+
+input[type=checkbox]:disabled:checked {
+  background: var(--disabled-color);
 }

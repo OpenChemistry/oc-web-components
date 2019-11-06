@@ -7,27 +7,30 @@ import { Component, Prop, Watch, Event, EventEmitter, h } from '@stencil/core';
 })
 export class OcToggle {
 
-  el: HTMLButtonElement;
+  el: HTMLInputElement;
 
   @Prop() value: boolean;
   @Watch('value')
   watchValue(newValue: boolean) {
     if (this.el) {
-      if (newValue) {
-        this.el.className = "mui-btn mui-btn--small mui-btn--raised mui-btn--primary";
-      } else {
-        this.el.className = "mui-btn mui-btn--small mui-btn--raised";
-      }
+      this.el.checked = newValue;
     }
   }
 
   @Prop() disabled: boolean = false;
+  @Watch('disabled')
+  watchDisabled(newValue: boolean) {
+    if (this.el) {
+      this.el.disabled = newValue;
+    }
+  }
 
   @Prop() label: string;
 
   @Event() ocChange: EventEmitter;
 
   componentDidLoad() {
+    this.watchDisabled(this.disabled);
     this.watchValue(this.value);
   }
 
@@ -38,10 +41,10 @@ export class OcToggle {
           <label>{this.label}</label>
         </div>
         <div class="toggle-container">
-          <button
+          <input
+            type="checkbox"
             ref={el => {this.el = el;}}
-            onClick={() => {this.ocChange.emit({value: !this.value})}}
-            disabled={this.disabled}
+            onChange={() => {this.ocChange.emit({value: !this.value})}}
           />
         </div>
       </div>
