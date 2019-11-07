@@ -26,6 +26,12 @@ function fetchCalculations(options={}, creatorId) {
           .then(response => response.data )
 }
 
+function createNewCalculation(upload) {
+  console.log(upload);
+  return girderClient().post('calculations', upload)
+    .then(response => response.data);
+}
+
 export function* loadCalculationNotebooks(action) {
   try {
     const { calculationId } = action.payload;
@@ -81,4 +87,16 @@ function* loadCalculations(action) {
 
 export function* watchLoadCalculations() {
   yield takeEvery(calculationsRedux.LOAD_CALCULATIONS, loadCalculations);
+}
+
+function* onCreateCalculation(action) {
+  try {
+    yield call(createNewCalculation, action.payload);
+  } catch(error) {
+    console.log('Create Calculation Failed: ', error);
+  }
+}
+
+export function* watchCreateCalculation() {
+  yield takeEvery(calculationsRedux.CREATE_CALCULATION, onCreateCalculation);
 }

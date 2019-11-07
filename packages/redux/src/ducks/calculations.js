@@ -1,6 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 
 // Actions
+
+export const CREATE_CALCULATION = 'CREATE_CALCULATION';
+
 export const LOAD_CALCULATIONS = 'LOAD_CALCULATIONS';
 export const REQUEST_CALCULATIONS = 'REQUEST_CALCULATIONS';
 export const RECEIVE_CALCULATIONS = 'RECEIVE_CALCULATIONS';
@@ -93,6 +96,8 @@ const reducer = handleActions({
 }, initialState);
 
 // Action Creators
+
+export const createCalculation = createAction(CREATE_CALCULATION);
 
 // Fetch calculations
 export const loadCalculations = createAction(LOAD_CALCULATIONS);
