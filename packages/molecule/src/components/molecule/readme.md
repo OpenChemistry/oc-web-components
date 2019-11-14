@@ -83,9 +83,13 @@ graph TD;
   oc-molecule-base --> oc-vibrational-spectrum
   oc-molecule-base --> oc-molecule-menu-popup
   oc-molecule-base --> oc-molecule-menu
-  oc-molecule-menu-popup --> ion-icon
+  oc-molecule-menu --> oc-select
+  oc-molecule-menu --> oc-slider
+  oc-molecule-menu --> oc-input
+  oc-molecule-menu --> oc-toggle
   oc-molecule-menu --> oc-volume-controls
-  oc-molecule-menu --> ion-icon
+  oc-molecule-menu --> oc-double-slider
+  oc-molecule-menu --> oc-icon-button
   oc-molecule --> oc-molecule-base
   style oc-molecule-base fill:#f9f,stroke:#333,stroke-width:4px
 ```

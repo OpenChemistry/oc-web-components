@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.19](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.6.18...@openchemistry/utils@0.6.19) (2019-11-06)
+
+**Note:** Version bump only for package @openchemistry/utils
+
+
+
+
+
+## [0.6.18](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.6.17...@openchemistry/utils@0.6.18) (2019-11-06)
+
+**Note:** Version bump only for package @openchemistry/utils
+
+
+
+
+
 ## [0.6.17](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/utils@0.6.16...@openchemistry/utils@0.6.17) (2019-10-10)
 
 **Note:** Version bump only for package @openchemistry/utils

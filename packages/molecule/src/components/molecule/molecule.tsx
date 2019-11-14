@@ -375,6 +375,7 @@ export class Molecule {
         activeMapName={this.getValue('activeMapName')}
         showIsoSurface={this.getValue('showIsoSurface')}
         showVolume={this.getValue('showVolume')}
+        showSpectrum={this.getValue('showSpectrum')}
         colorMapNames={Object.keys(this.colorMaps)}
         colors={this.getValue('colors')}
         colorsX={this.getValue('colorsX')}
