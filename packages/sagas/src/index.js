@@ -130,14 +130,14 @@ export function* watchFetchCalculationById() {
 }
 
 // mo
-export function fetchOrbitalFromGirder(id, mo, async=false) {
-  return girderClient().get(`calculations/${id}/cube/${mo}`, {params: {async}})
+export function fetchOrbitalFromGirder(id, mo, params) {
+  return girderClient().get(`calculations/${id}/cube/${mo}`, {params: params})
           .then(response => response.data )
 }
 export function* fetchOrbital(action) {
   try {
     yield put( calculations.requestOrbital(action.payload.id, action.payload.mo) )
-    const orbital = yield call(fetchOrbitalFromGirder, action.payload.id, action.payload.mo, true)
+    const orbital = yield call(fetchOrbitalFromGirder, action.payload.id, action.payload.mo, {async: true})
     yield put( calculations.receiveOrbital(action.payload.id, action.payload.mo, orbital) )
   }
   catch(error) {
@@ -203,8 +203,12 @@ export function* receiveNotification(action) {
     }
   }
   else if (type === 'cube.status') {
-    const orbital = yield call(fetchOrbitalFromGirder, data.id, data.mo);
-    yield put( calculations.receiveOrbital(data.id, data.mo, orbital) );
+    if (has(data, 'error')) {
+      console.log(data.error);
+    } else {
+      const orbital = yield call(fetchOrbitalFromGirder, data.id, data.mo);
+      yield put( calculations.receiveOrbital(data.id, data.mo, orbital) );
+    }
   }
 }
 
