@@ -13,7 +13,6 @@ import { default as Public } from './route/public';
 
 import { default as BasicInfo } from './user/containers/basic-info';
 import { default as ApiKeys } from './user/containers/api-keys';
-import { default as CreatorProfile } from './user/containers/creator-profile'
 
 export const auth = {
   LoginButton,
@@ -33,8 +32,7 @@ export const admin = {
 
 export const user = {
   BasicInfo,
-  ApiKeys,
-  CreatorProfile
+  ApiKeys
 }
 
 export const route = {
