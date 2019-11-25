@@ -18,6 +18,7 @@ const initialState = {
     byInchiKey: {},
     matches: 0,
     error: null,
+    creator: {},
   };
 
 // Reducer
@@ -72,10 +73,10 @@ const reducer = handleActions({
     return {...state,  byId, byInchiKey, matches };
   },
   RECEIVE_MOLECULE: (state, action) => {
-    const molecule = action.payload.molecule;
+    const { molecule, creator } = action.payload.molecule;
     const byId = {...state.byId, [molecule._id]: molecule };
     const byInchiKey = {...state.byInchiKey, [molecule.inchikey]: molecule._id }
-    return {...state, byId, byInchiKey};
+    return {...state, byId, byInchiKey, creator};
   }
 }, initialState);
 
