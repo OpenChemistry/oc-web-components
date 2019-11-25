@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property     | Attribute | Description | Type                 | Default     |
-| ------------ | --------- | ----------- | -------------------- | ----------- |
-| `options`    | --        |             | `INormalModeOptions` | `undefined` |
-| `vibrations` | --        |             | `IVibrations`        | `undefined` |
+| Property                 | Attribute | Description | Type                      | Default     |
+| ------------------------ | --------- | ----------- | ------------------------- | ----------- |
+| `VibrationsExperimental` | --        |             | `IVibrationsExperimental` | `undefined` |
+| `options`                | --        |             | `INormalModeOptions`      | `undefined` |
+| `vibrations`             | --        |             | `IVibrations`             | `undefined` |
 
 
 ## Events
