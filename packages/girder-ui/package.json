@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "lodash-es": "^4.17.11"
+    "lodash-es": "^4.17.11",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
