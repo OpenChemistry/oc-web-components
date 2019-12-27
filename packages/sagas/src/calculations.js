@@ -11,6 +11,7 @@ import { selectors } from '@openchemistry/redux';
 import girderClient from '@openchemistry/girder-client';
 
 import { setPaginationDefaults } from './index'
+import { fetchOcFolder } from './app'
 
 function fetchCalculations(options={}, creatorId) {
   // Let's modify a clone of the options instead of the original options
@@ -24,6 +25,15 @@ function fetchCalculations(options={}, creatorId) {
 
   return girderClient().get('calculations', params)
           .then(response => response.data )
+}
+
+function createNewCalculation(parameters) {
+  return girderClient().post('calculations', parameters)
+    .then(response => response.data);
+}
+
+function ingestCalculation(id, params, json) {
+  return girderClient().put(`calculations/${id}`, json, {params:{...params}});
 }
 
 export function* loadCalculationNotebooks(action) {
@@ -81,4 +91,37 @@ function* loadCalculations(action) {
 
 export function* watchLoadCalculations() {
   yield takeEvery(calculationsRedux.LOAD_CALCULATIONS, loadCalculations);
+}
+
+function* createCalculationFile(payload) {
+  const { body, name, size, moleculeId } = payload;
+  const parent = yield call(fetchOcFolder);
+  const createFile = yield call(file.create, parent._id, parent._modelType, name, 0);
+  const createUpload = yield call(file.update, createFile._id, size, body);
+  yield call(file.chunk, createUpload._id, 0, body, {});
+  return createFile;
+}
+
+function* uploadCalculation(body) {
+  const calc = yield call(createNewCalculation, body);
+  const params = {'detectBonds': true};
+  yield call(ingestCalculation, calc._id, params, body);
+  yield put(calculationsRedux.receiveNewCalculation(calc));
+}
+
+function* createCalculation(action) {
+  try {
+    const createdFile = yield call(createCalculationFile, action.payload);
+    var body = JSON.parse(action.payload.body);
+    body['fileId'] = createdFile._id;
+    body['format'] = 'cjson';
+    body['public'] = true;
+    yield call(uploadCalculation, body);
+  } catch (error) {
+    yield put(calculationsRedux.createCalculation(error));
+  }
+}
+
+export function* watchCreateCalculation() {
+  yield takeEvery(calculationsRedux.CREATE_CALCULATION, createCalculation);
 }
