@@ -13,8 +13,8 @@ export function create(parentId, parentType, name, size, mimeType='application/o
   .then(response => response.data );
 }
 
-export function update(id, size) {
-  return girderClient().put(`file/${id}/contents`, {},  {
+export function update(id, size, json={}) {
+  return girderClient().put(`file/${id}/contents`, json,  {
     params: {
       size,
     }
