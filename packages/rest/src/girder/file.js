@@ -14,7 +14,7 @@ export function create(parentId, parentType, name, size, mimeType='application/o
 }
 
 export function update(id, size) {
-  return girderClient().put(`file/${id}/content`, {},  {
+  return girderClient().put(`file/${id}/contents`, {},  {
     params: {
       size,
     }
@@ -24,7 +24,7 @@ export function update(id, size) {
 
 export function content(id, size) {
 
-  return girderClient().put(`file/${id}/content`, null,  {
+  return girderClient().put(`file/${id}/contents`, null,  {
     params: {
       size,
     }
