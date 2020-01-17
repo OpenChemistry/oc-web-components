@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/girder-client",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": " ",
   "module": "esm/index.js",
   "files": [

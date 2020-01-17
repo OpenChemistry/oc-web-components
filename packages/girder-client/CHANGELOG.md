@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.26](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/girder-client@0.0.25...@openchemistry/girder-client@0.0.26) (2020-01-17)
+
+**Note:** Version bump only for package @openchemistry/girder-client
+
+
+
+
+
 ## [0.0.25](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/girder-client@0.0.24...@openchemistry/girder-client@0.0.25) (2019-11-25)
 
 **Note:** Version bump only for package @openchemistry/girder-client

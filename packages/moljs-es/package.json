@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/moljs-es",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "module": "dist/moljs-es.js",
   "dependencies": {
     "3dmol": "^1.3.7",

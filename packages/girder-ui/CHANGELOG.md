@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.42](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/girder-ui@0.0.41...@openchemistry/girder-ui@0.0.42) (2020-01-17)
+
+**Note:** Version bump only for package @openchemistry/girder-ui
+
+
+
+
+
 ## [0.0.41](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/girder-ui@0.0.40...@openchemistry/girder-ui@0.0.41) (2019-11-25)
 
 **Note:** Version bump only for package @openchemistry/girder-ui
