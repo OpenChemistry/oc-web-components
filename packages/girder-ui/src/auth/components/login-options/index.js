@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { isNil } from 'lodash-es';
 
 import { girderLogo } from './logos';
 import { googleLogo } from './logos';
@@ -21,8 +22,8 @@ class LoginOptions extends Component {
 
     let { nersc } = this.props;
     // Oauth is disable at nersc deployments, use this flag to show the login option
-    // if `nersc` is not passed explicitly
-    if (nersc === undefined || nersc === null) {
+    // if `nersc` is not passed explicitly. Only if Girder login is also disabled
+    if (!girder && isNil(nersc)) {
       nersc = !oauth;
     }
 
