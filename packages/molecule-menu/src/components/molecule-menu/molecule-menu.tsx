@@ -80,7 +80,6 @@ export class MoleculeMenu {
   keyToEvent: Object;
 
   componentWillLoad() {
-    console.log('MoleculeMenu is about to be rendered');
     // Map props names to event emitters
     this.keyToEvent = {
       displayStyle: this.displayStyleChanged,
@@ -98,22 +97,6 @@ export class MoleculeMenu {
       moleculeRenderer: this.moleculeRendererChanged,
       iOrbital: this.iOrbitalChanged
     }
-  }
-
-  componentDidLoad() {
-    console.log('MoleculeMenu has been rendered');
-  }
-
-  componentWillUpdate() {
-    console.log('MoleculeMenu will update and re-render');
-  }
-
-  componentDidUpdate() {
-    console.log('MoleculeMenu did update');
-  }
-
-  componentDidUnload() {
-    console.log('MoleculeMenu removed from the DOM');
   }
 
   onValueChanged(val: any, key: string) {

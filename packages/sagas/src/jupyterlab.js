@@ -47,7 +47,6 @@ export function* invalidateSession(action) {
   }
   catch(error) {
     yield put( jupyterlab.requestSessionInvalidation(error) )
-    console.log(error)
   }
 }
 

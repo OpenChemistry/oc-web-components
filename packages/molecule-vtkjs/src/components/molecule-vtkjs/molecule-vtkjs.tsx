@@ -74,13 +74,11 @@ export class MoleculeVtkjs {
   opacityFn: any;
 
   componentWillLoad() {
-    console.log('MoleculeVtkjs is about to be rendered');
     this.initVtkJs();
     this.applyStyle();
   }
 
   componentDidLoad() {
-    console.log('MoleculeVtkjs has been rendered');
     this.viewer.setContainer(this.viewerContainer);
     this.viewer.resize();
 
@@ -101,7 +99,6 @@ export class MoleculeVtkjs {
   }
 
   componentWillUpdate() {
-    console.log('MoleculeVtkjs did update');
     if (this.cjsonHasChanged) {
       this.updateMolecule();
       this.updateVolume();
@@ -500,7 +497,6 @@ export class MoleculeVtkjs {
   }
 
   componentDidUnload() {
-    console.log('Component removed from the DOM');
     if (!isNil(this.animationInterval)) {
       clearInterval(this.animationInterval);
     }
