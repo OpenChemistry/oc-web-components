@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/volume-controls",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "Component to plot adjust the opacity map and visualize its effect on the colormap",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

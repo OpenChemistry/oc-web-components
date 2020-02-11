@@ -1,6 +1,6 @@
 {
   "name": "@openchemistry/molecule-vtkjs",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "description": "Stencil Wrapper for vtkjs with support for cjson chemical data",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
