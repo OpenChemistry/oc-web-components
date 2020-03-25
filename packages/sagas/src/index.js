@@ -22,6 +22,9 @@ export { watchLoadCalculationNotebooks, watchLoadCalculations, watchCreateCalcul
 import { watchLoadConfiguration } from './configuration'
 export { watchLoadConfiguration }
 
+import { watchRequestUniqueImages } from './images';
+export { watchRequestUniqueImages };
+
 import jp from 'jsonpath';
 
 // var jp = require('jsonpath')
