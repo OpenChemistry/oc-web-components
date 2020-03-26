@@ -13,6 +13,13 @@ import $3Dmol from '@openchemistry/moljs-es';
 import { isNil, throttle } from "lodash-es";
 
 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
   this.size = new $3Dmol.Vector3(volume.dimensions[0],
                                  volume.dimensions[1],
@@ -60,7 +67,8 @@ export class MoleculeMoljs {
   currModel: any;
   rotateInterval: any;
 
-  molViewer: any;
+  containerId: string = `${uuidv4()}`;
+  molViewer: HTMLDivElement;
 
   /**
    * The component is about to load and it has not
@@ -91,8 +99,8 @@ export class MoleculeMoljs {
       let config = { };
       // 3dmoljs expects the container element to have width and height functions
       // go figure, I guess they assume jQuery
-      this.molViewer.width = function() {return this.clientWidth};
-      this.molViewer.height = function() {return this.clientHeight};
+      (this.molViewer as any).width = function() {return this.clientWidth};
+      (this.molViewer as any).height = function() {return this.clientHeight};
       this.viewer = $3Dmol.createViewer( this.molViewer, config );
     }
     this.convertCjson();
@@ -297,7 +305,7 @@ export class MoleculeMoljs {
 
   render() {
     return (
-      <div id='mol-viewer' ref={ref => {this.molViewer = ref;}}></div>
+      <div id={this.containerId} class="mol-viewer" ref={ref => {this.molViewer = ref;}}></div>
     );
   }
 }
