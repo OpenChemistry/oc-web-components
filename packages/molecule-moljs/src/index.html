@@ -53,12 +53,33 @@
         },
         "order" : [ 1, 1 ]
       },
+      "vibrations": {
+        eigenVectors: [
+          [-1, 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+        frequencies: [100],
+        intensities: [1],
+        modes: [0]
+      },
       "chemical json" : 0
     };
 
+    const options = {
+      normalMode: {
+        play: true,
+        modeIdx: 0
+      }
+    }
+
     let el = document.querySelector("oc-molecule-moljs");
     let count = 0;
+    el.options = options;
     el.cjson = cjson;
+
+    setTimeout(() => {
+      // options.normalMode.play = false;
+      // el.options = {...options};
+    }, 4000);
     // pass cjson as a string
     // el.setAttribute("cjson", JSON.stringify(cjson));
   </script>

@@ -48,8 +48,11 @@ export class MoleculeVtkjs {
   cjsonHasChanged: boolean = false;
   optionsHasChanged: boolean = false;
 
-  animationInterval: any;
   rotateInterval: any;
+
+  animationRequestId?: number;
+  animationStartTime?: number;
+  animationPreviousTime?: number;
 
   viewerContainer: HTMLElement;
   viewer: any;
@@ -432,14 +435,16 @@ export class MoleculeVtkjs {
 
   stopAnimation() {
     // If an animation is playing, stop it
-    if (!isNil(this.animationInterval)) {
-      clearInterval(this.animationInterval);
+    if (!isNil(this.animationRequestId)) {
+      window.cancelAnimationFrame(this.animationRequestId);
+      this.animationRequestId = undefined;
+      this.animationStartTime = undefined;
+      this.animationPreviousTime = undefined;
       // Place the atoms back to the starting positions
       let cjson = this.getCjson();
       let atoms: IAtoms = cjson.atoms ? cjson.atoms : null;
       this.molecule.setAtoms(atoms);
       this.renderWindow.render();
-      this.animationInterval = null;
     }
   }
 
@@ -455,20 +460,35 @@ export class MoleculeVtkjs {
       if (isNil(eigenvector)) {
         return;
       }
-      let frame: number = 1;
-      this.animationInterval = setInterval(() => {
-        let coords: number[] = [...cjson.atoms.coords['3d']];
-        let scale = normalMode.scale * Math.sin(2 * Math.PI * frame / normalMode.framesPerPeriod);
-        for (let i = 0; i < eigenvector.length; ++i) {
-          let dx = scale * eigenvector[i];
-          coords[i] += dx;
+
+      const step = (timestamp: number) => {
+        if (isNil(this.animationStartTime)) {
+          this.animationStartTime = timestamp;
         }
-        let atoms = {...cjson.atoms};
-        atoms.coords = {['3d']: coords};
-        this.molecule.setAtoms(atoms);
-        this.renderWindow.render();
-        frame++;
-      }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
+
+        if (isNil(this.animationPreviousTime)) {
+          this.animationPreviousTime = 0;
+        }
+
+        if (timestamp - this.animationPreviousTime > 1000 / normalMode.framesPerPeriod * normalMode.periodsPerSecond) {
+          this.animationPreviousTime = timestamp;
+          const elapsedTime = (timestamp - this.animationStartTime) / 1000;
+
+          let coords: number[] = [...cjson.atoms.coords['3d']];
+          let scale = normalMode.scale * Math.sin(2 * Math.PI * elapsedTime / normalMode.periodsPerSecond);
+          for (let i = 0; i < eigenvector.length; ++i) {
+            let dx = scale * eigenvector[i];
+            coords[i] += dx;
+          }
+          let atoms = {...cjson.atoms};
+          atoms.coords = {['3d']: coords};
+          this.molecule.setAtoms(atoms);
+          this.renderWindow.render();
+        }
+        this.animationRequestId = window.requestAnimationFrame(step);
+      };
+
+      this.animationRequestId = window.requestAnimationFrame(step);
     }
   }
 
@@ -497,9 +517,7 @@ export class MoleculeVtkjs {
   }
 
   componentDidUnload() {
-    if (!isNil(this.animationInterval)) {
-      clearInterval(this.animationInterval);
-    }
+    this.stopAnimation();
     if (!isNil(this.rotateInterval)) {
       clearInterval(this.rotateInterval);
     }

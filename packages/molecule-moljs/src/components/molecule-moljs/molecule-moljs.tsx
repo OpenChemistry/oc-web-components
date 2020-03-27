@@ -62,13 +62,16 @@ export class MoleculeMoljs {
   cjsonHasChanged: boolean = false;
 
   viewer: any;
-  animationInterval: any;
   currAtoms: IAtomSpec[];
   currModel: any;
   rotateInterval: any;
 
   containerId: string = `${uuidv4()}`;
   molViewer: HTMLDivElement;
+
+  animationRequestId?: number;
+  animationStartTime?: number;
+  animationPreviousTime?: number;
 
   /**
    * The component is about to load and it has not
@@ -157,9 +160,7 @@ export class MoleculeMoljs {
    * will be destroyed.
    */
   componentDidUnload() {
-    if (!isNil(this.animationInterval)) {
-      clearInterval(this.animationInterval);
-    }
+    this.stopAnimation();
     if (!isNil(this.rotateInterval)) {
       clearInterval(this.rotateInterval);
     }
@@ -213,9 +214,11 @@ export class MoleculeMoljs {
 
   stopAnimation() {
     // If an animation is playing, stop it before setting the new atoms
-    if (!isNil(this.animationInterval)) {
-      clearInterval(this.animationInterval);
-      this.animationInterval = null;
+    if (!isNil(this.animationRequestId)) {
+      window.cancelAnimationFrame(this.animationRequestId);
+      this.animationRequestId = undefined;
+      this.animationStartTime = undefined;
+      this.animationPreviousTime = undefined;
     }
   }
 
@@ -231,27 +234,41 @@ export class MoleculeMoljs {
       if (isNil(eigenvector)) {
         return;
       }
-      let frame: number = 1;
-      this.animationInterval = setInterval(() => {
-        this.viewer.removeModel(this.currModel);
-        this.currModel = this.viewer.addModel();
-        let newAtoms: IAtomSpec[] = []
-        let scale = normalMode.scale * Math.sin(2 * Math.PI * frame / normalMode.framesPerPeriod);
-        for (let i = 0; i < this.currAtoms.length; ++i) {
-          let atom = {...this.currAtoms[i]};
-          let dx = scale * eigenvector[i * 3];
-          let dy = scale * eigenvector[i * 3 + 1];
-          let dz = scale * eigenvector[i * 3 + 2];
-          atom.x += dx;
-          atom.y += dy;
-          atom.z += dz;
-          newAtoms.push(atom);
+      const step = (timestamp: number) => {
+        if (isNil(this.animationStartTime)) {
+          this.animationStartTime = timestamp;
         }
-        this.currModel.addAtoms(newAtoms);
-        this.currModel.setStyle({},this.getOptions().style);
-        this.viewer.render();
-        frame++;
-      }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
+
+        if (isNil(this.animationPreviousTime)) {
+          this.animationPreviousTime = 0;
+        }
+
+        if (timestamp - this.animationPreviousTime > 1000 / normalMode.framesPerPeriod * normalMode.periodsPerSecond) {
+          this.animationPreviousTime = timestamp;
+          const elapsedTime = (timestamp - this.animationStartTime) / 1000;
+
+          this.viewer.removeModel(this.currModel);
+          this.currModel = this.viewer.addModel();
+          let newAtoms: IAtomSpec[] = []
+          let scale = normalMode.scale * Math.sin(2 * Math.PI * elapsedTime / normalMode.periodsPerSecond);
+          for (let i = 0; i < this.currAtoms.length; ++i) {
+            let atom = {...this.currAtoms[i]};
+            let dx = scale * eigenvector[i * 3];
+            let dy = scale * eigenvector[i * 3 + 1];
+            let dz = scale * eigenvector[i * 3 + 2];
+            atom.x += dx;
+            atom.y += dy;
+            atom.z += dz;
+            newAtoms.push(atom);
+          }
+          this.currModel.addAtoms(newAtoms);
+          this.currModel.setStyle({},this.getOptions().style);
+          this.viewer.render();
+        }
+        this.animationRequestId = window.requestAnimationFrame(step);
+      };
+
+      this.animationRequestId = window.requestAnimationFrame(step);
     }
   }
 
