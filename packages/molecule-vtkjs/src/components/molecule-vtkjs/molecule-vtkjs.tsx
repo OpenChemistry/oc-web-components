@@ -449,12 +449,12 @@ export class MoleculeVtkjs {
     // Start an interval to play the normal mode animation
     const cjson = this.getCjson();
     const normalMode = this.getOptions().normalMode;
-    if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
+    if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && !isNil(normalMode.modeIdx) && normalMode.play) {
       let modeIdx: number = normalMode.modeIdx;
-      if (modeIdx < 0 || modeIdx >= cjson.vibrations.eigenVectors.length) {
+      const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
+      if (isNil(eigenvector)) {
         return;
       }
-      const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
       let frame: number = 1;
       this.animationInterval = setInterval(() => {
         let coords: number[] = [...cjson.atoms.coords['3d']];

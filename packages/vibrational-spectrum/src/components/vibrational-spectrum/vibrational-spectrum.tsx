@@ -214,6 +214,10 @@ export class VibrationalSpectrum {
 
 
   addExperimentalLine(svg: any, vibrations: IVibrationsExperimental, resize: boolean = false) {
+    if (isNil(vibrations)) {
+      return;
+    }
+
     let duration = resize ? 0 : 1000;
     let xRange = this.xScale.domain();
     let yRange = this.yScale.domain();
@@ -232,7 +236,6 @@ export class VibrationalSpectrum {
       .transition()
         .duration(duration)
         .attr('stroke-width', 2.5)
-      
   }
 
   componentDidUpdate() {
