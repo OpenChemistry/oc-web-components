@@ -22,8 +22,10 @@
     "@openchemistry/types": "^0.8.20",
     "@openchemistry/utils": "^0.6.21",
     "@types/lodash-es": "^4.17.1",
+    "@types/uuid": "3.4.3",
     "lodash-es": "^4.17.11",
-    "resize-observer-polyfill": "^1.5.0"
+    "resize-observer-polyfill": "^1.5.0",
+    "uuid": "7.0.2"
   },
   "devDependencies": {
     "@stencil/core": "^1.5.4"
