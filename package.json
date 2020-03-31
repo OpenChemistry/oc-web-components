@@ -9,6 +9,7 @@
     "build": "lerna run build --stream",
     "build-serial": "lerna run build --concurrency 1 --stream",
     "clean": "lerna clean",
+    "deep-clean": "npm run clean && rm -rf packages/**/package-lock.json && rm -rf packages/**/dist && rm -rf packages/**/loader && rm -rf packages/**/esm && rm -rf packages/**/.stencil",
     "publish": "lerna publish --yes -m 'Publish [ci skip]'",
     "bootstrap": "lerna bootstrap"
   },

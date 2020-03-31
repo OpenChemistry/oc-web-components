@@ -11,6 +11,7 @@ import { composeDisplayOptions } from '@openchemistry/utils';
 import $3Dmol from '@openchemistry/moljs-es';
 
 import { isNil, throttle } from "lodash-es";
+import { v4 as uuidv4 } from 'uuid';
 
 
 $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
@@ -55,12 +56,16 @@ export class MoleculeMoljs {
   cjsonHasChanged: boolean = false;
 
   viewer: any;
-  animationInterval: any;
   currAtoms: IAtomSpec[];
   currModel: any;
   rotateInterval: any;
 
-  molViewer: any;
+  containerId: string = `${uuidv4()}`;
+  molViewer: HTMLDivElement;
+
+  animationRequestId?: number;
+  animationStartTime?: number;
+  animationPreviousTime?: number;
 
   /**
    * The component is about to load and it has not
@@ -91,8 +96,8 @@ export class MoleculeMoljs {
       let config = { };
       // 3dmoljs expects the container element to have width and height functions
       // go figure, I guess they assume jQuery
-      this.molViewer.width = function() {return this.clientWidth};
-      this.molViewer.height = function() {return this.clientHeight};
+      (this.molViewer as any).width = function() {return this.clientWidth};
+      (this.molViewer as any).height = function() {return this.clientHeight};
       this.viewer = $3Dmol.createViewer( this.molViewer, config );
     }
     this.convertCjson();
@@ -149,9 +154,7 @@ export class MoleculeMoljs {
    * will be destroyed.
    */
   componentDidUnload() {
-    if (!isNil(this.animationInterval)) {
-      clearInterval(this.animationInterval);
-    }
+    this.stopAnimation();
     if (!isNil(this.rotateInterval)) {
       clearInterval(this.rotateInterval);
     }
@@ -205,9 +208,11 @@ export class MoleculeMoljs {
 
   stopAnimation() {
     // If an animation is playing, stop it before setting the new atoms
-    if (!isNil(this.animationInterval)) {
-      clearInterval(this.animationInterval);
-      this.animationInterval = null;
+    if (!isNil(this.animationRequestId)) {
+      window.cancelAnimationFrame(this.animationRequestId);
+      this.animationRequestId = undefined;
+      this.animationStartTime = undefined;
+      this.animationPreviousTime = undefined;
     }
   }
 
@@ -217,33 +222,47 @@ export class MoleculeMoljs {
     // Start an interval to play the normal mode animation
     const cjson = this.getCjson();
     const normalMode = this.getOptions().normalMode;
-    if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && normalMode.play) {
+    if (!isNil(cjson) && !isNil(cjson.vibrations) && !isNil(cjson.vibrations.eigenVectors) && !isNil(normalMode.modeIdx) && normalMode.play) {
       let modeIdx: number = normalMode.modeIdx;
-      if (modeIdx < 0) {
+      const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
+      if (isNil(eigenvector)) {
         return;
       }
-      const eigenvector = cjson.vibrations.eigenVectors[modeIdx];
-      let frame: number = 1;
-      this.animationInterval = setInterval(() => {
-        this.viewer.removeModel(this.currModel);
-        this.currModel = this.viewer.addModel();
-        let newAtoms: IAtomSpec[] = []
-        let scale = normalMode.scale * Math.sin(2 * Math.PI * frame / normalMode.framesPerPeriod);
-        for (let i = 0; i < this.currAtoms.length; ++i) {
-          let atom = {...this.currAtoms[i]};
-          let dx = scale * eigenvector[i * 3];
-          let dy = scale * eigenvector[i * 3 + 1];
-          let dz = scale * eigenvector[i * 3 + 2];
-          atom.x += dx;
-          atom.y += dy;
-          atom.z += dz;
-          newAtoms.push(atom);
+      const step = (timestamp: number) => {
+        if (isNil(this.animationStartTime)) {
+          this.animationStartTime = timestamp;
         }
-        this.currModel.addAtoms(newAtoms);
-        this.currModel.setStyle({},this.getOptions().style);
-        this.viewer.render();
-        frame++;
-      }, 1000 / (normalMode.framesPerPeriod * normalMode.periodsPerSecond));
+
+        if (isNil(this.animationPreviousTime)) {
+          this.animationPreviousTime = 0;
+        }
+
+        if (timestamp - this.animationPreviousTime > 1000 / normalMode.framesPerPeriod * normalMode.periodsPerSecond) {
+          this.animationPreviousTime = timestamp;
+          const elapsedTime = (timestamp - this.animationStartTime) / 1000;
+
+          this.viewer.removeModel(this.currModel);
+          this.currModel = this.viewer.addModel();
+          let newAtoms: IAtomSpec[] = []
+          let scale = normalMode.scale * Math.sin(2 * Math.PI * elapsedTime / normalMode.periodsPerSecond);
+          for (let i = 0; i < this.currAtoms.length; ++i) {
+            let atom = {...this.currAtoms[i]};
+            let dx = scale * eigenvector[i * 3];
+            let dy = scale * eigenvector[i * 3 + 1];
+            let dz = scale * eigenvector[i * 3 + 2];
+            atom.x += dx;
+            atom.y += dy;
+            atom.z += dz;
+            newAtoms.push(atom);
+          }
+          this.currModel.addAtoms(newAtoms);
+          this.currModel.setStyle({},this.getOptions().style);
+          this.viewer.render();
+        }
+        this.animationRequestId = window.requestAnimationFrame(step);
+      };
+
+      this.animationRequestId = window.requestAnimationFrame(step);
     }
   }
 
@@ -297,7 +316,7 @@ export class MoleculeMoljs {
 
   render() {
     return (
-      <div id='mol-viewer' ref={ref => {this.molViewer = ref;}}></div>
+      <div id={this.containerId} class="mol-viewer" ref={ref => {this.molViewer = ref;}}></div>
     );
   }
 }
