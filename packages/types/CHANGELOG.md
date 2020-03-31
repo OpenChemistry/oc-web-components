@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.21](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.8.20...@openchemistry/types@0.8.21) (2020-03-31)
+
+**Note:** Version bump only for package @openchemistry/types
+
+
+
+
+
 ## [0.8.20](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/types@0.8.19...@openchemistry/types@0.8.20) (2020-01-17)
 
 **Note:** Version bump only for package @openchemistry/types
