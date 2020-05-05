@@ -57,35 +57,6 @@ export function parseImageName(name) {
   };
 }
 
-export function fetchClusters() {
-  return girderClient().get('clusters').then(r => r.data);
-}
-
-export function* makeClusterObject(clusterId) {
-  if (!isNil(clusterId)) {
-    return {
-      _id: clusterId
-    }
-  }
-
-  // Check to see if we are on nersc
-  if (process.env.OC_SITE == 'NERSC') {
-    return {
-      name: 'cori'
-    }
-  }
-
-  // Grab the first cluster we can find
-  const clusters = yield call(fetchClusters);
-  if (clusters.length > 0) {
-    return {
-      _id: clusters[0]['_id']
-    }
-  }
-
-  // The object will be undefined if we reach here...
-}
-
 export function fetchMoleculesFromGirder(options={}, creatorId) {
   // Let's modify a clone of the options instead of the original options
   const optionsClone = { ...options }
@@ -335,79 +306,37 @@ export function* watchFetchTaskFlow() {
   yield takeEvery(cumulus.LOAD_TASKFLOW, fetchTaskFlow)
 }
 
-export function fetchQueue(params) {
-  return girderClient().get('queues', params).then(r => r.data);
-}
-
-export function postQueue(params) {
-  return girderClient().post('queues', {}, params).then(r => r.data);
-}
-
-export function postTaskFlow(body) {
-  return girderClient().post('taskflows', body).then(r => r.data);
-}
-
-export function addTaskFlow(queueId, taskFlowId, body) {
-  return girderClient().put(`queues/${queueId}/add/${taskFlowId}`, body)
-          .then(r => r.data);
-}
-
-export function popQueue(queueId, params) {
-  return girderClient().put(`queues/${queueId}/pop`, {}, params)
-          .then(r => r.data);
+export function postLaunchTaskFlow(body) {
+  return girderClient().post('launch_taskflow/launch', body).then(r => r.data);
 }
 
 export function* launchTaskFlow(action) {
   try {
     const { imageName, container, clusterId, taskFlowClass } = action.payload;
     const image = parseImageName(imageName);
-    const cluster = yield call(makeClusterObject, clusterId);
 
-    let params = { name: 'oc_queue' };
-    const queues = yield call(fetchQueue, params);
-
-    if (queues.length > 0) {
-      var queue = queues[0];
-    } else {
-      params = {
-        params: {
-          name: 'oc_queue',
-          maxRunning: 5
+    const body = {
+      taskFlowBody: {
+        taskFlowClass,
+        meta: {
+          image
         }
-      };
-      var queue = yield call(postQueue, params);
+      },
+      taskBody: {
+        image,
+        container
+      }
     }
 
-    // Create the taskflow
-    let body = {
-      taskFlowClass,
-      meta: {
-        image
-      }
-    };
+    if (!body.taskBody.container) {
+      body.taskBody.container = 'docker';
+    }
 
-    const taskflow = yield call(postTaskFlow, body);
+    if (clusterId) {
+      body.taskBody.cluster = { '_id': clusterId };
+    }
 
-    // Start the taskflow
-    body = {
-      image,
-      container,
-      cluster
-    };
-
-    const queueId = queue['_id'];
-    const taskFlowId = taskflow['_id'];
-    yield call(addTaskFlow, queueId, taskFlowId, body);
-
-    params = {
-      params: {
-        multi: true
-      }
-    };
-
-    yield call(popQueue, queueId, params);
-
-    return taskFlowId;
+    return yield call(postLaunchTaskFlow, body);
   }
   catch(error) {
     console.log(error);
