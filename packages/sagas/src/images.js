@@ -13,7 +13,7 @@ export function* requestUniqueImages(action) {
     yield put(images.receiveUniqueImages(results));
   }
   catch(error) {
-    console.log('Error requesting unique images: ', error);
+    yield put(images.requestUniqueImages(error));
   }
 }
 
