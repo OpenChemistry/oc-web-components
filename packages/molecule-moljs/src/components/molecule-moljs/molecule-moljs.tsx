@@ -9,10 +9,65 @@ import { validateChemJson, isChemJson } from '@openchemistry/utils';
 import { cjsonToMoljs } from '@openchemistry/utils';
 import { composeDisplayOptions } from '@openchemistry/utils';
 import $3Dmol from '@openchemistry/moljs-es';
+import { createColorMap, createOpacityMap} from '@colormap/core';
 
 import { isNil, throttle } from "lodash-es";
 import { v4 as uuidv4 } from 'uuid';
 
+declare const $: any;
+
+interface Point<T> {
+  value: number;
+  mapped: T;
+}
+
+interface TransferFn {
+  value: number;
+  color: number;
+  opacity: number;
+}
+
+function uint8(value: number) : number {
+  if (value < 0) {
+    return 0;
+  } else if (value > 1) {
+    return 255;
+  } else {
+    return Math.round(value * 255);
+  }
+}
+
+function hex(value: number) : string {
+  let result = uint8(value).toString(16);
+  return result.length < 2 ? '0' + result : result;
+}
+
+function toHexColor(color: [number, number, number]) : number {
+  return parseInt(color.map(v => hex(v)).join(''), 16);
+}
+
+function makePoints<T>(mapped: T[], scalars: number[]): Point<T>[] {
+  if (mapped.length !== scalars.length) {
+    return [];
+  }
+  return scalars.map((value, i) => ({value, mapped: mapped[i]}));
+}
+
+function makeTransferFn(colors: Point<[number, number, number]>[], opacities: Point<number>[]): TransferFn[] {
+  const scale = (v: number) => v;
+  const colorMap = createColorMap(colors, scale);
+  const opacityMap = createOpacityMap(opacities, scale);
+
+  const x = colors.map(({value}) => value)
+    .concat(opacities.map(({value}) => value))
+    .sort((a, b) => a - b);
+
+  return x.map(value => ({
+    value,
+    color: toHexColor(colorMap(value)),
+    opacity: opacityMap(value)
+  }));
+}
 
 $3Dmol.VolumeData.prototype.volume = function (volume: ICube) {
   this.size = new $3Dmol.Vector3(volume.dimensions[0],
@@ -94,11 +149,7 @@ export class MoleculeMoljs {
   componentDidLoad() {
     if (isNil(this.viewer)) {
       let config = { };
-      // 3dmoljs expects the container element to have width and height functions
-      // go figure, I guess they assume jQuery
-      (this.molViewer as any).width = function() {return this.clientWidth};
-      (this.molViewer as any).height = function() {return this.clientHeight};
-      this.viewer = $3Dmol.createViewer( this.molViewer, config );
+      this.viewer = $3Dmol.createViewer( $(this.molViewer), config );
     }
     this.convertCjson();
     this.renderMolecule();
@@ -268,21 +319,52 @@ export class MoleculeMoljs {
 
   setVolume() {
     const cjson = this.getCjson();
-    if (isNil(cjson) || isNil(cjson.cube) || !this.getOptions().visibility.isoSurfaces) {
+    if (isNil(cjson) || isNil(cjson.cube)) {
+      return;
+    }
+    if (!(this.getOptions().visibility.isoSurfaces || this.getOptions().visibility.volume)) {
       return;
     }
     const volumeData = new $3Dmol.VolumeData(cjson.cube, 'volume');
-    const isoSurfaces: IIsoSurfaceOptions[] = this.getOptions().isoSurfaces;
-    for (let isoSurface of isoSurfaces) {
-      let iso: any = {
-        isoval: isoSurface.value,
-        color: isoSurface.color,
-        opacity: isoSurface.opacity,
-      };
-      if ('smoothness' in isoSurface) {
-        iso.smoothness = isoSurface.smoothness!;
+
+    if (this.getOptions().visibility.isoSurfaces) {
+      const isoSurfaces: IIsoSurfaceOptions[] = this.getOptions().isoSurfaces;
+      for (let isoSurface of isoSurfaces) {
+        let iso: any = {
+          isoval: isoSurface.value,
+          color: isoSurface.color,
+          opacity: isoSurface.opacity,
+        };
+        if ('smoothness' in isoSurface) {
+          iso.smoothness = isoSurface.smoothness!;
+        }
+        this.viewer.addIsosurface(volumeData, iso);
       }
-      this.viewer.addIsosurface(volumeData, iso);
+    }
+
+    if (this.getOptions().visibility.volume) {
+      let low = Infinity;
+      let high = -Infinity;
+      cjson.cube.scalars.forEach((value) => {
+        if (value < low) {low = value};
+        if (value > high) {high = value};
+      });
+      const range = [low, high];
+      const delta = high - low;
+
+      const colorsScalarValue = !isNil(this.getOptions().volume.colorsScalarValue) && this.getOptions().volume.colorsScalarValue.length == this.getOptions().volume.colors.length
+        ? this.getOptions().volume.colorsScalarValue
+        : this.getOptions().volume.colors.map((_, i) => range[0] + i * delta / (this.getOptions().volume.colors.length - 1));
+      const colorNodes = makePoints<[number, number, number]>(this.getOptions().volume.colors, colorsScalarValue);
+
+      const opacityScalarValue = !isNil(this.getOptions().volume.opacityScalarValue) && this.getOptions().volume.colorsScalarValue.length == this.getOptions().volume.opacity.length
+        ? this.getOptions().volume.opacityScalarValue
+        : this.getOptions().volume.opacity.map((_, i) => range[0] + i * delta / (this.getOptions().volume.opacity.length - 1));
+      const opacityNodes = makePoints<number>(this.getOptions().volume.opacity, opacityScalarValue);
+
+      const transferfn = makeTransferFn(colorNodes, opacityNodes);
+
+      this.viewer.addVolumetricRender(volumeData, {transferfn});
     }
   }
 

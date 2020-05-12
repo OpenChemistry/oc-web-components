@@ -303,14 +303,13 @@ export class MoleculeMenu {
       menuItems.push(
         <oc-toggle
           key="showVolume"
-          label={`Show Volume ${this.moleculeRenderer !== 'vtkjs' ? '(VTK.js only)' : ''}`}
+          label={"Show Volume"}
           value={this.showVolume}
-          disabled={this.moleculeRenderer !== 'vtkjs'}
           onOcChange={(e) => {this.onValueChanged(e.detail.value, 'showVolume')}}
         />
       );
 
-      if (this.showVolume && this.moleculeRenderer === 'vtkjs') {
+      if (this.showVolume) {
         menuItems.push(
           <div style={{width: "100%", height: "8rem"}}>
             <oc-volume-controls

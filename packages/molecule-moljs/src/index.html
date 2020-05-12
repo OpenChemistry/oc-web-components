@@ -68,18 +68,61 @@
       normalMode: {
         play: true,
         modeIdx: 0
+      },
+      visibility:{
+        isoSurfaces: true,
+        volume: false,
+      },
+      volume: {
+        colors: [
+          [1, 0, 0],
+          [1, 0, 0],
+          [1, 1, 1],
+          [0, 1, 1],
+          [0, 1, 1],
+        ],
+        colorsScalarValue: [
+          -0.01,
+          -0.01,
+          0,
+          0.01,
+          0.01
+        ],
+        opacity: [
+          0.4,
+          0, 0.4
+        ],
+        opacityScalarValue: [
+          -0.1,
+          0,
+          0.1
+        ]
       }
     }
 
     let el = document.querySelector("oc-molecule-moljs");
     let count = 0;
     el.options = options;
-    el.cjson = cjson;
+    // el.cjson = cjson;
+    fetch('benzene.cjson').then(r => r.json()).then(cjson => el.cjson = cjson);
 
     setTimeout(() => {
-      // options.normalMode.play = false;
-      // el.options = {...options};
+      options.visibility.volume = true;
+      options.visibility.isoSurfaces = false;
+      el.options = {...options};
+    }, 2000);
+
+    setTimeout(() => {
+      options.visibility.volume = false;
+      options.visibility.isoSurfaces = true;
+      el.options = {...options};
     }, 4000);
+
+    setTimeout(() => {
+      options.visibility.volume = true;
+      options.visibility.isoSurfaces = false;
+      el.options = {...options};
+    }, 6000);
     // pass cjson as a string
     // el.setAttribute("cjson", JSON.stringify(cjson));
   </script>
