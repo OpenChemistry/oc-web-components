@@ -328,11 +328,11 @@ export function* launchTaskFlow(action) {
       }
     }
 
-    if (!body.taskBody.container) {
+    if (isNil(body.taskBody.container)) {
       body.taskBody.container = 'docker';
     }
 
-    if (clusterId) {
+    if (!isNil(clusterId)) {
       body.taskBody.cluster = { '_id': clusterId };
     }
 
