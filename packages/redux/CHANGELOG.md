@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.33](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/redux@0.3.32...@openchemistry/redux@0.3.33) (2020-05-15)
+
+**Note:** Version bump only for package @openchemistry/redux
+
+
+
+
+
 ## [0.3.32](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/redux@0.3.31...@openchemistry/redux@0.3.32) (2020-03-31)
 
 **Note:** Version bump only for package @openchemistry/redux
