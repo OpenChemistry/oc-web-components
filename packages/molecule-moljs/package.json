@@ -18,6 +18,7 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
+    "@colormap/core": "^0.1.0-3",
     "@openchemistry/moljs-es": "^0.1.24",
     "@openchemistry/types": "^0.8.21",
     "@openchemistry/utils": "^0.6.22",
