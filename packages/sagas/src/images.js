@@ -20,3 +20,20 @@ export function* requestUniqueImages(action) {
 export function* watchRequestUniqueImages() {
   yield takeEvery(images.REQUEST_UNIQUE_IMAGES, requestUniqueImages)
 }
+
+export function postRegisterImages() {
+  return girderClient().post('images/register').then(r => r.data);
+}
+
+export function* registerImages(action) {
+  try {
+    const results = yield call(postRegisterImages);
+  }
+  catch(error) {
+    yield put(images.registerImages(error));
+  }
+}
+
+export function* watchRegisterImages() {
+  yield takeEvery(images.REGISTER_IMAGES, registerImages);
+}
