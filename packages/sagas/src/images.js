@@ -4,7 +4,8 @@ import girderClient from '@openchemistry/girder-client';
 import { images } from '@openchemistry/redux'
 
 export function getUniqueImages() {
-  return girderClient().get('images/unique').then(r => r.data);
+  const params = {params: {unique: true}};
+  return girderClient().get('images', params).then(r => r.data);
 }
 
 export function* requestUniqueImages(action) {
