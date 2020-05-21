@@ -325,18 +325,18 @@ export function* launchTaskFlow(action) {
           image
         }
       },
-      taskBody: {
+      taskFlowInput: {
         image,
         container
       }
     }
 
-    if (isNil(body.taskBody.container)) {
-      body.taskBody.container = 'docker';
+    if (isNil(body.taskFlowInput.container)) {
+      body.taskFlowInput.container = 'docker';
     }
 
     if (!isNil(clusterId)) {
-      body.taskBody.cluster = { '_id': clusterId };
+      body.taskFlowInput.cluster = { '_id': clusterId };
     }
 
     return yield call(postLaunchTaskFlow, body);
