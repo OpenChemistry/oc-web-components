@@ -22,6 +22,12 @@ export { watchLoadCalculationNotebooks, watchLoadCalculations, watchCreateCalcul
 import { watchLoadConfiguration } from './configuration'
 export { watchLoadConfiguration }
 
+import { watchRequestUniqueImages } from './images';
+export { watchRequestUniqueImages };
+
+import { watchRegisterImages } from './images';
+export { watchRegisterImages };
+
 import jp from 'jsonpath';
 
 // var jp = require('jsonpath')
@@ -34,6 +40,24 @@ export function setPaginationDefaults(options)
       options[key] = defaults[key]
     }
   }
+}
+
+export function parseImageName(name) {
+  // This returns an image object
+  // If the tag is undefined, it will be set to 'latest'
+
+  const split = name.split(':');
+  const repository = split[0];
+  let tag = split[1];
+
+  if (isNil(tag)) {
+    tag = 'latest';
+  }
+
+  return {
+    repository,
+    tag
+  };
 }
 
 export function fetchMoleculesFromGirder(options={}, creatorId) {
@@ -283,6 +307,47 @@ export function* fetchTaskFlow(action) {
 
 export function* watchFetchTaskFlow() {
   yield takeEvery(cumulus.LOAD_TASKFLOW, fetchTaskFlow)
+}
+
+export function postLaunchTaskFlow(body) {
+  return girderClient().post('launch_taskflow/launch', body).then(r => r.data);
+}
+
+export function* launchTaskFlow(action) {
+  try {
+    const { imageName, container, clusterId, taskFlowClass } = action.payload;
+    const image = parseImageName(imageName);
+
+    const body = {
+      taskFlowBody: {
+        taskFlowClass,
+        meta: {
+          image
+        }
+      },
+      taskFlowInput: {
+        image,
+        container
+      }
+    }
+
+    if (isNil(body.taskFlowInput.container)) {
+      body.taskFlowInput.container = 'docker';
+    }
+
+    if (!isNil(clusterId)) {
+      body.taskFlowInput.cluster = { '_id': clusterId };
+    }
+
+    return yield call(postLaunchTaskFlow, body);
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
+
+export function* watchLaunchTaskFlow() {
+  yield takeEvery(cumulus.LAUNCH_TASKFLOW, launchTaskFlow)
 }
 
 // Job

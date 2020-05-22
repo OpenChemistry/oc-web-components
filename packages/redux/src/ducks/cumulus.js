@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import jp from 'jsonpath';
 
 // Actions
+export const LAUNCH_TASKFLOW = 'LAUNCH_TASKFLOW';
 export const LOAD_TASKFLOW = 'LOAD_TASKFLOW';
 export const REQUEST_TASKFLOW = 'REQUEST_TASKFLOW';
 export const RECIEVE_TASKFLOW = 'RECIEVE_TASKFLOW';
@@ -136,7 +137,15 @@ const reducer = handleActions({
 }, initialState);
 
 // Action Creators
-
+export const launchTaskFlow = createAction(
+  LAUNCH_TASKFLOW,
+  (imageName, container, clusterId, taskFlowClass) => ({
+    imageName,
+    container,
+    clusterId,
+    taskFlowClass
+  })
+);
 export const loadTaskFlow = createAction(LOAD_TASKFLOW);
 export const requestTaskFlow = createAction(REQUEST_TASKFLOW);
 export const receiveTaskFlow = createAction(RECIEVE_TASKFLOW);

@@ -5,6 +5,7 @@ import appReducer, * as app  from './ducks/app';
 import cumulusReducer, * as cumulus  from './ducks/cumulus';
 import jupyterlabReducer, * as jupyterlab from './ducks/jupyterlab';
 import configurationReducer, * as configuration from './ducks/configuration';
+import imagesReducer, * as images  from './ducks/images';
 
 export const reducers = {
     molecules: moleculesReducer,
@@ -14,6 +15,7 @@ export const reducers = {
     cumulus: cumulusReducer,
     jupyterlab: jupyterlabReducer,
     configuration: configurationReducer,
+    images: imagesReducer,
 };
 
 export { default as selectors } from './selectors';
@@ -25,3 +27,4 @@ export {cumulus};
 export {jupyterlab};
 export {app};
 export {configuration};
+export {images};
