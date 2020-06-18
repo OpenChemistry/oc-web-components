@@ -2,7 +2,7 @@
 [![CircleCI Status](https://circleci.com/gh/OpenChemistry/oc-web-components.svg?style=shield)](https://circleci.com/gh/OpenChemistry/oc-web-components)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
-[Monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md) containing OpenChemistry npm packages.
+[Lerna](https://github.com/lerna/lerna) monorepo containing Open Chemistry npm packages.
 
 ## Table of Contents
 - [Packages](#packages)
@@ -121,31 +121,31 @@
 
 To build all the packages in the monorepo, follow the steps below.
 
-Clone the repository
+Clone the repository:
 ```
 git clone git@github.com:OpenChemistry/oc-web-components.git
 ```
 
-Install lerna dependencies and bootstrap the various packages
+Install the monorepo dependencies and bootstrap the various packages:
 ```
 cd oc-web-components
 yarn install
 yarn run bootstrap
 ```
 
-Build the packages
+Build the packages:
 ```
 yarn run build
 ```
 
 ## Develop
-To use the local dev version of the openchemistry packages within the mongochem project follow the steps below.
+To use the local dev version of the Open Chemistry packages within the mongochem project follow the steps below.
 
-NOTE: Because of [reasons](), `yarn` must be used instead of `npm`.
+NOTE: When linking the packages in development, `yarn` **must** be used instead of `npm`.
 
-Build all the packages in the monorepo. See instructions [above](#build)
+Build all the packages in the monorepo. See instructions [above](#build).
 
-Create local links for all the packages
+Create local links for all the packages:
 ```bash
 # From the oc-web-components root directory
 
@@ -159,7 +159,7 @@ for package in $OPENCHEMISTRY_PACKAGES; do \
 done;
 ```
 
-Consume the linked packages in the mongochemclient
+Consume the linked packages in the mongochemclient:
 ```bash
 # From the mongochemclient root directory
 
