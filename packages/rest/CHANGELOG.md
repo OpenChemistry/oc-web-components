@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.36](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/rest@0.3.35...@openchemistry/rest@0.3.36) (2020-10-16)
+
+**Note:** Version bump only for package @openchemistry/rest
+
+
+
+
+
 ## [0.3.35](https://github.com/OpenChemistry/oc-web-components/compare/@openchemistry/rest@0.3.34...@openchemistry/rest@0.3.35) (2020-05-15)
 
 **Note:** Version bump only for package @openchemistry/rest
