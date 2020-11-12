@@ -57,7 +57,7 @@ export class VolumeControls {
     this.drawCanvas();
   }
 
-  componentDidUnload() {
+  disconnectedCallback() {
     this.ro.unobserve(this.el.parentElement);
     this.ro.disconnect();
   }

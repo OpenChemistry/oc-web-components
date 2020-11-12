@@ -257,7 +257,7 @@ export class VibrationalSpectrum {
     }
   }
 
-  componentDidUnload() {
+  disconnectedCallback() {
     if (this.el.parentElement) {
       this.ro.unobserve(this.el.parentElement);
     }

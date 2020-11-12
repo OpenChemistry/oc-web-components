@@ -204,7 +204,7 @@ export class MoleculeMoljs {
    * The component did unload and the element
    * will be destroyed.
    */
-  componentDidUnload() {
+  disconnectedCallback() {
     this.stopAnimation();
     if (!isNil(this.rotateInterval)) {
       clearInterval(this.rotateInterval);
