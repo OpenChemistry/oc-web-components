@@ -21,13 +21,13 @@
   },
   "dependencies": {
     "@openchemistry/types": "^0.8.21",
-    "d3": "^5.7.0",
-    "lodash-es": "^4.17.11"
+    "d3": "^6.2.0",
+    "lodash-es": "^4.17.15"
   },
   "devDependencies": {
-    "@stencil/core": "^1.5.4",
-    "@types/d3": "^5.0.1",
-    "@types/lodash-es": "^4.17.1"
+    "@stencil/core": "^2.2.0",
+    "@types/d3": "^6.0.0",
+    "@types/lodash-es": "^4.17.3"
   },
   "repository": {
     "type": "git",

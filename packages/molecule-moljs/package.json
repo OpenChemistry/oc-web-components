@@ -18,18 +18,18 @@
     "start": "stencil build --dev --watch --serve"
   },
   "dependencies": {
-    "@colormap/core": "^0.1.0-3",
+    "@colormap/core": "^0.2.0",
     "@openchemistry/moljs-es": "^0.1.25",
     "@openchemistry/types": "^0.8.21",
     "@openchemistry/utils": "^0.6.23",
-    "@types/lodash-es": "^4.17.1",
-    "@types/uuid": "3.4.3",
-    "lodash-es": "^4.17.11",
-    "resize-observer-polyfill": "^1.5.0",
-    "uuid": "7.0.2"
+    "@types/lodash-es": "^4.17.3",
+    "@types/uuid": "8.3.0",
+    "lodash-es": "^4.17.15",
+    "resize-observer-polyfill": "^1.5.1",
+    "uuid": "8.3.1"
   },
   "devDependencies": {
-    "@stencil/core": "^1.5.4"
+    "@stencil/core": "^2.2.0"
   },
   "repository": {
     "type": "git",

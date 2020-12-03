@@ -516,7 +516,7 @@ export class MoleculeVtkjs {
     this.filter.setBondRadius(style.stick.radius);
   }
 
-  componentDidUnload() {
+  disconnectedCallback() {
     this.stopAnimation();
     if (!isNil(this.rotateInterval)) {
       clearInterval(this.rotateInterval);

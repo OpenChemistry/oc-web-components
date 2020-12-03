@@ -19,14 +19,14 @@
   },
   "dependencies": {
     "@openchemistry/utils": "^0.6.23",
-    "lodash-es": "^4.17.11",
-    "resize-observer-polyfill": "^1.5.0",
-    "vtk.js": "^8.11.1"
+    "lodash-es": "^4.17.15",
+    "resize-observer-polyfill": "^1.5.1",
+    "vtk.js": "^14.17.3"
   },
   "devDependencies": {
     "@openchemistry/types": "^0.8.21",
-    "@stencil/core": "^1.5.4",
-    "@types/lodash-es": "^4.17.1"
+    "@stencil/core": "^2.2.0",
+    "@types/lodash-es": "^4.17.3"
   },
   "repository": {
     "type": "git",

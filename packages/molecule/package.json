@@ -24,14 +24,16 @@
     "@openchemistry/types": "^0.8.21",
     "@openchemistry/utils": "^0.6.23",
     "@openchemistry/vibrational-spectrum": "^0.1.40",
-    "immer": "~1.8.0",
-    "lodash-es": "^4.17.11",
-    "memoize-one": "^5.0.0",
-    "split-me": "^1.2.1"
+    "immer": "~7.0.14",
+    "lodash-es": "^4.17.15",
+    "memoize-one": "^5.1.1",
+    "serve": "^11.3.2",
+    "service": "^0.1.4",
+    "split-me": "^1.2.2"
   },
   "devDependencies": {
-    "@stencil/core": "^1.5.4",
-    "@types/lodash-es": "^4.17.2"
+    "@stencil/core": "^2.2.0",
+    "@types/lodash-es": "^4.17.3"
   },
   "repository": {
     "type": "git",
