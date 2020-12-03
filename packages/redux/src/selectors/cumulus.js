@@ -1,4 +1,4 @@
-import { Enum } from 'enumify';
+import { Enumify } from 'enumify';
 import { hasIn } from 'lodash-es'
 
 export const getTaskFlow = (state, _id) => _id in state.cumulus.taskflows.byId ?  state.cumulus.taskflows.byId[_id] : null;
@@ -17,19 +17,40 @@ export const getJob = (state, _id) => _id in state.cumulus.jobs.byId ?  state.cu
 
 export const getTaskFlowJobIds = (state, _id) => _id in state.cumulus.taskflows.idToJobIds ? state.cumulus.taskflows.idToJobIds[_id] : null;
 
-class TaskFlowState  extends Enum {}
-TaskFlowState.initEnum(['created', 'running', 'error',
-                        'unexpectederror', 'terminating', 'terminated',
-                        'deleting', 'deleted', 'complete']);
+class TaskFlowState  extends Enumify {
+  static created = new TaskFlowState();
+  static running = new TaskFlowState();
+  static error = new TaskFlowState();
+  static unexpectederror = new TaskFlowState();
+  static terminating = new TaskFlowState();
+  static terminated = new TaskFlowState();
+  static deleting = new TaskFlowState();
+  static deleted = new TaskFlowState();
+  static complete = new TaskFlowState();
+}
 
-class JobState extends Enum {}
-JobState.initEnum(['created', 'running', 'terminated', 'terminating',
-                   'unexpectederror', 'queued', 'error', 'complete']);
+class JobState extends Enumify {
+  static created = new JobState();
+  static running = new JobState();
+  static terminated = new JobState();
+  static terminating = new JobState();
+  static unexpectederror = new JobState();
+  static queued = new JobState();
+  static error = new JobState();
+  static complete = new JobState();
+}
 
-class CalculationState extends Enum {}
-CalculationState.initEnum(['initializing', 'queued', 'running', 'terminated',
-                  'terminating', 'unexpectederror', 'error', 'complete',
-                  'uploading']);
+class CalculationState extends Enumify {
+  static initializing = new CalculationState();
+  static queued = new CalculationState();
+  static running = new CalculationState();
+  static terminated = new CalculationState();
+  static terminating = new CalculationState();
+  static unexpectederror = new CalculationState();
+  static error = new CalculationState();
+  static complete = new CalculationState();
+  static uploading = new CalculationState();
+}
 
 export const getCalculationStatus = (state, taskFlowId) => {
 
