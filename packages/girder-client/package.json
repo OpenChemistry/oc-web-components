@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/OpenChemistry/oc-web-components#readme",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.21.2"
   },
   "peerDependencies": {
     "redux-saga": "^0.16.2 || ^1.0.0"
